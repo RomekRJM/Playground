@@ -35,7 +35,8 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 
 # Object Files
 OBJECTFILES= \
-	${OBJECTDIR}/11_enhanced_helloworld.o
+	${OBJECTDIR}/11_enhanced_helloworld.o \
+	${OBJECTDIR}/19_calc.o
 
 
 # C Compiler Flags
@@ -66,6 +67,11 @@ ${OBJECTDIR}/11_enhanced_helloworld.o: 11_enhanced_helloworld.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/11_enhanced_helloworld.o 11_enhanced_helloworld.cpp
+
+${OBJECTDIR}/19_calc.o: 19_calc.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -O2 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/19_calc.o 19_calc.cpp
 
 # Subprojects
 .build-subprojects:

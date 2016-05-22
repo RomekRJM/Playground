@@ -18,7 +18,7 @@ using namespace std;
 /*
  * 
  */
-int main(int argc, char** argv) {
+int main11(int argc, char** argv) {
     
     if (argc < 6) {
         std::cerr << "Not enough arguments - at least 5 required" << endl;

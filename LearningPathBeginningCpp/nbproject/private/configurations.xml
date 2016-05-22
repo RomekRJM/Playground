@@ -27,8 +27,14 @@
           <runcommandpicklistitem>"${OUTPUT_PATH} a b c d e r"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}"</runcommandpicklistitem>
           <runcommandpicklistitem>"${OUTPUT_PATH}" a b c d e f</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 2.345 + 3.24342349</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 6.345 + 3.2434</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 6.345 "*" 3.2434</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 6.345 x 3.2434</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 6.345 / 3.2434</runcommandpicklistitem>
+          <runcommandpicklistitem>"${OUTPUT_PATH}" 6.345 ^ 3.2434</runcommandpicklistitem>
         </runcommandpicklist>
-        <runcommand>"${OUTPUT_PATH}" a b c d e f</runcommand>
+        <runcommand>"${OUTPUT_PATH}" 6.345 ^ 3.2434</runcommand>
         <rundir></rundir>
         <buildfirst>true</buildfirst>
         <terminal-type>0</terminal-type>
