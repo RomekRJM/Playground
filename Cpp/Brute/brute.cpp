@@ -15,63 +15,64 @@ public:
 
 class DamageInterceptor{
 public:
-    float dealDamage(float * hp, Weapon weapon);
+    virtual float dealDamage(float * hp, Weapon weapon);
 };
 
 class CriticalDamageInterceptor : public DamageInterceptor{
 private:
-    const float criticalMultiplier = 3.33;
+    const float criticalMultiplier = 1.5;
 public:
-    float dealDamage(float * hp, Weapon weapon);
+    float dealDamage(float * hp, Weapon weapon) override;
 };
 
 template <class T>
 class Character{
 private:
-	string name;
-	T hitPoints;
-	DamageInterceptor damageInterceptor;
+    string name;
+    T hitPoints;
+    DamageInterceptor* damageInterceptor;
 public:
-	Character(string name, T hitPoints);
-	string getName();
-	T getHitPoints();
-	float dealDamage(Weapon weapon);
-	void setDamageInterceptor(DamageInterceptor damageInterceptor);
+    Character(string name, T hitPoints);
+    string getName();
+    T getHitPoints();
+    float dealDamage(Weapon weapon);
+    void setDamageInterceptor(DamageInterceptor* damageInterceptor);
 };
 
 template <class T>
 Character<T>::Character(string nname, T initialHitPoints){
-	name = nname;
-	hitPoints = initialHitPoints;
-	damageInterceptor = DamageInterceptor();
+    name = nname;
+    hitPoints = initialHitPoints;
+    damageInterceptor = new DamageInterceptor();
 }
 
 template <class T>
 string Character<T>::getName(){
-	return name;
+    return name;
 }
 
 template <class T>
 T Character<T>::getHitPoints(){
-	return hitPoints;
+    return hitPoints;
 }
 
 template <class T>
 float Character<T>::dealDamage(Weapon weapon){
-	return damageInterceptor.dealDamage(&hitPoints, weapon);
+    return damageInterceptor->dealDamage(&hitPoints, weapon);
 }
 
 template <class T>
-void Character<T>::setDamageInterceptor(DamageInterceptor _damageInterceptor){
+void Character<T>::setDamageInterceptor(DamageInterceptor* _damageInterceptor){
         damageInterceptor = _damageInterceptor;
 }
 
 float DamageInterceptor::dealDamage(float* hp, Weapon weapon){
+    cout << "DamageInterceptor" << endl;
     return *hp -= weapon.hit();
 }
 
 float CriticalDamageInterceptor::dealDamage(float* hp, Weapon weapon){
-    cout << "Critical" << endl;
+    cout << "CriticalDamageInterceptor" << endl;
     return *hp -= weapon.hit() * criticalMultiplier;
 }
 
@@ -87,14 +88,15 @@ float Weapon::hit(){
 }
 
 int main(int argc, char **argv) {
-	string bruteName = "Brute";
-	Character<float> brute = Character<float>(bruteName, 100.0);
-	Weapon oblivionMace = Weapon("Oblivion mace", 13, 21);
-	cout << "Brute: " << brute.getName() << ", hp: " << brute.getHitPoints()  << endl;
-	brute.dealDamage(oblivionMace);
-	cout << "Brute receives hit on DamageInterceptor: " << brute.getName() << ", hp: " << brute.getHitPoints()  << endl;
-	brute.setDamageInterceptor(CriticalDamageInterceptor());
-	brute.dealDamage(oblivionMace);
-	cout << "Brute receives hit on CriticalDamageInterceptor: " << brute.getName() << ", hp: " << brute.getHitPoints()  << endl;
-	return 0;
+    string bruteName = "Brute";
+    Character<float> brute = Character<float>(bruteName, 100.0);
+    Weapon oblivionMace = Weapon("Oblivion mace", 13, 21);
+    cout << "Brute: " << brute.getName() << ", hp: " << brute.getHitPoints()  << endl;
+    brute.dealDamage(oblivionMace);
+    cout << "Brute receives hit on DamageInterceptor: " << brute.getName() << ", hp: " << brute.getHitPoints()  << endl;
+    CriticalDamageInterceptor* criticalDamageInterceptor = new CriticalDamageInterceptor();
+    brute.setDamageInterceptor(criticalDamageInterceptor);
+    brute.dealDamage(oblivionMace);
+    cout << "Brute receives hit on CriticalDamageInterceptor: " << brute.getName() << ", hp: " << brute.getHitPoints()  << endl;
+    return 0;
 }
