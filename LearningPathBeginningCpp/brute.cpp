@@ -22,7 +22,7 @@ class CriticalDamageInterceptor : public DamageInterceptor{
 private:
     const float criticalMultiplier = 1.5;
 public:
-    float dealDamage(float * hp, Weapon weapon) override;
+        float dealDamage(float * hp, Weapon weapon) override;
 };
 
 template <class T>
@@ -44,7 +44,7 @@ Character<T>::Character(string nname, T initialHitPoints){
     name = nname;
     hitPoints = initialHitPoints;
     damageInterceptor = new DamageInterceptor();
-}
+    }
 
 template <class T>
 string Character<T>::getName(){
@@ -68,7 +68,7 @@ void Character<T>::setDamageInterceptor(DamageInterceptor* _damageInterceptor){
 
 float DamageInterceptor::dealDamage(float* hp, Weapon weapon){
     cout << "DamageInterceptor" << endl;
-    return *hp -= weapon.hit();
+        return *hp -= weapon.hit();
 }
 
 float CriticalDamageInterceptor::dealDamage(float* hp, Weapon weapon){

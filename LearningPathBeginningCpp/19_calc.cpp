@@ -8,7 +8,7 @@
 #include <string>
 #include <cmath>
 
-int main(int argc, char *argv[]) 
+int main19(int argc, char *argv[]) 
 {
     if(argc != 4)
     {
@@ -45,5 +45,5 @@ int main(int argc, char *argv[])
         std::cerr << "Op: " << op << " is not supported" << std::endl;
         return 1;
     }
-    
+    return 0;
 }
