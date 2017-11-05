@@ -126,7 +126,7 @@ void fight() {
     } while (brute.getHitPoints() > 0 && arrgor.getHitPoints() > 0);
 }
 
-int main(int argc, char **argv) {
+int main_b(int argc, char **argv) {
     fight();
 
     return 0;
