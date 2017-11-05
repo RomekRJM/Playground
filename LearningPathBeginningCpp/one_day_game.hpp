@@ -40,20 +40,23 @@ public:
 class Character {
 private:
     int hp;
+    int fullHp;
     int damage;
     string name;
     Weapon *weapon;
     
 public:
-    Character(int h, int d, string n="You") {
+    Character(int h, int d, string n="Player") {
         hp = h;
+        fullHp = h;
         damage = d;
         weapon = nullptr;
         name = n;
     }
     
-    int getHp() { return hp; };
+    int getHp();
     void modifyHp(int hpDifference) { hp += hpDifference; };
+    void fullyHeal() { hp = fullHp; };
     int getDamage() { return damage; };
     Weapon* getWeapon() { return weapon; };
     void setWeapon(Weapon *w) { weapon = w; };
@@ -85,6 +88,8 @@ public:
     Weapon* getWeapon() { return currentItem; };
     Character* generateOpponent();
     Weapon* generateWeapon();
+    void purgeOponent() { currentOponent = nullptr; };
+    void purgeWeapon() { currentItem = nullptr; };
     const static int TOTAL_ROUNDS = 3;
     const string oponentNames[TOTAL_ROUNDS] = {"Old dog", "Weak murlock", "Warrior"};
     const string weaponNames[TOTAL_ROUNDS] = {"Dog's claw", "Old sword", "Battle axe"};

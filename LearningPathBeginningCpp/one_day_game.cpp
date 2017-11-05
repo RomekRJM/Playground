@@ -52,10 +52,14 @@ int Character::hit(Character* opponent) {
     return totalDamage;
 }
 
+int Character::getHp() {
+    return hp;
+}
+
 string Character::toString() {
     return name + ": " + to_string(hp) + " hp and " + to_string(damage)
             + " base damage\n"
-            + ((weapon == nullptr) ? "" : "Wields:" + weapon->toString());
+            + ((weapon == nullptr) ? "" : " Wields:" + weapon->toString());
 }
 
 Weapon* GameWorld::generateWeapon() {
@@ -133,7 +137,9 @@ void redrawScreen(GameWorld* world, Character* player) {
             break;
         case fight:
             simulateFight(player, world->getOponent());
-            return;
+            description = "Press any key to continue...";
+            
+            options = "";
             break;
         default:
             break;
@@ -156,25 +162,34 @@ void simulateFight(Character* player, Character* oponent) {
 }
 
 void runGameLogic(GameWorld *world, Character* player, const string playerInput) {
-    if (playerInput == "s") {
-        world->setGameState(stats_screen);
-    } else if (playerInput == "a") {
-        world->setGameState(fight);
-    } else if (player->getHp() <= 0) {
+    if (player->getHp() <= 0) {
         world->setGameState(game_over);
     } else if (player->getHp() > 0 and world->getGameState() == fight) {
         world->setGameState(round_won);
         int round = world->nextRound();
-
         if (round >= GameWorld::TOTAL_ROUNDS) {
             world->setGameState(game_won);
         }
-    }
+    } else if (world->getGameState() == round_won) {
+        if (playerInput == "y") {
+            player->setWeapon(world->getOponent()->getWeapon());
+        }
+        world->purgeWeapon();
+        world->purgeOponent();
+        world->setGameState(start_game);
+        player->fullyHeal();
+    } else if (playerInput == "s") {
+        world->setGameState(stats_screen);
+    } else if (playerInput == "a") {
+        world->setGameState(fight);
+    } 
+
 }
 
 int main(int argc, char** argv) {
     GameWorld* world = new GameWorld();
     Character* player = new Character(100, 10);
+    player->setWeapon(new Weapon("Bare hands", 1, 5));
 
     do {
         redrawScreen(world, player);
