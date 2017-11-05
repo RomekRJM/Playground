@@ -28,8 +28,8 @@ int getRandomIntFromRange(int lowerBand, int upperBand) {
     }
 
     int range = upperBand - lowerBand;
-    std::srand(std::time(0));
-    int randomValue = std::rand() % range;
+    srand(std::time(0));
+    int randomValue = rand() % range;
 
     return lowerBand + randomValue;
 }
@@ -47,51 +47,68 @@ void Character::hit(Character opponent) {
 }
 
 string Character::toString() {
-    return name + " has " + to_string(hp) + " hp and " + to_string(damage) 
-            + " base damage\nWields:" + weapon->toString();
+    return name + ": " + to_string(hp) + " hp and " + to_string(damage) 
+            + " base damage\n" 
+            + ((weapon == nullptr) ? "" : "Wields:" + weapon->toString());
 }
 
-Weapon GameWorld::generateWeapon() {
+Weapon* GameWorld::generateWeapon() {
     int minDamage = round * 2 + getRandomInt(round * 2);
     int maxDamage = round * 4 + 1;
-
-    return Weapon(weaponNames[round], minDamage, maxDamage);
+    currentItem = new Weapon(weaponNames[round], minDamage, maxDamage);
+    
+    return currentItem;
 }
 
-Character GameWorld::generateOpponent() {
-    int hp = round * 100 + getRandomInt(round - 1)*10;
+Character* GameWorld::generateOpponent() {
+    int hp = round * 100 + getRandomInt(round)*10;
     int damage = round * 2;
     Weapon *weapon = currentItem;
 
-    Character opponent = Character(hp, damage, weaponNames[round]);
-    opponent.setWeapon(currentItem);
+    currentOponent = new Character(hp, damage, oponentNames[round]);
+    currentOponent->setWeapon(currentItem);
 
-    return opponent;
+    return currentOponent;
 }
 
-string getInput() {
-    string input;
-    cin >> input;
+string getInput(GameWorld* world, Character* player) {
+    string input = "";
+    
+    if (world->getGameState() == stats_screen) {
+        getchar();
+    }
+    else {
+        cin >> input;   
+    }
+    
     return input;
 }
 
-void redrawScreen(GameWorld world, Character player) {
-    if (world.getGameState() != fight) {
+void redrawScreen(GameWorld* world, Character* player) {
+    if (world->getGameState() != fight) {
         system("clear");
+    }
+    
+    if (world->getWeapon() == nullptr) {
+        world->generateWeapon();
+    }
+    
+    if (world->getOponent() == nullptr) {
+        world->generateOpponent();
     }
 
     string description;
     string options = "\n\nPress 's' to see yours and opponent's stats.\n"
             "Press 'a' to enter the duel.\n";
 
-    switch (world.getGameState()) {
+    switch (world->getGameState()) {
         case start_game:
             description = "Welcome on the arena.\nYou will be facing various oponents.\n"
                     "Only one can win!";
             break;
         case stats_screen:
-            description = "Your stats.\n\n" + player.toString() 
-                    + "\n\nOpponent stats" + world.getOponent()->toString();
+            description = "Your stats.\n\n" + player->toString() 
+                    + "\n\nOpponent stats\n\n" + world->getOponent()->toString();
             break;
         default:
             break;
@@ -100,21 +117,21 @@ void redrawScreen(GameWorld world, Character player) {
     cout << description << options;
 }
 
-void runGameLogic(GameWorld world, Character player, string playerInput) {
+void runGameLogic(GameWorld *world, Character* player, const string playerInput) {
     if (playerInput == "s") {
-        world.setGameState(stats_screen);
+        world->setGameState(stats_screen);
     }
 }
 
 int main(int argc, char** argv) {
-    GameWorld world = GameWorld();
-    Character player = Character(100, 10);
+    GameWorld* world = new GameWorld();
+    Character* player = new Character(100, 10);
 
     do {
         redrawScreen(world, player);
-        string input = getInput();
+        string input = getInput(world, player);
         runGameLogic(world, player, input);
-    } while (world.getGameState() != game_over);
+    } while (world->getGameState() != game_over);
 
     return 0;
 }

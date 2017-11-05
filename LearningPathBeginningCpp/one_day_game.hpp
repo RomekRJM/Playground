@@ -70,9 +70,6 @@ private:
     int round;
     GameState gameState;
     
-    Character generateOpponent();
-    Weapon generateWeapon();
-    
 public:
     GameWorld(){
         currentItem = nullptr;
@@ -85,6 +82,8 @@ public:
     void setGameState(GameState s) { gameState = s; };
     Character* getOponent() { return currentOponent; };
     Weapon* getWeapon() { return currentItem; };
+    Character* generateOpponent();
+    Weapon* generateWeapon();
     const static int TOTAL_ROUNDS = 3;
     const string oponentNames[TOTAL_ROUNDS] = {"Old dog", "Weak murlock", "Warrior"};
     const string weaponNames[TOTAL_ROUNDS] = {"Dog's claw", "Old sword", "Battle axe"};
@@ -94,9 +93,9 @@ public:
 extern int getRandomInt(int max);
 extern int getRandomIntFromRange(int min, int max);
 
-extern string getInput();
-extern void redrawScreen(GameWorld world, Character player);
-extern void runGameLogic(GameWorld world, Character player, string playerInput);
+extern string getInput(GameWorld* world, Character* player);
+extern void redrawScreen(GameWorld* world, Character* player);
+extern void runGameLogic(GameWorld* world, Character* player, const string playerInput);
 
 #endif /* ONE_DAY_GAME_HPP */
 
