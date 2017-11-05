@@ -23,17 +23,26 @@ private:
     int minDamage;
     int maxDamage;
     string name;
-    
+
 public:
+
     Weapon(string n, int min, int max) {
         name = n;
         minDamage = min;
         maxDamage = max;
     }
-    
-    string getName() { return name; };
-    int getMinDamage() { return minDamage; };
-    int getMaxDamage() { return maxDamage; };
+
+    string getName() {
+        return name;
+    };
+
+    int getMinDamage() {
+        return minDamage;
+    };
+
+    int getMaxDamage() {
+        return maxDamage;
+    };
     string toString();
 };
 
@@ -44,56 +53,111 @@ private:
     int damage;
     string name;
     Weapon *weapon;
-    
+
 public:
-    Character(int h, int d, string n="Player") {
+
+    Character(int h, int d, string n = "Player") {
         hp = h;
         fullHp = h;
         damage = d;
         weapon = nullptr;
         name = n;
     }
+
+    int getHp() {
+        return hp;
+    }
+
+    void modifyHp(int hpDifference) {
+        hp += hpDifference;
+    };
+
+    void fullyHeal() {
+        hp = fullHp;
+    };
+
+    void increaseFullHp(float percent) {
+        fullHp = int(fullHp * percent);
+    };
+
+    int getDamage() {
+        return damage;
+    };
     
-    int getHp();
-    void modifyHp(int hpDifference) { hp += hpDifference; };
-    void fullyHeal() { hp = fullHp; };
-    int getDamage() { return damage; };
-    Weapon* getWeapon() { return weapon; };
-    void setWeapon(Weapon *w) { weapon = w; };
+    void increaseDamage(int d) {
+        damage += d;
+    };
+
+    Weapon* getWeapon() {
+        return weapon;
+    };
+
+    void setWeapon(Weapon *w) {
+        weapon = w;
+    };
+    
     int hit(Character* oponent);
-    string getName() { return name; };
+
+    string getName() {
+        return name;
+    };
+    
     string toString();
 };
 
-enum GameState { start_game, stats_screen, fight, round_won, game_over, game_won };
+enum GameState {
+    start_game, stats_screen, fight, round_won, game_over, game_won
+};
 
-class GameWorld{
+class GameWorld {
 private:
     Weapon *currentItem;
     Character *currentOponent;
     int round;
     GameState gameState;
-    
+
 public:
-    GameWorld(){
+
+    GameWorld() {
         currentItem = nullptr;
         currentOponent = nullptr;
         round = 1;
         gameState = start_game;
     };
-    int nextRound() { return ++round; };
-    GameState getGameState() { return gameState; };
-    void setGameState(GameState s) { gameState = s; };
-    Character* getOponent() { return currentOponent; };
-    Weapon* getWeapon() { return currentItem; };
+
+    int nextRound() {
+        return ++round;
+    };
+
+    GameState getGameState() {
+        return gameState;
+    };
+
+    void setGameState(GameState s) {
+        gameState = s;
+    };
+
+    Character* getOponent() {
+        return currentOponent;
+    };
+
+    Weapon* getWeapon() {
+        return currentItem;
+    };
     Character* generateOpponent();
     Weapon* generateWeapon();
-    void purgeOponent() { currentOponent = nullptr; };
-    void purgeWeapon() { currentItem = nullptr; };
+
+    void purgeOponent() {
+        currentOponent = nullptr;
+    };
+
+    void purgeWeapon() {
+        currentItem = nullptr;
+    };
     const static int TOTAL_ROUNDS = 3;
     const string oponentNames[TOTAL_ROUNDS] = {"Old dog", "Weak murlock", "Warrior"};
     const string weaponNames[TOTAL_ROUNDS] = {"Dog's claw", "Old sword", "Battle axe"};
-    
+
 };
 
 extern int getRandomInt(int max);
