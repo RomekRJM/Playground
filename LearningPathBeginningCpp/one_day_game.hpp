@@ -57,7 +57,8 @@ public:
     int getDamage() { return damage; };
     Weapon* getWeapon() { return weapon; };
     void setWeapon(Weapon *w) { weapon = w; };
-    void hit(Character oponent);
+    int hit(Character* oponent);
+    string getName() { return name; };
     string toString();
 };
 
@@ -77,7 +78,7 @@ public:
         round = 1;
         gameState = start_game;
     };
-    void nextRound();
+    int nextRound() { return ++round; };
     GameState getGameState() { return gameState; };
     void setGameState(GameState s) { gameState = s; };
     Character* getOponent() { return currentOponent; };
@@ -93,6 +94,7 @@ public:
 extern int getRandomInt(int max);
 extern int getRandomIntFromRange(int min, int max);
 
+extern void simulateFight(Character* player, Character* oponent);
 extern string getInput(GameWorld* world, Character* player);
 extern void redrawScreen(GameWorld* world, Character* player);
 extern void runGameLogic(GameWorld* world, Character* player, const string playerInput);
