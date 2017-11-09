@@ -14,6 +14,23 @@
 #ifndef HANDSON_FUNCTIONS_HPP
 #define HANDSON_FUNCTIONS_HPP
 
+#include <string>
+
+std::string find(std::string to_find, std::string data[], int beg, int end) {
+    
+    while(beg <= end) {
+        int mid = beg + (end - beg) / 2;
+        if (data[mid] == to_find) {
+            return to_find;
+        } else if (data[mid] < to_find) {
+            beg = mid + 1;
+        } else {
+            end = mid - 1;
+        }
+    }
+    
+    return "";
+}
 
 
 #endif /* HANDSON_FUNCTIONS_HPP */

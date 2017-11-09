@@ -4,9 +4,13 @@
  * and open the template in the editor.
  */
 #include <gtest/gtest.h>
+#include <algorithm>
 #include "30_handson_functions.hpp"
 
-TEST(TestCase, testCase) {
-    EXPECT_EQ(9, 3*3);
+TEST(FindTest, findFindsValueInStringArray) {
+    std::string fruits[] = { "apple", "banana", "strawbery", "orange"};
+    std::string actual = find("banana", fruits, 0, 3);
+    
+    ASSERT_STREQ("banana", actual.c_str());
 }
 
