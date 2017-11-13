@@ -37,7 +37,7 @@ OBJECTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}
 OBJECTFILES= \
 	${OBJECTDIR}/11_enhanced_helloworld.o \
 	${OBJECTDIR}/19_calc.o \
-	${OBJECTDIR}/30_handson_functions.o \
+	${OBJECTDIR}/37_handson_pointers.o \
 	${OBJECTDIR}/brute.o \
 	${OBJECTDIR}/one_day_game.o
 
@@ -86,15 +86,30 @@ ${OBJECTDIR}/19_calc.o: 19_calc.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/19_calc.o 19_calc.cpp
 
-${OBJECTDIR}/30_handson_functions.o: 30_handson_functions.cpp
+${OBJECTDIR}/37_handson_pointers.o: 37_handson_pointers.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
-	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/30_handson_functions.o 30_handson_functions.cpp
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/37_handson_pointers.o 37_handson_pointers.cpp
 
 ${OBJECTDIR}/brute.o: brute.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/brute.o brute.cpp
+
+${OBJECTDIR}/data.hpp.gch: data.hpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o "$@" data.hpp
+
+${OBJECTDIR}/find.hpp.gch: find.hpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o "$@" find.hpp
+
+${OBJECTDIR}/functions.hpp.gch: functions.hpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o "$@" functions.hpp
 
 ${OBJECTDIR}/one_day_game.o: one_day_game.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -146,17 +161,17 @@ ${OBJECTDIR}/19_calc_nomain.o: ${OBJECTDIR}/19_calc.o 19_calc.cpp
 	    ${CP} ${OBJECTDIR}/19_calc.o ${OBJECTDIR}/19_calc_nomain.o;\
 	fi
 
-${OBJECTDIR}/30_handson_functions_nomain.o: ${OBJECTDIR}/30_handson_functions.o 30_handson_functions.cpp 
+${OBJECTDIR}/37_handson_pointers_nomain.o: ${OBJECTDIR}/37_handson_pointers.o 37_handson_pointers.cpp 
 	${MKDIR} -p ${OBJECTDIR}
-	@NMOUTPUT=`${NM} ${OBJECTDIR}/30_handson_functions.o`; \
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/37_handson_pointers.o`; \
 	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
 	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
 	then  \
 	    ${RM} "$@.d";\
-	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/30_handson_functions_nomain.o 30_handson_functions.cpp;\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/37_handson_pointers_nomain.o 37_handson_pointers.cpp;\
 	else  \
-	    ${CP} ${OBJECTDIR}/30_handson_functions.o ${OBJECTDIR}/30_handson_functions_nomain.o;\
+	    ${CP} ${OBJECTDIR}/37_handson_pointers.o ${OBJECTDIR}/37_handson_pointers_nomain.o;\
 	fi
 
 ${OBJECTDIR}/brute_nomain.o: ${OBJECTDIR}/brute.o brute.cpp 
@@ -170,6 +185,45 @@ ${OBJECTDIR}/brute_nomain.o: ${OBJECTDIR}/brute.o brute.cpp
 	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/brute_nomain.o brute.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/brute.o ${OBJECTDIR}/brute_nomain.o;\
+	fi
+
+${OBJECTDIR}/data_nomain.hpp.gch: ${OBJECTDIR}/data.hpp.gch data.hpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/data.hpp.gch`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o "$@" data.hpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/data.hpp.gch ${OBJECTDIR}/data_nomain.hpp.gch;\
+	fi
+
+${OBJECTDIR}/find_nomain.hpp.gch: ${OBJECTDIR}/find.hpp.gch find.hpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/find.hpp.gch`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o "$@" find.hpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/find.hpp.gch ${OBJECTDIR}/find_nomain.hpp.gch;\
+	fi
+
+${OBJECTDIR}/functions_nomain.hpp.gch: ${OBJECTDIR}/functions.hpp.gch functions.hpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/functions.hpp.gch`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o "$@" functions.hpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/functions.hpp.gch ${OBJECTDIR}/functions_nomain.hpp.gch;\
 	fi
 
 ${OBJECTDIR}/one_day_game_nomain.o: ${OBJECTDIR}/one_day_game.o one_day_game.cpp 

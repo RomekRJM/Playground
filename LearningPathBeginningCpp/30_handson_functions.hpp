@@ -32,6 +32,8 @@ std::string find(std::string to_find, std::string data[], int beg, int end) {
     return "";
 }
 
-
+constexpr auto aggregate = [&] (std::string line) {
+    auto parts = split(line, "|", true);
+}
 #endif /* HANDSON_FUNCTIONS_HPP */
 

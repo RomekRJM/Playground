@@ -195,7 +195,7 @@ void runGameLogic(GameWorld *world, Character* player, const string playerInput)
 
 }
 
-int main(int argc, char** argv) {
+int main_odg(int argc, char** argv) {
     GameWorld* world = new GameWorld();
     Character* player = new Character(100, 10);
     player->setWeapon(new Weapon("Bare hands", 1, 5));
