@@ -23,7 +23,7 @@ public:
 			   std::string c,
 			   StateAbbrev s,
 			   std::string z) : _address(s1, s2, c), _state(s), _zip(z) {}
-	virtual ~_us_address() {}
+	virtual ~USAddress() {}
 
 	USAddress& operator=(const USAddress& rhs) {
 		_address::operator=(rhs);

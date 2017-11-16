@@ -15,6 +15,7 @@
 #define _SITE_HPP
 
 class Site {
+public:
     Site() : _id(1) {};
     Site(long id, std::string name, WebAddress uri, USAddress postal)
         : _id(id), _name(name), _uri(uri), _postal(postal) {};

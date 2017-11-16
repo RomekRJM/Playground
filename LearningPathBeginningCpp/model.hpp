@@ -19,6 +19,11 @@
 #include "_model/_web_address.hpp"
 
 #include "_model/_site.hpp"
+#include "_model/_state_abbrev.hpp"
+
+namespace data {
+    using FarmersSite = Site;
+}
 
 #endif /* MODEL_HPP */
 
