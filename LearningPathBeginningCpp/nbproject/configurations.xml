@@ -4,19 +4,32 @@
     <logicalFolder name="HeaderFiles"
                    displayName="Header Files"
                    projectFiles="true">
+      <logicalFolder name="_messaging" displayName="_messaging" projectFiles="true">
+        <itemPath>_messaging/_message.hpp</itemPath>
+        <itemPath>_messaging/_message_builder.hpp</itemPath>
+        <itemPath>_messaging/_message_header.hpp</itemPath>
+      </logicalFolder>
+      <logicalFolder name="_model" displayName="_model" projectFiles="true">
+        <itemPath>_model/_address.hpp</itemPath>
+        <itemPath>_model/_email_address.hpp</itemPath>
+        <itemPath>_model/_prov_abbrev.hpp</itemPath>
+        <itemPath>_model/_site.hpp</itemPath>
+        <itemPath>_model/_state_abbrev.hpp</itemPath>
+        <itemPath>_model/_us_address.hpp</itemPath>
+        <itemPath>_model/_web_address.hpp</itemPath>
+      </logicalFolder>
       <itemPath>30_handson_functions.hpp</itemPath>
-      <itemPath>_model/_address.hpp</itemPath>
-      <itemPath>_model/_email_address.hpp</itemPath>
-      <itemPath>_model/_prov_abbrev.hpp</itemPath>
-      <itemPath>_model/_site.hpp</itemPath>
-      <itemPath>_model/_state_abbrev.hpp</itemPath>
-      <itemPath>_model/_us_address.hpp</itemPath>
-      <itemPath>_model/_web_address.hpp</itemPath>
+      <itemPath>builder.hpp</itemPath>
+      <itemPath>_model/cube.h</itemPath>
       <itemPath>data.hpp</itemPath>
       <itemPath>file_reader.hpp</itemPath>
       <itemPath>file_system.hpp</itemPath>
       <itemPath>find.hpp</itemPath>
       <itemPath>functions.hpp</itemPath>
+      <itemPath>generic_builder.hpp</itemPath>
+      <itemPath>int_list.hpp</itemPath>
+      <itemPath>list.hpp</itemPath>
+      <itemPath>messaging.hpp</itemPath>
       <itemPath>model.hpp</itemPath>
       <itemPath>one_day_game.hpp</itemPath>
       <itemPath>string_utils.hpp</itemPath>
@@ -33,13 +46,29 @@
       <itemPath>11_enhanced_helloworld.cpp</itemPath>
       <itemPath>19_calc.cpp</itemPath>
       <itemPath>37_handson_pointers.cpp</itemPath>
+      <itemPath>49_handson_generic.cpp</itemPath>
       <itemPath>brute.cpp</itemPath>
+      <itemPath>_model/cube.cpp</itemPath>
       <itemPath>one_day_game.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
                    displayName="Test Files"
                    projectFiles="false"
                    kind="TEST_LOGICAL_FOLDER">
+      <logicalFolder name="f2"
+                     displayName="New Test 2"
+                     projectFiles="true"
+                     kind="TEST">
+        <itemPath>tests/find_fx_test.hpp</itemPath>
+        <itemPath>tests/find_test.hpp</itemPath>
+        <itemPath>tests/generic_builder_test.hpp</itemPath>
+        <itemPath>tests/int_list_test.hpp</itemPath>
+        <itemPath>tests/list_double_test.hpp</itemPath>
+        <itemPath>tests/list_string_test.hpp</itemPath>
+        <itemPath>tests/list_test.hpp</itemPath>
+        <itemPath>tests/main.cpp</itemPath>
+        <itemPath>tests/template_fx_test.hpp</itemPath>
+      </logicalFolder>
       <logicalFolder name="f1" displayName="Tests" projectFiles="true" kind="TEST">
         <itemPath>test.cpp</itemPath>
       </logicalFolder>
@@ -51,6 +80,10 @@
       <itemPath>Makefile</itemPath>
     </logicalFolder>
   </logicalFolder>
+  <sourceRootList>
+    <Elem>_model</Elem>
+    <Elem>_messaging</Elem>
+  </sourceRootList>
   <projectmakefile>Makefile</projectmakefile>
   <confs>
     <conf name="Debug" type="1">
@@ -71,6 +104,18 @@
             <pElem>.</pElem>
           </linkerDynSerch>
         </linkerTool>
+        <requiredProjects>
+          <makeArtifact PL="../../../NetBeansProjects/GoogleTest"
+                        CT="3"
+                        CN="Debug"
+                        AC="true"
+                        BL="true"
+                        WD="../../../NetBeansProjects/GoogleTest"
+                        BC="${MAKE}  -f Makefile CONF=Debug"
+                        CC="${MAKE}  -f Makefile CONF=Debug clean"
+                        OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libgoogletest.a">
+          </makeArtifact>
+        </requiredProjects>
       </compileType>
       <item path="11_enhanced_helloworld.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -84,6 +129,14 @@
       <item path="30_handson_functions.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="37_handson_pointers.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="49_handson_generic.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="_messaging/_message.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="_messaging/_message_builder.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="_messaging/_message_header.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="_model/_address.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -99,7 +152,13 @@
       </item>
       <item path="_model/_web_address.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="_model/cube.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="_model/cube.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="brute.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="builder.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="data.hpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -144,7 +203,34 @@
                             OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libgoogletest.a">
               </makeArtifact>
             </linkerLibProjectItem>
+            <linkerLibProjectItem>
+              <makeArtifact PL="../../../NetBeansProjects/GoogleTest"
+                            CT="3"
+                            CN="Release"
+                            AC="false"
+                            BL="true"
+                            WD="../../../NetBeansProjects/GoogleTest"
+                            BC="${MAKE}  -f Makefile CONF=Release"
+                            CC="${MAKE}  -f Makefile CONF=Release clean"
+                            OP="${CND_DISTDIR}/${CND_CONF}/${CND_PLATFORM}/libgoogletest.a">
+              </makeArtifact>
+            </linkerLibProjectItem>
           </linkerLibItems>
+        </linkerTool>
+      </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
         </linkerTool>
       </folder>
       <item path="file_reader.hpp" ex="false" tool="3" flavor2="0">
@@ -155,6 +241,14 @@
       </item>
       <item path="functions.hpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="generic_builder.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="int_list.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="list.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="messaging.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="model.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="one_day_game.cpp" ex="false" tool="1" flavor2="0">
@@ -164,6 +258,24 @@
       <item path="string_utils.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/find_fx_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/find_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/generic_builder_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/int_list_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/list_double_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/list_string_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/list_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/template_fx_test.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utils.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -209,6 +321,14 @@
       </item>
       <item path="37_handson_pointers.cpp" ex="false" tool="1" flavor2="0">
       </item>
+      <item path="49_handson_generic.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="_messaging/_message.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="_messaging/_message_builder.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="_messaging/_message_header.hpp" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="_model/_address.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="_model/_email_address.hpp" ex="false" tool="3" flavor2="0">
@@ -223,7 +343,13 @@
       </item>
       <item path="_model/_web_address.hpp" ex="false" tool="3" flavor2="0">
       </item>
+      <item path="_model/cube.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="_model/cube.h" ex="false" tool="3" flavor2="0">
+      </item>
       <item path="brute.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="builder.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="data.hpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -254,6 +380,21 @@
           </linkerDynSerch>
         </linkerTool>
       </folder>
+      <folder path="TestFiles/f2">
+        <cTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </cTool>
+        <ccTool>
+          <incDir>
+            <pElem>.</pElem>
+          </incDir>
+        </ccTool>
+        <linkerTool>
+          <output>${TESTDIR}/TestFiles/f2</output>
+        </linkerTool>
+      </folder>
       <item path="file_reader.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="file_system.hpp" ex="false" tool="3" flavor2="0">
@@ -261,6 +402,14 @@
       <item path="find.hpp" ex="false" tool="1" flavor2="0">
       </item>
       <item path="functions.hpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="generic_builder.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="int_list.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="list.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="messaging.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="model.hpp" ex="false" tool="3" flavor2="0">
       </item>
@@ -271,6 +420,24 @@
       <item path="string_utils.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="test.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/find_fx_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/find_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/generic_builder_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/int_list_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/list_double_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/list_string_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/list_test.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="tests/main.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="tests/template_fx_test.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="utils.hpp" ex="false" tool="3" flavor2="0">
       </item>

@@ -2,12 +2,12 @@
 #ifndef FIND_TEST_HPP_
 #define FIND_TEST_HPP_
 
-#include "gtest/gtest.h"
 #include <algorithm>
 #include <cstring>
 #include <string>
 
 #include "find.hpp"
+#include "gtest/gtest.h"
 
 TEST(BinarySearchTest, findDoesNotFindValueInStringArray) {
 

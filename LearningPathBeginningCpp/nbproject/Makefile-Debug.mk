@@ -38,6 +38,8 @@ OBJECTFILES= \
 	${OBJECTDIR}/11_enhanced_helloworld.o \
 	${OBJECTDIR}/19_calc.o \
 	${OBJECTDIR}/37_handson_pointers.o \
+	${OBJECTDIR}/49_handson_generic.o \
+	${OBJECTDIR}/_model/cube.o \
 	${OBJECTDIR}/brute.o \
 	${OBJECTDIR}/one_day_game.o
 
@@ -46,11 +48,13 @@ TESTDIR=${CND_BUILDDIR}/${CND_CONF}/${CND_PLATFORM}/tests
 
 # Test Files
 TESTFILES= \
+	${TESTDIR}/TestFiles/f2 \
 	${TESTDIR}/TestFiles/f1
 
 # Test Object Files
 TESTOBJECTFILES= \
-	${TESTDIR}/test.o
+	${TESTDIR}/test.o \
+	${TESTDIR}/tests/main.o
 
 # C Compiler Flags
 CFLAGS=
@@ -91,6 +95,16 @@ ${OBJECTDIR}/37_handson_pointers.o: 37_handson_pointers.cpp
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/37_handson_pointers.o 37_handson_pointers.cpp
 
+${OBJECTDIR}/49_handson_generic.o: 49_handson_generic.cpp
+	${MKDIR} -p ${OBJECTDIR}
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/49_handson_generic.o 49_handson_generic.cpp
+
+${OBJECTDIR}/_model/cube.o: _model/cube.cpp
+	${MKDIR} -p ${OBJECTDIR}/_model
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_model/cube.o _model/cube.cpp
+
 ${OBJECTDIR}/brute.o: brute.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
@@ -118,15 +132,27 @@ ${OBJECTDIR}/one_day_game.o: one_day_game.cpp
 
 # Subprojects
 .build-subprojects:
+	cd ../../../NetBeansProjects/GoogleTest && ${MAKE}  -f Makefile CONF=Debug
 
 # Build Test Targets
 .build-tests-conf: .build-tests-subprojects .build-conf ${TESTFILES}
 .build-tests-subprojects:
 	cd ../../../NetBeansProjects/GoogleTest && ${MAKE}  -f Makefile CONF=Debug
+	cd ../../../NetBeansProjects/GoogleTest && ${MAKE}  -f Makefile CONF=Release
+
+${TESTDIR}/TestFiles/f2: ${TESTDIR}/tests/main.o ${OBJECTFILES:%.o=%_nomain.o}
+	${MKDIR} -p ${TESTDIR}/TestFiles
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f2 $^ ${LDLIBSOPTIONS}   
 
 ${TESTDIR}/TestFiles/f1: ${TESTDIR}/test.o ${OBJECTFILES:%.o=%_nomain.o}
 	${MKDIR} -p ${TESTDIR}/TestFiles
-	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   ../../../NetBeansProjects/GoogleTest/dist/Debug/GNU-MacOSX/libgoogletest.a 
+	${LINK.cc} -o ${TESTDIR}/TestFiles/f1 $^ ${LDLIBSOPTIONS}   ../../../NetBeansProjects/GoogleTest/dist/Debug/GNU-MacOSX/libgoogletest.a ../../../NetBeansProjects/GoogleTest/dist/Release/GNU-MacOSX/libgoogletest.a 
+
+
+${TESTDIR}/tests/main.o: tests/main.cpp 
+	${MKDIR} -p ${TESTDIR}/tests
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -I. -std=c++11 -MMD -MP -MF "$@.d" -o ${TESTDIR}/tests/main.o tests/main.cpp
 
 
 ${TESTDIR}/test.o: test.cpp 
@@ -172,6 +198,32 @@ ${OBJECTDIR}/37_handson_pointers_nomain.o: ${OBJECTDIR}/37_handson_pointers.o 37
 	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/37_handson_pointers_nomain.o 37_handson_pointers.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/37_handson_pointers.o ${OBJECTDIR}/37_handson_pointers_nomain.o;\
+	fi
+
+${OBJECTDIR}/49_handson_generic_nomain.o: ${OBJECTDIR}/49_handson_generic.o 49_handson_generic.cpp 
+	${MKDIR} -p ${OBJECTDIR}
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/49_handson_generic.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/49_handson_generic_nomain.o 49_handson_generic.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/49_handson_generic.o ${OBJECTDIR}/49_handson_generic_nomain.o;\
+	fi
+
+${OBJECTDIR}/_model/cube_nomain.o: ${OBJECTDIR}/_model/cube.o _model/cube.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_model
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_model/cube.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_model/cube_nomain.o _model/cube.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_model/cube.o ${OBJECTDIR}/_model/cube_nomain.o;\
 	fi
 
 ${OBJECTDIR}/brute_nomain.o: ${OBJECTDIR}/brute.o brute.cpp 
@@ -243,6 +295,7 @@ ${OBJECTDIR}/one_day_game_nomain.o: ${OBJECTDIR}/one_day_game.o one_day_game.cpp
 .test-conf:
 	@if [ "${TEST}" = "" ]; \
 	then  \
+	    ${TESTDIR}/TestFiles/f2 || true; \
 	    ${TESTDIR}/TestFiles/f1 || true; \
 	else  \
 	    ./${TEST} || true; \
@@ -254,6 +307,7 @@ ${OBJECTDIR}/one_day_game_nomain.o: ${OBJECTDIR}/one_day_game.o one_day_game.cpp
 
 # Subprojects
 .clean-subprojects:
+	cd ../../../NetBeansProjects/GoogleTest && ${MAKE}  -f Makefile CONF=Debug clean
 
 # Enable dependency checking
 .dep.inc: .depcheck-impl

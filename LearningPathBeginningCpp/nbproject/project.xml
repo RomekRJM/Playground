@@ -6,10 +6,15 @@
             <name>LearningPathBeginningCpp</name>
             <c-extensions/>
             <cpp-extensions>cpp</cpp-extensions>
-            <header-extensions>hpp</header-extensions>
+            <header-extensions>h,hpp</header-extensions>
             <sourceEncoding>UTF-8</sourceEncoding>
-            <make-dep-projects/>
-            <sourceRootList/>
+            <make-dep-projects>
+                <make-dep-project>../../../NetBeansProjects/GoogleTest</make-dep-project>
+            </make-dep-projects>
+            <sourceRootList>
+                <sourceRootElem>_model</sourceRootElem>
+                <sourceRootElem>_messaging</sourceRootElem>
+            </sourceRootList>
             <confList>
                 <confElem>
                     <name>Debug</name>

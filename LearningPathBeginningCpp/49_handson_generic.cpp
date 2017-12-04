@@ -23,5 +23,6 @@ void int_list() {
 int main(int argc, char* argv[]) {
 	
 	int_list();
+        return 0;
 	
 }
