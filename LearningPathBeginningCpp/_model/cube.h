@@ -42,22 +42,29 @@ public:
     
     void rotateClockwise(Side front, Side top, Side left, 
                          Side bottom, Side right);
+    void rotateCounterClockwise(Side front, Side top, Side left, 
+                         Side bottom, Side right);
     
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     
     void printCube();
+    void printCubeSide(array<array<Color, SIZE>, SIZE> side);
 private:
+    void rotateFrontClockwise(Side front);
+    void rotateSidesClockwise(Side top, Side left, Side bottom, Side right);
+    void rotateFrontCounterClockwise(Side front);
+    void rotateSidesCounterClockwise(Side top, Side left, Side bottom, Side right);
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube = 
     {{
         {{
-            {RED, RED, RED},
-            {RED, RED, RED},
-            {RED, RED, RED}
+           {RED, RED, RED},
+           {RED, RED, RED},
+           {ORANGE, BLUE, GREEN}
         }},
         {{
            {WHITE, WHITE, WHITE},
            {WHITE, WHITE, WHITE},
-           {WHITE, WHITE, WHITE}
+           {WHITE, GREEN, ORANGE}
         }},
         {{
           {ORANGE, ORANGE, ORANGE},
@@ -65,19 +72,19 @@ private:
           {ORANGE, ORANGE, ORANGE}
         }},
         {{
-          {YELLOW, YELLOW, YELLOW},
+          {ORANGE, BLUE, GREEN},
           {YELLOW, YELLOW, YELLOW},
           {YELLOW, YELLOW, YELLOW}
         }},
         {{
+          {RED, BLUE, BLUE},
           {BLUE, BLUE, BLUE},
-          {BLUE, BLUE, BLUE},
-          {BLUE, BLUE, BLUE}
+          {GREEN, BLUE, BLUE}
         }},
         {{
           {GREEN, GREEN, GREEN},
-          {GREEN, GREEN, GREEN},
-          {GREEN, GREEN, GREEN}
+          {GREEN, GREEN, YELLOW},
+          {GREEN, GREEN, RED}
         }}
      }};
 };
