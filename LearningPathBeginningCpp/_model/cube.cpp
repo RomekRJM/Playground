@@ -17,8 +17,6 @@
 
 using namespace std;
 
-Cube::Cube() {
-}
 
 Cube::Cube(const Cube& orig) {
 }
@@ -177,7 +175,8 @@ void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
 
 int main(int argc, char** argv) {
     Cube cube = Cube();
-    cube.rotateCounterClockwise(Side::FRONT, Side::UP, Side::LEFT, Side::DOWN, Side::RIGHT);
+    //cube.rotateCounterClockwise(Side::FRONT, Side::UP, Side::LEFT, Side::DOWN, Side::RIGHT);
+    cube.rotate(Rotation::UP_CLOCKWISE);
     cube.printCube();
 
     return 0;
