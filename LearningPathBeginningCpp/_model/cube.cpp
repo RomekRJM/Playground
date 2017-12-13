@@ -31,12 +31,7 @@ array<array<Color, Cube::SIZE>, Cube::SIZE> Cube::copySide(Side side) {
     return sideCopy;
 }
 
-void Cube::rotateClockwise(Side side) {
-    rotateFrontClockwise(side);
-    rotateSidesClockwiseForFront();
-}
-
-void Cube::rotateFrontClockwise(Side front) {
+void Cube::rotateSideClockwise(Side front) {
     array<array<Color, SIZE>, SIZE> front_copy = copySide(front);
 
     int i, j;
@@ -75,12 +70,7 @@ void Cube::rotateSidesClockwiseForFront() {
 
 }
 
-void Cube::rotateCounterClockwise(Side side) {
-    rotateFrontCounterClockwise(side);
-    rotateSidesCounterClockwiseForFront();
-}
-
-void Cube::rotateFrontCounterClockwise(Side front) {
+void Cube::rotateSideCounterClockwise(Side front) {
     array<array<Color, SIZE>, SIZE> front_copy = copySide(front);
 
     int i, j;

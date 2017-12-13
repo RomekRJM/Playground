@@ -42,8 +42,8 @@ enum Rotation {
 class Cube {
 public:
     Cube() {
-        function<void()> rfc = [this]() { rotateClockwise(FRONT); rotateSidesClockwiseForFront(); };
-        function<void()> rfcc = [this]() { rotateCounterClockwise(FRONT); rotateSidesCounterClockwiseForFront(); };
+        function<void()> rfc = [this]() { rotateSideClockwise(FRONT); rotateSidesClockwiseForFront(); };
+        function<void()> rfcc = [this]() { rotateSideCounterClockwise(FRONT); rotateSidesCounterClockwiseForFront(); };
         rotations.insert(pair<Rotation, function<void()>>(FRONT_CLOCKWISE, rfc));
         rotations.insert(pair<Rotation, function<void()>>(FRONT_COUNTER_CLOCKWISE, rfcc));
     }
@@ -63,21 +63,14 @@ public:
         }
     }
     
-    void rotateFrontCounterClockwise(Side front, Side top, Side left, 
-                         Side bottom, Side right);
-    
-    void rotateClockwise(Side side);
-    void rotateCounterClockwise(Side side);
-    
-    array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
-    
     void printCube();
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
 private:
-    void rotateFrontClockwise(Side front);
+    void rotateSideClockwise(Side front);
     void rotateSidesClockwiseForFront();
-    void rotateFrontCounterClockwise(Side front);
+    void rotateSideCounterClockwise(Side front);
     void rotateSidesCounterClockwiseForFront();
+    array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube = 
     {{
         {{ // FRONT
