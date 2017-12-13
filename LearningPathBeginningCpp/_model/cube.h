@@ -42,16 +42,10 @@ enum Rotation {
 class Cube {
 public:
     Cube() {
-        function<void()> rfc = [this]() { return rotateClockwise(FRONT, UP, LEFT, DOWN, RIGHT); };
-        function<void()> rfcc = [this]() { return rotateCounterClockwise(FRONT, UP, LEFT, DOWN, RIGHT); };
+        function<void()> rfc = [this]() { rotateClockwise(FRONT); rotateSidesClockwiseForFront(); };
+        function<void()> rfcc = [this]() { rotateCounterClockwise(FRONT); rotateSidesCounterClockwiseForFront(); };
         rotations.insert(pair<Rotation, function<void()>>(FRONT_CLOCKWISE, rfc));
         rotations.insert(pair<Rotation, function<void()>>(FRONT_COUNTER_CLOCKWISE, rfcc));
-        
-        function<void()> ruc = [this]() { return rotateClockwise(UP, BACK, LEFT, FRONT, RIGHT); };
-        function<void()> rucc = [this]() { return rotateCounterClockwise(UP, BACK, LEFT, FRONT, RIGHT); };
-        rotations.insert(pair<Rotation, function<void()>>(UP_CLOCKWISE, ruc));
-        rotations.insert(pair<Rotation, function<void()>>(UP_COUNTER_CLOCKWISE, rucc));
-        
     }
     
     Cube(const Cube& orig);
@@ -72,10 +66,8 @@ public:
     void rotateFrontCounterClockwise(Side front, Side top, Side left, 
                          Side bottom, Side right);
     
-    void rotateClockwise(Side front, Side top, Side left, 
-                         Side bottom, Side right);
-    void rotateCounterClockwise(Side front, Side top, Side left, 
-                         Side bottom, Side right);
+    void rotateClockwise(Side side);
+    void rotateCounterClockwise(Side side);
     
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     
@@ -83,9 +75,9 @@ public:
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
 private:
     void rotateFrontClockwise(Side front);
-    void rotateSidesClockwise(Side top, Side left, Side bottom, Side right);
+    void rotateSidesClockwiseForFront();
     void rotateFrontCounterClockwise(Side front);
-    void rotateSidesCounterClockwise(Side top, Side left, Side bottom, Side right);
+    void rotateSidesCounterClockwiseForFront();
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube = 
     {{
         {{ // FRONT
