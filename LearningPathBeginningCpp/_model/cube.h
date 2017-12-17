@@ -41,16 +41,7 @@ enum Rotation {
 
 class Cube {
 public:
-    Cube() {
-        function<void()> fc = [this]() { rotateSideClockwise(FRONT); rotateSidesClockwiseForFront(); };
-        function<void()> fcc = [this]() { rotateSideCounterClockwise(FRONT); rotateSidesCounterClockwiseForFront(); };
-        rotations.insert(pair<Rotation, function<void()>>(FRONT_CLOCKWISE, fc));
-        rotations.insert(pair<Rotation, function<void()>>(FRONT_COUNTER_CLOCKWISE, fcc));
-        
-        function<void()> uc = [this]() { rotateSideClockwise(UP); rotateSidesClockwiseForUp(); };
-        rotations.insert(pair<Rotation, function<void()>>(UP_CLOCKWISE, uc));
-    }
-    
+    Cube();
     Cube(const Cube& orig);
     virtual ~Cube();
     
