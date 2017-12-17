@@ -45,6 +45,20 @@ Cube::Cube() {
     };
     rotations.insert(pair<Rotation, function<void()>>(UP_CLOCKWISE, uc));
     rotations.insert(pair<Rotation, function<void()>>(UP_COUNTER_CLOCKWISE, ucc));
+    
+    function<void() > dc = [this]() {
+        rotateSideClockwise(DOWN);
+        rotateSidesClockwiseForDown();
+    };
+    function<void() > dcc = [this]() {
+        rotateSideCounterClockwise(DOWN);
+        
+        for(int i=0; i<3; ++i) {
+            rotateSidesClockwiseForDown();
+        }
+    };
+    rotations.insert(pair<Rotation, function<void()>>(DOWN_CLOCKWISE, dc));
+    rotations.insert(pair<Rotation, function<void()>>(DOWN_COUNTER_CLOCKWISE, dcc));
 }
 
 Cube::Cube(const Cube& orig) {
@@ -112,27 +126,41 @@ void Cube::rotateSidesClockwiseForFront() {
 }
 
 void Cube::rotateSidesClockwiseForUp() {
-    int i;
+    rotateSidesClockwiseUpDown(Side::UP);
+}
+
+void Cube::rotateSidesClockwiseForDown() {
+    rotateSidesClockwiseUpDown(Side::DOWN);
+}
+
+void Cube::rotateSidesClockwiseUpDown(Side side) {
+    int i, row = -1;
+    if (side == Side::UP) {
+        row = 0;
+    } else if (side == Side::DOWN) {
+        row = SIZE - 1;
+    }
+    
     array<Color, SIZE> rowCopy, columnCopy;
-    copy(&cube[Side::BACK][0][0], &cube[Side::BACK][0][0] + SIZE, &rowCopy[0]);
+    copy(&cube[Side::BACK][row][0], &cube[Side::BACK][row][0] + SIZE, &rowCopy[0]);
 
     for (i = 0; i < SIZE; ++i) {
-        cube[Side::BACK][0][i] = cube[Side::LEFT][0][i];
+        cube[Side::BACK][row][i] = cube[Side::LEFT][row][i];
     }
 
     for (i = 0; i < SIZE; ++i) {
-        columnCopy[i] = cube[Side::RIGHT][0][i];
-        cube[Side::RIGHT][0][i] = rowCopy[i];
+        columnCopy[i] = cube[Side::RIGHT][row][i];
+        cube[Side::RIGHT][row][i] = rowCopy[i];
     }
 
-    copy(&cube[Side::FRONT][0][0], &cube[Side::FRONT][0][0] + SIZE, &rowCopy[0]);
+    copy(&cube[Side::FRONT][row][0], &cube[Side::FRONT][row][0] + SIZE, &rowCopy[0]);
 
     for (i = 0; i < SIZE; ++i) {
-        cube[Side::FRONT][0][i] = columnCopy[i];
+        cube[Side::FRONT][row][i] = columnCopy[i];
     }
 
     for (i = 0; i < SIZE; ++i) {
-        cube[Side::LEFT][0][i] = rowCopy[i];
+        cube[Side::LEFT][row][i] = rowCopy[i];
     }
 }
 
@@ -191,7 +219,7 @@ void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
 
 int main(int argc, char** argv) {
     Cube cube = Cube();
-    cube.rotate(Rotation::UP_COUNTER_CLOCKWISE);
+    cube.rotate(Rotation::DOWN_CLOCKWISE);
     cube.printCube();
 
     return 0;
