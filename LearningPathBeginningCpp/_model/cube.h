@@ -42,10 +42,13 @@ enum Rotation {
 class Cube {
 public:
     Cube() {
-        function<void()> rfc = [this]() { rotateSideClockwise(FRONT); rotateSidesClockwiseForFront(); };
-        function<void()> rfcc = [this]() { rotateSideCounterClockwise(FRONT); rotateSidesCounterClockwiseForFront(); };
-        rotations.insert(pair<Rotation, function<void()>>(FRONT_CLOCKWISE, rfc));
-        rotations.insert(pair<Rotation, function<void()>>(FRONT_COUNTER_CLOCKWISE, rfcc));
+        function<void()> fc = [this]() { rotateSideClockwise(FRONT); rotateSidesClockwiseForFront(); };
+        function<void()> fcc = [this]() { rotateSideCounterClockwise(FRONT); rotateSidesCounterClockwiseForFront(); };
+        rotations.insert(pair<Rotation, function<void()>>(FRONT_CLOCKWISE, fc));
+        rotations.insert(pair<Rotation, function<void()>>(FRONT_COUNTER_CLOCKWISE, fcc));
+        
+        function<void()> uc = [this]() { rotateSideClockwise(UP); rotateSidesClockwiseForUp(); };
+        rotations.insert(pair<Rotation, function<void()>>(UP_CLOCKWISE, uc));
     }
     
     Cube(const Cube& orig);
@@ -67,9 +70,10 @@ public:
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
 private:
     void rotateSideClockwise(Side front);
-    void rotateSidesClockwiseForFront();
     void rotateSideCounterClockwise(Side front);
+    void rotateSidesClockwiseForFront();
     void rotateSidesCounterClockwiseForFront();
+    void rotateSidesClockwiseForUp();
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube = 
     {{
@@ -84,7 +88,7 @@ private:
            {WHITE, GREEN, ORANGE}
         }},
         {{ // BACK
-          {ORANGE, ORANGE, ORANGE},
+          {RED, ORANGE, WHITE},
           {ORANGE, ORANGE, ORANGE},
           {ORANGE, ORANGE, ORANGE}
         }},
@@ -99,7 +103,7 @@ private:
           {GREEN, BLUE, BLUE}
         }},
         {{ // LEFT
-          {GREEN, GREEN, GREEN},
+          {RED, YELLOW, GREEN},
           {GREEN, GREEN, YELLOW},
           {GREEN, GREEN, RED}
         }}

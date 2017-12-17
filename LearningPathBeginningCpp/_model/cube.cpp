@@ -44,6 +44,19 @@ void Cube::rotateSideClockwise(Side front) {
     cube[front] = front_copy;
 }
 
+void Cube::rotateSideCounterClockwise(Side front) {
+    array<array<Color, SIZE>, SIZE> front_copy = copySide(front);
+
+    int i, j;
+    for (i = 0; i < SIZE; ++i) {
+        for (j = 0; j < SIZE; ++j) {
+            front_copy[SIZE - j - 1][i] = cube[front][i][j];
+        }
+    }
+
+    cube[front] = front_copy;
+}
+
 void Cube::rotateSidesClockwiseForFront() {
     int i;
     array<Color, SIZE> rowCopy, columnCopy;
@@ -67,20 +80,6 @@ void Cube::rotateSidesClockwiseForFront() {
     for (i = 0; i < SIZE; ++i) {
         cube[Side::LEFT][i][SIZE - 1] = rowCopy[i];
     }
-
-}
-
-void Cube::rotateSideCounterClockwise(Side front) {
-    array<array<Color, SIZE>, SIZE> front_copy = copySide(front);
-
-    int i, j;
-    for (i = 0; i < SIZE; ++i) {
-        for (j = 0; j < SIZE; ++j) {
-            front_copy[SIZE - j - 1][i] = cube[front][i][j];
-        }
-    }
-
-    cube[front] = front_copy;
 }
 
 void Cube::rotateSidesCounterClockwiseForFront() {
@@ -105,6 +104,31 @@ void Cube::rotateSidesCounterClockwiseForFront() {
     
     for (i = 0; i < SIZE; ++i) {
         cube[Side::RIGHT][SIZE - i - 1][0] = rowCopy[i];
+    }
+}
+
+void Cube::rotateSidesClockwiseForUp() {
+    int i;
+    array<Color, SIZE> rowCopy, columnCopy;
+    copy(&cube[Side::BACK][0][0], &cube[Side::BACK][0][0]+SIZE, &rowCopy[0]);
+
+    for (i = 0; i < SIZE; ++i) {
+        cube[Side::BACK][0][i] = cube[Side::LEFT][0][i];
+    }
+    
+    for (i = 0; i < SIZE; ++i) {
+        columnCopy[i] = cube[Side::RIGHT][0][i];
+        cube[Side::RIGHT][0][i] = rowCopy[i];
+    }
+    
+    copy(&cube[Side::FRONT][0][0], &cube[Side::FRONT][0][0]+SIZE, &rowCopy[0]);
+    
+    for (i = 0; i < SIZE; ++i) {
+        cube[Side::FRONT][0][i] = columnCopy[i];
+    }
+    
+    for (i = 0; i < SIZE; ++i) {
+        cube[Side::LEFT][0][i] = rowCopy[i];
     }
 }
 
@@ -163,7 +187,7 @@ void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
 
 int main(int argc, char** argv) {
     Cube cube = Cube();
-    cube.rotate(Rotation::FRONT_CLOCKWISE);
+    cube.rotate(Rotation::UP_CLOCKWISE);
     cube.printCube();
 
     return 0;
