@@ -68,6 +68,9 @@ private:
     void rotateSidesClockwiseForUp();
     void rotateSidesClockwiseForDown();
     void rotateSidesClockwiseUpDown(Side side);
+    void rotateSidesClockwiseForLeft();
+    void rotateSidesClockwiseForRight();
+    void rotateSidesClockwiseLeftRight(Side side);
     
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube = 
