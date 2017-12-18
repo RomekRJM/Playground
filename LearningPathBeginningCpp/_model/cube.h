@@ -63,6 +63,8 @@ private:
     void rotateSideClockwise(Side front);
     void rotateSideCounterClockwise(Side front);
     void rotateSidesClockwiseForFront();
+    void rotateSidesClockwiseForBack();
+    void rotateSidesClockwiseFrontBack(Side side);
     void rotateSidesClockwiseForUp();
     void rotateSidesClockwiseForDown();
     void rotateSidesClockwiseUpDown(Side side);
