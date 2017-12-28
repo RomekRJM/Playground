@@ -1,12 +1,17 @@
-import static org.junit.jupiter.api.Assertions.assertEquals;
-
 import lambdasandstreams.Hero;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Stream;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class HeroTest {
 
@@ -40,5 +45,22 @@ public class HeroTest {
         heroes.stream().forEach(heroConsumer::accept);
 
         assert(heroes.stream().allMatch(x -> x.getHp() > 100));
+    }
+
+    @Test
+    public void testFindHeroesWithNamesFromFile() throws IOException {
+        ArrayList<Hero>heroesWithNameFromFile = new ArrayList<Hero>();
+        try (Stream<String> stream = Files.lines(Paths.get("src/test/resources/HeroesNames"))) {
+            stream.forEach(x ->
+            {
+                Optional<Hero> optionalHero = heroes.stream().filter(y -> y.getName().equals(x)).findFirst();
+                optionalHero.ifPresent(z -> heroesWithNameFromFile.add(z));
+            }
+            );
+        } catch (IOException e) {
+            throw e;
+        }
+
+        assert(heroesWithNameFromFile.get(0).getName().equals("Barrog"));
     }
 }
