@@ -18,6 +18,16 @@
 using namespace std;
 
 Cube::Cube() {
+    setUpRotations();
+}
+
+Cube::Cube(const Cube& orig) {
+}
+
+Cube::~Cube() {
+}
+
+void Cube::setUpRotations() {
     function<void() > fc = [this]() {
         rotateSideClockwise(FRONT);
         rotateSidesClockwiseForFront();
@@ -100,10 +110,8 @@ Cube::Cube() {
     rotations.insert(pair<Rotation, function<void()>>(LEFT_COUNTER_CLOCKWISE, lcc));
 }
 
-Cube::Cube(const Cube& orig) {
-}
-
-Cube::~Cube() {
+void Cube::setUpFlips() {
+    
 }
 
 array<array<Color, Cube::SIZE>, Cube::SIZE> Cube::copySide(Side side) {

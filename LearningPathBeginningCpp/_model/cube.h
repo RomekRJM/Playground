@@ -39,6 +39,10 @@ enum Rotation {
     RIGHT_COUNTER_CLOCKWISE, LEFT_COUNTER_CLOCKWISE
 };
 
+enum Flip {
+    Y_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90, Z_180
+};
+
 class Cube {
 public:
     Cube();
@@ -49,10 +53,17 @@ public:
     static const int SIDES = 6;
     
     map<Rotation, function<void()>> rotations;
-    
     void rotate(Rotation rotation) {
         auto iter = rotations.find(rotation);
         if (iter != end(rotations)) {
+            iter->second();
+        }
+    }
+    
+    map<Flip, function<void()>> flips;
+    void flip(Flip flip) {
+        auto iter = flips.find(flip);
+        if (iter != end(flips)) {
             iter->second();
         }
     }
@@ -71,6 +82,8 @@ private:
     void rotateSidesClockwiseForLeft();
     void rotateSidesClockwiseForRight();
     void rotateSidesClockwiseLeftOrCounterClockwiseRight(Side side);
+    void setUpRotations();
+    void setUpFlips();
     
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube = 

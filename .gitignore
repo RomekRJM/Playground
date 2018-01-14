@@ -28,3 +28,5 @@
 *.app
 /LearningPathBeginningCpp/build/
 /LearningPathBeginningCpp/dist/
+Java/target/
+.idea/
