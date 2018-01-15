@@ -71,6 +71,8 @@ public:
     void printCube();
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
 private:
+    void setUpRotations();
+    void setUpFlips();
     void rotateSideClockwise(Side front);
     void rotateSideCounterClockwise(Side front);
     void rotateSidesClockwiseForFront();
@@ -82,8 +84,9 @@ private:
     void rotateSidesClockwiseForLeft();
     void rotateSidesClockwiseForRight();
     void rotateSidesClockwiseLeftOrCounterClockwiseRight(Side side);
-    void setUpRotations();
-    void setUpFlips();
+    void flipSidesClockwiseOverY();
+    void flipSidesClockwiseOverZ();
+    void replaceSide(Side side, array<array<Color, Cube::SIZE>, Cube::SIZE> sideValue);
     
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube = 

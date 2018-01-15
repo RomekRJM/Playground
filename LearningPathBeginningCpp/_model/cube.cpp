@@ -19,6 +19,7 @@ using namespace std;
 
 Cube::Cube() {
     setUpRotations();
+    setUpFlips();
 }
 
 Cube::Cube(const Cube& orig) {
@@ -111,7 +112,58 @@ void Cube::setUpRotations() {
 }
 
 void Cube::setUpFlips() {
+    function<void() > yc = [this]() {
+        rotateSideClockwise(UP);
+        rotateSideClockwise(DOWN);
+        flipSidesClockwiseOverY();
+    };
+    flips.insert(pair<Flip, function<void()>>(Y_CLOCKWISE_90, yc));
     
+    function<void() > ycc = [this]() {
+        for(int i=0; i<3; ++i) {
+            rotateSideClockwise(UP);
+            rotateSideClockwise(DOWN);
+            flipSidesClockwiseOverY();
+        }
+    };
+    flips.insert(pair<Flip, function<void()>>(Y_COUNTER_CLOCKWISE_90, ycc));
+    
+    function<void() > z180 = [this]() {
+        for(int i=0; i<2; ++i) {
+            rotateSideClockwise(FRONT);
+            rotateSideClockwise(BACK);
+            flipSidesClockwiseOverZ();
+        }
+    };
+    flips.insert(pair<Flip, function<void()>>(Z_180, z180));
+}
+
+void Cube::flipSidesClockwiseOverY() {
+    array<array<Color, Cube::SIZE>, Cube::SIZE> side1 = copySide(Side::FRONT);
+    array<array<Color, Cube::SIZE>, Cube::SIZE> side2 = copySide(Side::LEFT);
+    
+    replaceSide(Side::LEFT, side1);
+    side1 = copySide(Side::BACK);
+    replaceSide(Side::BACK, side2);
+    side2 = copySide(Side::RIGHT);
+    replaceSide(Side::RIGHT, side1);
+    replaceSide(Side::FRONT, side2);
+}
+
+void Cube::flipSidesClockwiseOverZ() {
+    array<array<Color, Cube::SIZE>, Cube::SIZE> side1 = copySide(Side::UP);
+    array<array<Color, Cube::SIZE>, Cube::SIZE> side2 = copySide(Side::RIGHT);
+    
+    replaceSide(Side::RIGHT, side1);
+    side1 = copySide(Side::DOWN);
+    replaceSide(Side::DOWN, side2);
+    side2 = copySide(Side::LEFT);
+    replaceSide(Side::LEFT, side1);
+    replaceSide(Side::UP, side2);
+}
+
+void Cube::replaceSide(Side side, array<array<Color, Cube::SIZE>, Cube::SIZE> sideValue) {
+    copy(&sideValue[0][0], &sideValue[0][0] + SIZE*SIZE, &cube[side][0][0]);
 }
 
 array<array<Color, Cube::SIZE>, Cube::SIZE> Cube::copySide(Side side) {
@@ -324,7 +376,8 @@ void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
 
 int main(int argc, char** argv) {
     Cube cube = Cube();
-    cube.rotate(Rotation::RIGHT_COUNTER_CLOCKWISE);
+    //cube.rotate(Rotation::RIGHT_COUNTER_CLOCKWISE);
+    cube.flip(Flip::Y_COUNTER_CLOCKWISE_90);
     cube.printCube();
 
     return 0;
