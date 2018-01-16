@@ -373,12 +373,3 @@ void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
         cout << endl;
     }
 }
-
-int main(int argc, char** argv) {
-    Cube cube = Cube();
-    //cube.rotate(Rotation::RIGHT_COUNTER_CLOCKWISE);
-    cube.flip(Flip::Y_COUNTER_CLOCKWISE_90);
-    cube.printCube();
-
-    return 0;
-}

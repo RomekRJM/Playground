@@ -19,6 +19,7 @@
         <itemPath>_model/_web_address.hpp</itemPath>
       </logicalFolder>
       <itemPath>30_handson_functions.hpp</itemPath>
+      <itemPath>_model/beginners_method.hpp</itemPath>
       <itemPath>builder.hpp</itemPath>
       <itemPath>_model/cube.h</itemPath>
       <itemPath>data.hpp</itemPath>
@@ -47,6 +48,7 @@
       <itemPath>19_calc.cpp</itemPath>
       <itemPath>37_handson_pointers.cpp</itemPath>
       <itemPath>49_handson_generic.cpp</itemPath>
+      <itemPath>_model/beginners_method.cpp</itemPath>
       <itemPath>brute.cpp</itemPath>
       <itemPath>_model/cube.cpp</itemPath>
       <itemPath>one_day_game.cpp</itemPath>
@@ -151,6 +153,10 @@
       <item path="_model/_us_address.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="_model/_web_address.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="_model/beginners_method.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="_model/beginners_method.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="_model/cube.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -342,6 +348,10 @@
       <item path="_model/_us_address.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="_model/_web_address.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="_model/beginners_method.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="_model/beginners_method.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="_model/cube.cpp" ex="false" tool="1" flavor2="0">
       </item>

@@ -39,6 +39,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/19_calc.o \
 	${OBJECTDIR}/37_handson_pointers.o \
 	${OBJECTDIR}/49_handson_generic.o \
+	${OBJECTDIR}/_model/beginners_method.o \
 	${OBJECTDIR}/_model/cube.o \
 	${OBJECTDIR}/brute.o \
 	${OBJECTDIR}/one_day_game.o
@@ -99,6 +100,11 @@ ${OBJECTDIR}/49_handson_generic.o: 49_handson_generic.cpp
 	${MKDIR} -p ${OBJECTDIR}
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/49_handson_generic.o 49_handson_generic.cpp
+
+${OBJECTDIR}/_model/beginners_method.o: _model/beginners_method.cpp
+	${MKDIR} -p ${OBJECTDIR}/_model
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_model/beginners_method.o _model/beginners_method.cpp
 
 ${OBJECTDIR}/_model/cube.o: _model/cube.cpp
 	${MKDIR} -p ${OBJECTDIR}/_model
@@ -211,6 +217,19 @@ ${OBJECTDIR}/49_handson_generic_nomain.o: ${OBJECTDIR}/49_handson_generic.o 49_h
 	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/49_handson_generic_nomain.o 49_handson_generic.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/49_handson_generic.o ${OBJECTDIR}/49_handson_generic_nomain.o;\
+	fi
+
+${OBJECTDIR}/_model/beginners_method_nomain.o: ${OBJECTDIR}/_model/beginners_method.o _model/beginners_method.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_model
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_model/beginners_method.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_model/beginners_method_nomain.o _model/beginners_method.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_model/beginners_method.o ${OBJECTDIR}/_model/beginners_method_nomain.o;\
 	fi
 
 ${OBJECTDIR}/_model/cube_nomain.o: ${OBJECTDIR}/_model/cube.o _model/cube.cpp 

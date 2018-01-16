@@ -33,9 +33,9 @@ enum Side {
 string getSideName(Side s);
 
 enum Rotation {
-    FRONT_CLOCKWISE, UP_CLOCKWISE, BACK_CLOCKWISE, DOWN_CLOCKWISE, 
-    RIGHT_CLOCKWISE, LEFT_CLOCKWISE, FRONT_COUNTER_CLOCKWISE, 
-    UP_COUNTER_CLOCKWISE, BACK_COUNTER_CLOCKWISE, DOWN_COUNTER_CLOCKWISE, 
+    FRONT_CLOCKWISE, UP_CLOCKWISE, BACK_CLOCKWISE, DOWN_CLOCKWISE,
+    RIGHT_CLOCKWISE, LEFT_CLOCKWISE, FRONT_COUNTER_CLOCKWISE,
+    UP_COUNTER_CLOCKWISE, BACK_COUNTER_CLOCKWISE, DOWN_COUNTER_CLOCKWISE,
     RIGHT_COUNTER_CLOCKWISE, LEFT_COUNTER_CLOCKWISE
 };
 
@@ -44,30 +44,34 @@ enum Flip {
 };
 
 class Cube {
+    friend class BeginnersMethod;
+
 public:
     Cube();
     Cube(const Cube& orig);
     virtual ~Cube();
-    
+
     static const int SIZE = 3;
     static const int SIDES = 6;
-    
-    map<Rotation, function<void()>> rotations;
+
+    map<Rotation, function<void() >> rotations;
+
     void rotate(Rotation rotation) {
         auto iter = rotations.find(rotation);
         if (iter != end(rotations)) {
             iter->second();
         }
     }
-    
-    map<Flip, function<void()>> flips;
+
+    map<Flip, function<void() >> flips;
+
     void flip(Flip flip) {
         auto iter = flips.find(flip);
         if (iter != end(flips)) {
             iter->second();
         }
     }
-    
+
     void printCube();
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
 private:
@@ -87,41 +91,47 @@ private:
     void flipSidesClockwiseOverY();
     void flipSidesClockwiseOverZ();
     void replaceSide(Side side, array<array<Color, Cube::SIZE>, Cube::SIZE> sideValue);
-    
+
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
-    array<array<array<Color, SIZE>, SIZE>, SIDES> cube = 
-    {{
-        {{ // FRONT
-           {RED, RED, RED},
-           {RED, RED, RED},
-           {ORANGE, BLUE, GREEN}
-        }},
-        {{ // UP
-           {WHITE, WHITE, WHITE},
-           {WHITE, WHITE, WHITE},
-           {WHITE, GREEN, ORANGE}
-        }},
-        {{ // BACK
-          {RED, ORANGE, WHITE},
-          {ORANGE, ORANGE, ORANGE},
-          {ORANGE, ORANGE, ORANGE}
-        }},
-        {{ // DOWN
-          {ORANGE, BLUE, GREEN},
-          {YELLOW, YELLOW, YELLOW},
-          {YELLOW, YELLOW, YELLOW}
-        }},
-        {{ // RIGHT
-          {RED, BLUE, BLUE},
-          {BLUE, BLUE, BLUE},
-          {GREEN, BLUE, BLUE}
-        }},
-        {{ // LEFT
-          {RED, YELLOW, GREEN},
-          {GREEN, GREEN, YELLOW},
-          {GREEN, GREEN, RED}
-        }}
-     }};
+    array<array<array<Color, SIZE>, SIZE>, SIDES> cube ={
+        {
+            {
+                { // FRONT
+                    {RED, RED, RED},
+                    {RED, RED, RED},
+                    {ORANGE, BLUE, GREEN}
+                }},
+            {
+                { // UP
+                    {WHITE, WHITE, WHITE},
+                    {WHITE, YELLOW, WHITE},
+                    {WHITE, WHITE, ORANGE}
+                }},
+            {
+                { // BACK
+                    {RED, ORANGE, WHITE},
+                    {ORANGE, ORANGE, ORANGE},
+                    {ORANGE, ORANGE, ORANGE}
+                }},
+            {
+                { // DOWN
+                    {ORANGE, BLUE, GREEN},
+                    {YELLOW, YELLOW, YELLOW},
+                    {YELLOW, YELLOW, YELLOW}
+                }},
+            {
+                { // RIGHT
+                    {RED, BLUE, BLUE},
+                    {BLUE, BLUE, BLUE},
+                    {GREEN, BLUE, BLUE}
+                }},
+            {
+                { // LEFT
+                    {RED, YELLOW, GREEN},
+                    {GREEN, GREEN, YELLOW},
+                    {GREEN, GREEN, RED}
+                }}
+        }};
 };
 
 
