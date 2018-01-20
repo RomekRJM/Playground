@@ -15,8 +15,10 @@
 #define CUBE_H
 
 #include <stdlib.h>
+#include <stdexcept>
 #include <array>
 #include <map>
+#include <set>
 
 using namespace std;
 
@@ -45,6 +47,24 @@ enum Flip {
     Y_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90, Z_180
 };
 
+template<typename T, typename U>
+void executeFunctionFromMap(T key, map<T, U> _map) {
+    auto iter = _map.find(key);
+    if (iter != end(_map)) {
+        iter->second();
+    }
+}
+
+template<typename K, typename V>
+V findInMap(K key, map<K, V> _map) {
+    auto iter = _map.find(key);
+    if (iter != end(_map)) {
+        return iter->second;
+    }
+    
+    throw domain_error("Key not found in map.");
+}
+
 class Cube {
     friend class BeginnersMethod;
 
@@ -57,14 +77,6 @@ public:
     static const int SIDES = 6;
 
     map<Rotation, function<void() >> rotations;
-    
-    template<typename T, typename U>
-    void executeFunctionFromMap(T item, map<T, U> _map) {
-        auto iter = _map.find(item);
-        if (iter != end(_map)) {
-            iter->second();
-        }
-    }
 
     void rotate(Rotation rotation) {
         return executeFunctionFromMap(rotation, rotations);
@@ -75,12 +87,19 @@ public:
     void flip(Flip flip) {
         return executeFunctionFromMap(flip, flips);
     }
+    
+    map<Side, set<Side>> neighbours;
+    
+    set<Side> getNeighbours(Side side) {
+        return findInMap(side, neighbours);
+    }
 
     void printCube();
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
 private:
     void setUpRotations();
     void setUpFlips();
+    void setUpNeighbours();
     void rotateSideClockwise(Side front);
     void rotateSideCounterClockwise(Side front);
     void rotateSidesClockwiseForFront();

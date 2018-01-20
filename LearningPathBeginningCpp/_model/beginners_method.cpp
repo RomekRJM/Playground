@@ -44,6 +44,8 @@ bool BeginnersMethod::isStateDone(Cube cube, State state, Side leadingSide) {
             return checkDasy(cube, leadingSide);
         case WHITE_CROSS:
             return checkWhiteCross(cube, leadingSide);
+        default:
+            return false;
     }
 };
 
@@ -63,9 +65,12 @@ bool BeginnersMethod::checkWhiteCross(Cube cube, Side leadingSide) {
 
 int main(int argc, char** argv) {
     Cube cube = Cube();
-    cube.rotate(Rotation::UP_CLOCKWISE);
+    //cube.rotate(Rotation::UP_CLOCKWISE);
     cube.flip(Flip::Y_CLOCKWISE_90);
     cube.printCube();
+    
+    for(Side s : cube.getNeighbours(DOWN))
+        cout << getSideName(s);
     //BeginnersMethod beginnersMethod = BeginnersMethod();
 
     //cout << beginnersMethod.isDasyDone(cube);

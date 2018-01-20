@@ -20,6 +20,7 @@ using namespace std;
 Cube::Cube() {
     setUpRotations();
     setUpFlips();
+    setUpNeighbours();
 }
 
 Cube::Cube(const Cube& orig) {
@@ -136,6 +137,15 @@ void Cube::setUpFlips() {
         }
     };
     flips.insert(pair<Flip, function<void()>>(Z_180, z180));
+}
+
+void Cube::setUpNeighbours() {
+   neighbours.insert(pair<Side, set<Side>>(FRONT, set<Side>{ UP, DOWN, RIGHT, LEFT }));
+   neighbours.insert(pair<Side, set<Side>>(UP, set<Side>{ FRONT, BACK, RIGHT, LEFT }));
+   neighbours.insert(pair<Side, set<Side>>(BACK, set<Side>{ UP, DOWN, RIGHT, LEFT }));
+   neighbours.insert(pair<Side, set<Side>>(DOWN, set<Side>{ FRONT, BACK, RIGHT, LEFT }));
+   neighbours.insert(pair<Side, set<Side>>(RIGHT, set<Side>{ UP, DOWN, FRONT, BACK }));
+   neighbours.insert(pair<Side, set<Side>>(LEFT, set<Side>{ UP, DOWN, FRONT, BACK }));
 }
 
 void Cube::flipSidesClockwiseOverY() {
