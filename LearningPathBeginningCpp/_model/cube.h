@@ -30,6 +30,8 @@ enum Side {
     FRONT, UP, BACK, DOWN, RIGHT, LEFT
 };
 
+//map<Side, array<Side> neighbours;
+
 string getSideName(Side s);
 
 enum Rotation {
@@ -55,21 +57,23 @@ public:
     static const int SIDES = 6;
 
     map<Rotation, function<void() >> rotations;
-
-    void rotate(Rotation rotation) {
-        auto iter = rotations.find(rotation);
-        if (iter != end(rotations)) {
+    
+    template<typename T, typename U>
+    void executeFunctionFromMap(T item, map<T, U> _map) {
+        auto iter = _map.find(item);
+        if (iter != end(_map)) {
             iter->second();
         }
+    }
+
+    void rotate(Rotation rotation) {
+        return executeFunctionFromMap(rotation, rotations);
     }
 
     map<Flip, function<void() >> flips;
 
     void flip(Flip flip) {
-        auto iter = flips.find(flip);
-        if (iter != end(flips)) {
-            iter->second();
-        }
+        return executeFunctionFromMap(flip, flips);
     }
 
     void printCube();
@@ -91,6 +95,7 @@ private:
     void flipSidesClockwiseOverY();
     void flipSidesClockwiseOverZ();
     void replaceSide(Side side, array<array<Color, Cube::SIZE>, Cube::SIZE> sideValue);
+    
 
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube ={
