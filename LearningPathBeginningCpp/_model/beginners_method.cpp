@@ -25,11 +25,11 @@ bool BeginnersMethod::isDasyDone(Cube cube) {
 };
 
 bool BeginnersMethod::isWhiteCrossDone(Cube cube) {
-    return isStateDone(cube, State::DASY);
+    return isStateDone(cube, State::WHITE_CROSS);
 };
 
 bool BeginnersMethod::isStateDone(Cube cube, State state) {
-    for (int sideNum = FRONT; sideNum != LEFT; ++sideNum) {
+    for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
         Side leadingSide = static_cast<Side> (sideNum);
         if (isStateDone(cube, state, leadingSide)) {
             return true;
@@ -51,29 +51,26 @@ bool BeginnersMethod::isStateDone(Cube cube, State state, Side leadingSide) {
 
 bool BeginnersMethod::checkDasy(Cube cube, Side leadingSide) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
-    
+
     return (side[1][1] == YELLOW) &&
             (side[0][1] == side[1][0] == side[1][2] == WHITE);
 }
 
 bool BeginnersMethod::checkWhiteCross(Cube cube, Side leadingSide) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
-    
-    return (side[1][1] == YELLOW) &&
-            (side[0][1] == side[1][0] == side[1][2] == WHITE);
+
+    return side[1][1] == side[0][1] == side[1][0] == side[1][2] ==
+            side[2][1] == WHITE;
 }
 
 int main(int argc, char** argv) {
     Cube cube = Cube();
-    //cube.rotate(Rotation::UP_CLOCKWISE);
-    cube.flip(Flip::Y_CLOCKWISE_90);
-    cube.printCube();
+//    cube.rotate(Rotation::UP_CLOCKWISE);
+//    cube.flip(Flip::Y_CLOCKWISE_90);
+//    cube.printCube();
     
-    for(Side s : cube.getNeighbours(DOWN))
-        cout << getSideName(s);
-    //BeginnersMethod beginnersMethod = BeginnersMethod();
-
-    //cout << beginnersMethod.isDasyDone(cube);
+    BeginnersMethod beginnersMethod = BeginnersMethod();
+    cout << beginnersMethod.isWhiteCrossDone(cube);
 
     return 0;
 }
