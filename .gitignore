@@ -30,3 +30,7 @@
 /LearningPathBeginningCpp/dist/
 Java/target/
 .idea/
+nbproject/
+
+#mac
+.DS_Store

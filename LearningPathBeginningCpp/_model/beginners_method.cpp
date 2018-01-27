@@ -28,6 +28,10 @@ bool BeginnersMethod::isWhiteCrossDone(Cube cube) {
     return isStateDone(cube, State::WHITE_CROSS);
 };
 
+bool BeginnersMethod::areFirstLayerCornersDone(Cube cube) {
+    return isStateDone(cube, State::FIRST_LAYER_CORNERS);
+};
+
 bool BeginnersMethod::isStateDone(Cube cube, State state) {
     for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
         Side leadingSide = static_cast<Side> (sideNum);
@@ -61,6 +65,55 @@ bool BeginnersMethod::checkWhiteCross(Cube cube, Side leadingSide) {
 
     return side[1][1] == side[0][1] == side[1][0] == side[1][2] ==
             side[2][1] == WHITE;
+}
+
+bool BeginnersMethod::checkFirstLayerCorners(Cube cube, Side leadingSide) {
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
+    
+    if(getSideLeadingColor(cube, leadingSide) != WHITE)
+        return false;
+    
+    if(!isSideCompleted(cube, leadingSide))
+        return false;
+    
+    for (Side neighbour : cube.getNeighbours(leadingSide)) {
+        if(!hasLowerT(cube, leadingSide))
+            return false;
+    }
+    
+    return true;
+}
+
+bool BeginnersMethod::isSideCompleted(Cube cube, Side leadingSide) {
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
+    Color correct = side[Cube::SIZE-1][Cube::SIZE-1];
+
+    for(int i=0; i<Cube::SIZE; ++i) {
+        for(int j=0; j<Cube::SIZE; ++j) {
+            if(side[i][j] != correct) {
+                return false;
+            }
+        }
+    }
+    
+    return true;
+}
+
+bool BeginnersMethod::hasLowerT(Cube cube, Side leadingSide) {
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
+    Color correct = getSideLeadingColor(cube, leadingSide);
+
+    for(int j=0; j<Cube::SIZE; ++j) {
+        if(side[Cube::SIZE-1][j] != correct) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
+Color BeginnersMethod::getSideLeadingColor(Cube cube, Side leadingSide) {
+    return cube.cube[leadingSide][Cube::SIZE-1][Cube::SIZE-1];
 }
 
 int main(int argc, char** argv) {

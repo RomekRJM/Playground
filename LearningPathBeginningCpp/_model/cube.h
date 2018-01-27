@@ -128,7 +128,7 @@ private:
             {
                 { // UP
                     {ORANGE, WHITE, WHITE},
-                    {WHITE, YELLOW, WHITE},
+                    {WHITE, WHITE, WHITE},
                     {ORANGE, WHITE, WHITE}
                 }},
             {
@@ -151,8 +151,8 @@ private:
                 }},
             {
                 { // LEFT
-                    {RED, WHITE, GREEN},
-                    {WHITE, WHITE, WHITE},
+                    {RED, RED, GREEN},
+                    {BLUE, YELLOW, WHITE},
                     {GREEN, WHITE, RED}
                 }}
         }};
