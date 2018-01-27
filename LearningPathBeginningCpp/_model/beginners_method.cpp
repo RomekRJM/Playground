@@ -118,12 +118,12 @@ Color BeginnersMethod::getSideLeadingColor(Cube cube, Side leadingSide) {
 
 int main(int argc, char** argv) {
     Cube cube = Cube();
-    //    cube.rotate(Rotation::UP_CLOCKWISE);
-    //    cube.flip(Flip::Y_CLOCKWISE_90);
-    //    cube.printCube();
+    //cube.rotate(Rotation::UP_CLOCKWISE);
+    cube.flip(Flip::X_COUNTER_CLOCKWISE_90);
+    cube.printCube();
 
-    BeginnersMethod beginnersMethod = BeginnersMethod();
-    cout << beginnersMethod.areFirstLayerCornersDone(cube);
+    //BeginnersMethod beginnersMethod = BeginnersMethod();
+    //cout << beginnersMethod.areFirstLayerCornersDone(cube);
 
     return 0;
 }

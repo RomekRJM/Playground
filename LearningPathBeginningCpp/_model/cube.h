@@ -44,9 +44,10 @@ enum Rotation {
 };
 
 enum Flip {
-    Y_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90, 
-    X_CLOCKWISE_90, X_COUNTER_CLOCKWISE_90, 
-    Z_CLOCKWISE_90, Z_COUNTER_CLOCKWISE_90, Z_180
+    Y_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90,
+    X_CLOCKWISE_90, X_COUNTER_CLOCKWISE_90,
+    Z_CLOCKWISE_90, Z_COUNTER_CLOCKWISE_90,
+    UPSIDE_DOWN
 };
 
 template<typename T, typename U>
@@ -63,7 +64,7 @@ V findInMap(K key, map<K, V> _map) {
     if (iter != end(_map)) {
         return iter->second;
     }
-    
+
     throw domain_error("Key not found in map.");
 }
 
@@ -89,9 +90,9 @@ public:
     void flip(Flip flip) {
         return executeFunctionFromMap(flip, flips);
     }
-    
+
     map<Side, set<Side>> neighbours;
-    
+
     set<Side> getNeighbours(Side side) {
         return findInMap(side, neighbours);
     }
@@ -113,51 +114,59 @@ private:
     void rotateSidesClockwiseForLeft();
     void rotateSidesClockwiseForRight();
     void rotateSidesClockwiseLeftOrCounterClockwiseRight(Side side);
+    void flipSidesClockwiseOverX();
     void flipSidesClockwiseOverY();
     void flipSidesClockwiseOverZ();
     void replaceSide(Side side, array<array<Color, Cube::SIZE>, Cube::SIZE> sideValue);
-    
+
 
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
-    array<array<array<Color, SIZE>, SIZE>, SIDES> cube ={
+    array<array<array<Color, SIZE>, SIZE>, SIDES> cube = {
         {
             {
                 { // FRONT
-                    {RED, RED, RED},
-                    {RED, RED, RED},
-                    {RED, RED, RED}
-                }},
+                    {ORANGE, RED, RED},
+                    {RED, GREEN, RED},
+                    {WHITE, WHITE, RED}
+                }
+            },
             {
                 { // UP
-                    {ORANGE, BLUE, GREEN},
-                    {YELLOW, YELLOW, YELLOW},
-                    {YELLOW, YELLOW, YELLOW}
-                }},
+                    {ORANGE, ORANGE, YELLOW},
+                    {YELLOW, YELLOW, WHITE},
+                    {GREEN, GREEN, WHITE}
+                }
+            },
             {
                 { // BACK
-                    {RED, ORANGE, WHITE},
-                    {ORANGE, ORANGE, ORANGE},
-                    {ORANGE, ORANGE, ORANGE}
-                }},
+                    {WHITE, BLUE, ORANGE},
+                    {ORANGE, GREEN, RED},
+                    {BLUE, GREEN, YELLOW}
+                }
+            },
             {
                 { // DOWN
                     {WHITE, WHITE, WHITE},
-                    {WHITE, WHITE, WHITE},
-                    {WHITE, WHITE, WHITE}
-                }},
+                    {WHITE, WHITE, RED},
+                    {RED, WHITE, RED}
+                }
+            },
             {
                 { // RIGHT
                     {RED, BLUE, BLUE},
                     {BLUE, BLUE, RED},
                     {BLUE, BLUE, BLUE}
-                }},
+                }
+            },
             {
                 { // LEFT
                     {RED, RED, GREEN},
                     {BLUE, GREEN, WHITE},
                     {GREEN, GREEN, GREEN}
-                }}
-        }};
+                }
+            }
+        }
+    };
 };
 
 
