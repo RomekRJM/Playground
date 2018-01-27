@@ -44,7 +44,9 @@ enum Rotation {
 };
 
 enum Flip {
-    Y_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90, Z_180
+    Y_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90, 
+    X_CLOCKWISE_90, X_COUNTER_CLOCKWISE_90, 
+    Z_CLOCKWISE_90, Z_COUNTER_CLOCKWISE_90, Z_180
 };
 
 template<typename T, typename U>
@@ -123,13 +125,13 @@ private:
                 { // FRONT
                     {RED, RED, RED},
                     {RED, RED, RED},
-                    {ORANGE, BLUE, GREEN}
+                    {RED, RED, RED}
                 }},
             {
                 { // UP
-                    {ORANGE, WHITE, WHITE},
-                    {WHITE, WHITE, WHITE},
-                    {ORANGE, WHITE, WHITE}
+                    {ORANGE, BLUE, GREEN},
+                    {YELLOW, YELLOW, YELLOW},
+                    {YELLOW, YELLOW, YELLOW}
                 }},
             {
                 { // BACK
@@ -139,21 +141,21 @@ private:
                 }},
             {
                 { // DOWN
-                    {ORANGE, BLUE, GREEN},
-                    {YELLOW, YELLOW, YELLOW},
-                    {YELLOW, YELLOW, YELLOW}
+                    {WHITE, WHITE, WHITE},
+                    {WHITE, WHITE, WHITE},
+                    {WHITE, WHITE, WHITE}
                 }},
             {
                 { // RIGHT
                     {RED, BLUE, BLUE},
-                    {BLUE, BLUE, BLUE},
-                    {GREEN, BLUE, BLUE}
+                    {BLUE, BLUE, RED},
+                    {BLUE, BLUE, BLUE}
                 }},
             {
                 { // LEFT
                     {RED, RED, GREEN},
-                    {BLUE, YELLOW, WHITE},
-                    {GREEN, WHITE, RED}
+                    {BLUE, GREEN, WHITE},
+                    {GREEN, GREEN, GREEN}
                 }}
         }};
 };

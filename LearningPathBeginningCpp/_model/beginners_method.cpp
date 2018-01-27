@@ -48,6 +48,8 @@ bool BeginnersMethod::isStateDone(Cube cube, State state, Side leadingSide) {
             return checkDasy(cube, leadingSide);
         case WHITE_CROSS:
             return checkWhiteCross(cube, leadingSide);
+        case FIRST_LAYER_CORNERS:
+            return checkFirstLayerCorners(cube, leadingSide);
         default:
             return false;
     }
@@ -69,61 +71,59 @@ bool BeginnersMethod::checkWhiteCross(Cube cube, Side leadingSide) {
 
 bool BeginnersMethod::checkFirstLayerCorners(Cube cube, Side leadingSide) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
-    
-    if(getSideLeadingColor(cube, leadingSide) != WHITE)
+
+    if (getSideLeadingColor(cube, leadingSide) != WHITE)
         return false;
-    
-    if(!isSideCompleted(cube, leadingSide))
+
+    if (!isSideCompleted(cube, leadingSide))
         return false;
-    
-    for (Side neighbour : cube.getNeighbours(leadingSide)) {
-        if(!hasLowerT(cube, leadingSide))
+
+    array<Side, 4> sides = {LEFT, FRONT, RIGHT, BACK};
+    for (Side neighbour : sides) {
+        if (!hasLowerT(cube, leadingSide))
             return false;
     }
-    
+
     return true;
 }
 
 bool BeginnersMethod::isSideCompleted(Cube cube, Side leadingSide) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
-    Color correct = side[Cube::SIZE-1][Cube::SIZE-1];
+    Color correct = side[Cube::SIZE - 1][Cube::SIZE - 1];
 
-    for(int i=0; i<Cube::SIZE; ++i) {
-        for(int j=0; j<Cube::SIZE; ++j) {
-            if(side[i][j] != correct) {
+    for (int i = 0; i < Cube::SIZE; ++i) {
+        for (int j = 0; j < Cube::SIZE; ++j) {
+            if (side[i][j] != correct) {
                 return false;
             }
         }
     }
-    
+
     return true;
 }
 
 bool BeginnersMethod::hasLowerT(Cube cube, Side leadingSide) {
-    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
     Color correct = getSideLeadingColor(cube, leadingSide);
-
-    for(int j=0; j<Cube::SIZE; ++j) {
-        if(side[Cube::SIZE-1][j] != correct) {
-            return false;
-        }
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
+    if (side[1][1] == side[2][0] == side[2][1] == side[2][2] == correct) {
+        return true;
     }
-    
-    return true;
+
+    return false;
 }
 
 Color BeginnersMethod::getSideLeadingColor(Cube cube, Side leadingSide) {
-    return cube.cube[leadingSide][Cube::SIZE-1][Cube::SIZE-1];
+    return cube.cube[leadingSide][Cube::SIZE - 1][Cube::SIZE - 1];
 }
 
 int main(int argc, char** argv) {
     Cube cube = Cube();
-//    cube.rotate(Rotation::UP_CLOCKWISE);
-//    cube.flip(Flip::Y_CLOCKWISE_90);
-//    cube.printCube();
-    
+    //    cube.rotate(Rotation::UP_CLOCKWISE);
+    //    cube.flip(Flip::Y_CLOCKWISE_90);
+    //    cube.printCube();
+
     BeginnersMethod beginnersMethod = BeginnersMethod();
-    cout << beginnersMethod.isWhiteCrossDone(cube);
+    cout << beginnersMethod.areFirstLayerCornersDone(cube);
 
     return 0;
 }
