@@ -125,44 +125,44 @@ private:
         {
             {
                 { // FRONT
-                    {WHITE, RED, RED},
+                    {ORANGE, ORANGE, RED},
                     {ORANGE, ORANGE, ORANGE},
                     {ORANGE, ORANGE, ORANGE}
                 }
             },
             {
                 { // UP
-                    {GREEN, BLUE, GREEN},
-                    {WHITE, WHITE, WHITE},
-                    {ORANGE, WHITE, WHITE}
+                    {BLUE, BLUE, GREEN},
+                    {BLUE, BLUE, WHITE},
+                    {BLUE, BLUE, WHITE}
                 }
             },
             {
                 { // BACK
-                    {BLUE, GREEN, ORANGE},
-                    {BLUE, BLUE, WHITE},
-                    {BLUE, GREEN, BLUE}
+                    {BLUE, GREEN, GREEN},
+                    {BLUE, GREEN, GREEN},
+                    {BLUE, GREEN, GREEN}
                 }
             },
             {
                 { // DOWN
-                    {YELLOW, YELLOW, YELLOW},
-                    {YELLOW, YELLOW, YELLOW},
-                    {YELLOW, YELLOW, YELLOW}
+                    {RED, RED, RED},
+                    {RED, RED, RED},
+                    {RED, RED, RED}
                 }
             },
             {
                 { // RIGHT
                     {BLUE, BLUE, WHITE},
-                    {RED, RED, RED},
+                    {RED, YELLOW, RED},
                     {RED, BLUE, RED}
                 }
             },
             {
                 { // LEFT
-                    {WHITE, GREEN, RED},
-                    {ORANGE, GREEN, GREEN},
-                    {GREEN, RED, GREEN}
+                    {WHITE, WHITE, WHITE},
+                    {WHITE, WHITE, WHITE},
+                    {WHITE, WHITE, WHITE}
                 }
             }
         }

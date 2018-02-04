@@ -25,19 +25,22 @@ enum State {
 class BeginnersMethod {
 public:
     BeginnersMethod();
-    bool isDasyDone(Cube cube);
-    bool isWhiteCrossDone(Cube cube);
-    bool areFirstLayerCornersDone(Cube cube);
-    bool isStateDone(Cube cube, State state);
-    void ensureColorOnTop(Cube cube, Color color);
+    bool isDasyDone(Cube &cube);
+    bool isWhiteCrossDone(Cube &cube);
+    bool areFirstLayerCornersDone(Cube &cube);
+    bool areSecondLayerEdgesDone(Cube &cube);
+    bool isStateDone(Cube &cube, State state);
+    void ensureColorOnTop(Cube &cube, Color color);
 
 private:
-    bool checkDasy(Cube cube, Side leadingSide);
-    bool checkWhiteCross(Cube cube, Side leadingSide);
-    bool checkFirstLayerCorners(Cube cube, Side leadingSide);
-    bool isSideCompleted(Cube cube, Side leadingSide);
-    Color getSideLeadingColor(Cube cube, Side leadingSide);
-    bool hasLowerT(Cube cube, Side leadingSide);
+    bool checkDasy(Cube &cube, Side leadingSide);
+    bool checkWhiteCross(Cube &cube, Side leadingSide);
+    bool checkFirstLayerCorners(Cube &cube, Side leadingSide);
+    bool checkSecondLayerEdges(Cube &cube, Side leadingSide);
+    bool isSideCompleted(Cube &cube, Side leadingSide);
+    Color getSideLeadingColor(Cube &cube, Side leadingSide);
+    bool hasLowerT(Cube &cube, Side leadingSide);
+    bool hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide);
 };
 
 #endif /* BEGINNERS_METHOD_HPP */
