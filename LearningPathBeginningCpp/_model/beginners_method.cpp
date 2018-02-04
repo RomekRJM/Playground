@@ -119,7 +119,7 @@ Color BeginnersMethod::getSideLeadingColor(Cube cube, Side leadingSide) {
 int main(int argc, char** argv) {
     Cube cube = Cube();
     //cube.rotate(Rotation::UP_CLOCKWISE);
-    cube.flip(Flip::X_COUNTER_CLOCKWISE_90);
+    cube.flip(Flip::UPSIDE_DOWN);
     cube.printCube();
 
     //BeginnersMethod beginnersMethod = BeginnersMethod();

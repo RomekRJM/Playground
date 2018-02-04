@@ -125,44 +125,44 @@ private:
         {
             {
                 { // FRONT
-                    {ORANGE, RED, RED},
-                    {RED, GREEN, RED},
-                    {WHITE, WHITE, RED}
+                    {WHITE, RED, RED},
+                    {ORANGE, ORANGE, ORANGE},
+                    {ORANGE, ORANGE, ORANGE}
                 }
             },
             {
                 { // UP
-                    {ORANGE, ORANGE, YELLOW},
-                    {YELLOW, YELLOW, WHITE},
-                    {GREEN, GREEN, WHITE}
+                    {GREEN, BLUE, GREEN},
+                    {WHITE, WHITE, WHITE},
+                    {ORANGE, WHITE, WHITE}
                 }
             },
             {
                 { // BACK
-                    {WHITE, BLUE, ORANGE},
-                    {ORANGE, GREEN, RED},
-                    {BLUE, GREEN, YELLOW}
+                    {BLUE, GREEN, ORANGE},
+                    {BLUE, BLUE, WHITE},
+                    {BLUE, GREEN, BLUE}
                 }
             },
             {
                 { // DOWN
-                    {WHITE, WHITE, WHITE},
-                    {WHITE, WHITE, RED},
-                    {RED, WHITE, RED}
+                    {YELLOW, YELLOW, YELLOW},
+                    {YELLOW, YELLOW, YELLOW},
+                    {YELLOW, YELLOW, YELLOW}
                 }
             },
             {
                 { // RIGHT
-                    {RED, BLUE, BLUE},
-                    {BLUE, BLUE, RED},
-                    {BLUE, BLUE, BLUE}
+                    {BLUE, BLUE, WHITE},
+                    {RED, RED, RED},
+                    {RED, BLUE, RED}
                 }
             },
             {
                 { // LEFT
-                    {RED, RED, GREEN},
-                    {BLUE, GREEN, WHITE},
-                    {GREEN, GREEN, GREEN}
+                    {WHITE, GREEN, RED},
+                    {ORANGE, GREEN, GREEN},
+                    {GREEN, RED, GREEN}
                 }
             }
         }

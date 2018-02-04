@@ -114,7 +114,7 @@ void Cube::setUpRotations() {
 
 void Cube::setUpFlips() {
     function<void() > xc = [this]() {
-        rotateSideClockwise(LEFT);
+        rotateSideCounterClockwise(LEFT);
         rotateSideClockwise(RIGHT);
         flipSidesClockwiseOverX();
     };
@@ -122,7 +122,7 @@ void Cube::setUpFlips() {
 
     function<void() > xcc = [this]() {
         for (int i = 0; i < 3; ++i) {
-            rotateSideClockwise(LEFT);
+            rotateSideCounterClockwise(LEFT);
             rotateSideClockwise(RIGHT);
             flipSidesClockwiseOverX();
         }
@@ -147,15 +147,15 @@ void Cube::setUpFlips() {
 
     function<void() > zc = [this]() {
         rotateSideClockwise(FRONT);
-        rotateSideClockwise(BACK);
+        rotateSideCounterClockwise(BACK);
         flipSidesClockwiseOverZ();
     };
     flips.insert(pair<Flip, function<void()>>(Z_CLOCKWISE_90, zc));
 
     function<void() > zcc = [this]() {
         for (int i = 0; i < 3; ++i) {
-            rotateSideClockwise(UP);
-            rotateSideClockwise(DOWN);
+            rotateSideClockwise(FRONT);
+            rotateSideCounterClockwise(BACK);
             flipSidesClockwiseOverZ();
         }
     };
@@ -179,12 +179,11 @@ void Cube::setUpNeighbours() {
     neighbours.insert(pair<Side, set < Side >> (RIGHT, set<Side>{UP, DOWN, FRONT, BACK}));
     neighbours.insert(pair<Side, set < Side >> (LEFT, set<Side>{UP, DOWN, FRONT, BACK}));
 }
-
+// TODO: Make sure on flips code is right
 void Cube::flipSidesClockwiseOverX() {
     array<array<Color, Cube::SIZE>, Cube::SIZE> side1 = copySide(Side::FRONT);
     array<array<Color, Cube::SIZE>, Cube::SIZE> side2 = copySide(Side::UP);
 
-    // TODO
     replaceSide(Side::UP, side1);
     side1 = copySide(Side::BACK);
     replaceSide(Side::BACK, side2);
@@ -223,6 +222,11 @@ void Cube::flipSidesClockwiseOverZ() {
     side2 = copySide(Side::LEFT);
     replaceSide(Side::LEFT, side1);
     replaceSide(Side::UP, side2);
+    
+    rotateSideClockwise(UP);
+    rotateSideClockwise(RIGHT);
+    rotateSideClockwise(DOWN);
+    rotateSideClockwise(LEFT);
 }
 
 void Cube::replaceSide(Side side, array<array<Color, Cube::SIZE>, Cube::SIZE> sideValue) {
