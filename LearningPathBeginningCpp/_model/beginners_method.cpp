@@ -33,23 +33,16 @@ bool BeginnersMethod::areFirstLayerCornersDone(Cube cube) {
 };
 
 bool BeginnersMethod::isStateDone(Cube cube, State state) {
-    for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
-        Side leadingSide = static_cast<Side> (sideNum);
-        if (isStateDone(cube, state, leadingSide)) {
-            return true;
-        }
-    }
-    return false;
-};
-
-bool BeginnersMethod::isStateDone(Cube cube, State state, Side leadingSide) {
     switch (state) {
         case DASY:
-            return checkDasy(cube, leadingSide);
+            ensureColorOnTop(cube, YELLOW);
+            return checkDasy(cube, UP);
         case WHITE_CROSS:
-            return checkWhiteCross(cube, leadingSide);
+            ensureColorOnTop(cube, WHITE);
+            return checkWhiteCross(cube, UP);
         case FIRST_LAYER_CORNERS:
-            return checkFirstLayerCorners(cube, leadingSide);
+            ensureColorOnTop(cube, YELLOW);
+            return checkFirstLayerCorners(cube, DOWN);
         default:
             return false;
     }
@@ -112,6 +105,44 @@ bool BeginnersMethod::hasLowerT(Cube cube, Side leadingSide) {
     return false;
 }
 
+void BeginnersMethod::ensureColorOnTop(Cube cube, Color color) {
+    Side leadingSide = FRONT;
+
+    for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
+        Side currentSide = static_cast<Side> (sideNum);
+        if (getSideLeadingColor(cube, currentSide) == color) {
+            leadingSide = currentSide;
+            break;
+        }
+    }
+    
+    switch(leadingSide) {
+        case UP:
+            cout << "Doing nothing, color on top already" << endl;
+            break;
+        case DOWN:
+            cout << "Filipping upside down." << endl;
+            cube.flip(UPSIDE_DOWN);
+            break;
+        case FRONT:
+            cout << "Filipping X_CLOCKWISE_90." << endl;
+            cube.flip(X_CLOCKWISE_90);
+            break;
+        case BACK:
+            cout << "Filipping X_COUNTER_CLOCKWISE_90." << endl;
+            cube.flip(X_COUNTER_CLOCKWISE_90);
+            break;
+        case RIGHT:
+            cout << "Filipping Z_COUNTER_CLOCKWISE_90." << endl;
+            cube.flip(Z_COUNTER_CLOCKWISE_90);
+            break;
+        case LEFT:
+            cout << "Filipping Z_CLOCKWISE_90." << endl;
+            cube.flip(Z_CLOCKWISE_90);
+            break;
+    }
+}
+
 Color BeginnersMethod::getSideLeadingColor(Cube cube, Side leadingSide) {
     return cube.cube[leadingSide][Cube::SIZE - 1][Cube::SIZE - 1];
 }
@@ -119,10 +150,11 @@ Color BeginnersMethod::getSideLeadingColor(Cube cube, Side leadingSide) {
 int main(int argc, char** argv) {
     Cube cube = Cube();
     //cube.rotate(Rotation::UP_CLOCKWISE);
-    cube.flip(Flip::UPSIDE_DOWN);
-    cube.printCube();
+    //cube.flip(Flip::UPSIDE_DOWN);
+    //cube.printCube();
 
-    //BeginnersMethod beginnersMethod = BeginnersMethod();
+    BeginnersMethod beginnersMethod = BeginnersMethod();
+    beginnersMethod.ensureColorOnTop(cube, RED);
     //cout << beginnersMethod.areFirstLayerCornersDone(cube);
 
     return 0;

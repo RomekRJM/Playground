@@ -29,9 +29,9 @@ public:
     bool isWhiteCrossDone(Cube cube);
     bool areFirstLayerCornersDone(Cube cube);
     bool isStateDone(Cube cube, State state);
+    void ensureColorOnTop(Cube cube, Color color);
 
 private:
-    bool isStateDone(Cube cube, State state, Side leadingSide);
     bool checkDasy(Cube cube, Side leadingSide);
     bool checkWhiteCross(Cube cube, Side leadingSide);
     bool checkFirstLayerCorners(Cube cube, Side leadingSide);
