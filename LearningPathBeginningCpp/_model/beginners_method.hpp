@@ -17,8 +17,9 @@
 #include "cube.h"
 
 enum State {
-    DASY, WHITE_CROSS, FIRST_LAYER_CORNERS, SECOND_LAYER_EDGES, YELLOW_CROSS,
-    POSITION_LAST_LAYER_CORNERS, PERMUTE_LAST_LAYER_CORNERS,
+    DASY, WHITE_CROSS, FIRST_LAYER_CORNERS, SECOND_LAYER_EDGES, 
+    YELLOW_DOT, YELLOW_LINE, YELLOW_ARC,
+    YELLOW_CROSS, POSITION_LAST_LAYER_CORNERS, PERMUTE_LAST_LAYER_CORNERS,
     PERMUTE_LAST_LAYER_EDGES
 };
 
@@ -29,6 +30,7 @@ public:
     bool isWhiteCrossDone(Cube &cube);
     bool areFirstLayerCornersDone(Cube &cube);
     bool areSecondLayerEdgesDone(Cube &cube);
+    bool isYellowDotDone(Cube &cube);
     bool isStateDone(Cube &cube, State state);
     void ensureColorOnTop(Cube &cube, Color color);
 
@@ -37,6 +39,7 @@ private:
     bool checkWhiteCross(Cube &cube);
     bool checkFirstLayerCorners(Cube &cube);
     bool checkSecondLayerEdges(Cube &cube);
+    bool checkYellowDot(Cube &cube);
     bool isSideCompleted(Cube &cube, Side leadingSide);
     Color getSideLeadingColor(Cube &cube, Side leadingSide);
     bool hasLowerT(Cube &cube, Side leadingSide);
