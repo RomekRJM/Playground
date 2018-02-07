@@ -31,6 +31,7 @@ public:
     bool areFirstLayerCornersDone(Cube &cube);
     bool areSecondLayerEdgesDone(Cube &cube);
     bool isYellowDotDone(Cube &cube);
+    bool isYellowLineDone(Cube &cube);
     bool isStateDone(Cube &cube, State state);
     void ensureColorOnTop(Cube &cube, Color color);
 
@@ -40,6 +41,7 @@ private:
     bool checkFirstLayerCorners(Cube &cube);
     bool checkSecondLayerEdges(Cube &cube);
     bool checkYellowDot(Cube &cube);
+    bool checkYellowLine(Cube &cube);
     bool isSideCompleted(Cube &cube, Side leadingSide);
     Color getSideLeadingColor(Cube &cube, Side leadingSide);
     bool hasLowerT(Cube &cube, Side leadingSide);

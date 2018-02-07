@@ -40,6 +40,10 @@ bool BeginnersMethod::isYellowDotDone(Cube &cube) {
     return isStateDone(cube, State::YELLOW_DOT);
 };
 
+bool BeginnersMethod::isYellowLineDone(Cube &cube) {
+    return isStateDone(cube, State::YELLOW_LINE);
+};
+
 bool BeginnersMethod::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
@@ -57,6 +61,21 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
         case YELLOW_DOT:
             ensureColorOnTop(cube, YELLOW);
             return checkYellowDot(cube);
+        case YELLOW_LINE:
+        {
+            ensureColorOnTop(cube, YELLOW);
+            
+            bool yellowLineDone = false;
+            for(int i=0; i<2; ++i) {
+                if(checkYellowLine(cube)) {
+                    yellowLineDone = true;
+                    break;
+                } else {
+                    cube.flip(Y_CLOCKWISE_90);
+                }
+            }
+            return yellowLineDone;
+        }
         default:
             return false;
     }
@@ -72,8 +91,9 @@ bool BeginnersMethod::checkDasy(Cube &cube) {
 bool BeginnersMethod::checkWhiteCross(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
-    return side[1][1] == side[0][1] == side[1][0] == side[1][2] ==
-            side[2][1] == WHITE;
+    return (side[0][1] == side[1][1]) && (side[0][1] == side[1][0]) && 
+           (side[0][1] == side[1][2]) && (side[0][1] == side[2][1]) &&
+           (side[0][1] == WHITE);
 }
 
 bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
@@ -117,6 +137,17 @@ bool BeginnersMethod::checkYellowDot(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
     return side[1][1] == YELLOW;
+}
+
+bool BeginnersMethod::checkYellowLine(Cube &cube) {
+    if (!checkYellowDot(cube)) {
+        return false;
+    }
+    
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
+
+    return (side[1][0] == side[1][1]) &&  (side[1][0] == side[1][2]) && 
+           (side[1][0] == YELLOW);
 }
 
 bool BeginnersMethod::isSideCompleted(Cube &cube, Side leadingSide) {
@@ -205,7 +236,7 @@ int main(int argc, char** argv) {
 
     BeginnersMethod beginnersMethod = BeginnersMethod();
     //beginnersMethod.ensureColorOnTop(cube, RED);
-    cout << beginnersMethod.isYellowDotDone(cube);
+    cout << beginnersMethod.isYellowLineDone(cube);
     cube.printCube();
 
     return 0;

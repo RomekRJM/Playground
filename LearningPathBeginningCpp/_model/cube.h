@@ -153,9 +153,9 @@ private:
             },
             {
                 { // RIGHT
-                    {BLUE, BLUE, WHITE},
-                    {RED, YELLOW, RED},
-                    {RED, BLUE, RED}
+                    {BLUE, RED, WHITE},
+                    {YELLOW, YELLOW, YELLOW},
+                    {RED, YELLOW, RED}
                 }
             },
             {
