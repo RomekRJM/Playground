@@ -53,6 +53,10 @@ bool BeginnersMethod::isYellowCrossDone(Cube &cube) {
     return isStateDone(cube, State::YELLOW_CROSS);
 };
 
+bool BeginnersMethod::areLastLayerCornersPositioned(Cube &cube) {
+    return isStateDone(cube, State::POSITION_LAST_LAYER_CORNERS);
+};
+
 bool BeginnersMethod::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
@@ -79,7 +83,7 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
         {
             cout << "Checking yellow line" << endl;
             ensureColorOnTop(cube, YELLOW);
-            function<bool(Cube&)> check = [&](Cube &_cube) {
+            function<bool(Cube&) > check = [&](Cube & _cube) {
                 return checkYellowLine(_cube);
             };
             return checkConditionOnManyAngles(cube, Y_CLOCKWISE_90, 2, check);
@@ -88,7 +92,7 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
         {
             cout << "Checking yellow arc" << endl;
             ensureColorOnTop(cube, YELLOW);
-            function<bool(Cube&)> check = [&](Cube &_cube) {
+            function<bool(Cube&) > check = [&](Cube & _cube) {
                 return checkYellowArc(_cube);
             };
             return checkConditionOnManyAngles(cube, Y_CLOCKWISE_90, 4, check);
@@ -99,10 +103,16 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
             ensureColorOnTop(cube, YELLOW);
             return checkYellowCross(cube);
         }
+        case POSITION_LAST_LAYER_CORNERS:
+        {
+            cout << "Checking last layer corners position" << endl;
+            ensureColorOnTop(cube, YELLOW);
+            return checkLastLayerCornersPosition(cube);
+        }
         default:
             return false;
     }
-    
+
 };
 
 bool BeginnersMethod::checkDasy(Cube &cube) {
@@ -115,17 +125,17 @@ bool BeginnersMethod::checkDasy(Cube &cube) {
 bool BeginnersMethod::checkWhiteCross(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
-    return (side[0][1] == side[1][1]) && (side[0][1] == side[1][0]) && 
-           (side[0][1] == side[1][2]) && (side[0][1] == side[2][1]) &&
-           (side[0][1] == WHITE);
+    return (side[0][1] == side[1][1]) && (side[0][1] == side[1][0]) &&
+            (side[0][1] == side[1][2]) && (side[0][1] == side[2][1]) &&
+            (side[0][1] == WHITE);
 }
 
 bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
-    
+
     if (getSideLeadingColor(cube, DOWN) != WHITE)
         return false;
-    
+
     if (!isSideCompleted(cube, DOWN))
         return false;
 
@@ -134,7 +144,7 @@ bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
         if (!hasLowerT(cube, neighbour))
             return false;
     }
-    
+
     return true;
 }
 
@@ -142,14 +152,14 @@ bool BeginnersMethod::checkSecondLayerEdges(Cube &cube) {
     if (!areFirstLayerCornersDone(cube)) {
         return false;
     }
-    
+
     array<Side, 4> sides = {LEFT, FRONT, RIGHT, BACK};
     for (Side side : sides) {
         if (!hasSecondLayerEdgesPositioned(cube, side)) {
             return false;
         }
     }
-    
+
     return true;
 }
 
@@ -157,7 +167,7 @@ bool BeginnersMethod::checkYellowDot(Cube &cube) {
     if (!areSecondLayerEdgesDone(cube)) {
         return false;
     }
-    
+
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
     return side[1][1] == YELLOW;
@@ -167,7 +177,7 @@ bool BeginnersMethod::checkYellowLine(Cube &cube) {
     if (!isYellowDotDone(cube)) {
         return false;
     }
-    
+
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
     return (side[1][0] == side[1][2]) && (side[1][0] == YELLOW);
@@ -177,7 +187,7 @@ bool BeginnersMethod::checkYellowArc(Cube &cube) {
     if (!isYellowDotDone(cube)) {
         return false;
     }
-    
+
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
     return (side[1][2] == side[2][1]) && (side[1][2] == YELLOW);
@@ -187,11 +197,53 @@ bool BeginnersMethod::checkYellowCross(Cube &cube) {
     if (!isYellowDotDone(cube)) {
         return false;
     }
-    
+
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
-    return (side[0][1] == side[1][0]) && (side[0][1] == side[1][2]) && 
-           (side[0][1] == side[2][1]) && (side[0][1] == YELLOW);
+    return (side[0][1] == side[1][0]) && (side[0][1] == side[1][2]) &&
+            (side[0][1] == side[2][1]) && (side[0][1] == YELLOW);
+}
+
+bool BeginnersMethod::checkLastLayerCornersPosition(Cube& cube) {
+    if (!isYellowCrossDone(cube)) {
+        return false;
+    }
+
+    map<array<Color, 3>, array<Color, 3 >> cornersToSides;
+
+    array<Color, 3> uflCornerColors = {cube.cube[UP][2][0], cube.cube[FRONT][0][0], cube.cube[LEFT][0][2]};
+    array<Color, 3> uflSideColors = {getSideLeadingColor(cube, UP), getSideLeadingColor(cube, FRONT), getSideLeadingColor(cube, LEFT)};
+    cornersToSides.insert(pair<array<Color, 3>, array<Color, 3 >> (uflCornerColors, uflSideColors));
+
+    array<Color, 3> ufrCornerColors = {cube.cube[UP][2][2], cube.cube[FRONT][0][2], cube.cube[RIGHT][0][0]};
+    array<Color, 3> ufrSideColors = {getSideLeadingColor(cube, UP), getSideLeadingColor(cube, FRONT), getSideLeadingColor(cube, RIGHT)};
+    cornersToSides.insert(pair<array<Color, 3>, array<Color, 3 >> (ufrCornerColors, ufrSideColors));
+
+    array<Color, 3> ublCornerColors = {cube.cube[UP][0][0], cube.cube[BACK][0][2], cube.cube[LEFT][0][0]};
+    array<Color, 3> ublSideColors = {getSideLeadingColor(cube, UP), getSideLeadingColor(cube, BACK), getSideLeadingColor(cube, LEFT)};
+    cornersToSides.insert(pair<array<Color, 3>, array<Color, 3 >> (ublCornerColors, ublSideColors));
+
+    array<Color, 3> ubrCornerColors = {cube.cube[UP][0][2], cube.cube[BACK][0][0], cube.cube[RIGHT][0][2]};
+    array<Color, 3> ubrSideColors = {getSideLeadingColor(cube, UP), getSideLeadingColor(cube, BACK), getSideLeadingColor(cube, RIGHT)};
+    cornersToSides.insert(pair<array<Color, 3>, array<Color, 3 >> (ubrCornerColors, ubrSideColors));
+
+    for (map<array<Color, 3>, array < Color, 3 >> ::iterator it = cornersToSides.begin(); it != cornersToSides.end(); ++it) {
+        if (!colorsMatchInAnyOrder(it->first, it->second)) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+bool BeginnersMethod::colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> a2) {
+    for (int i = 0; i < 3; ++i) {
+        if (find(std::begin(a2), std::end(a2), a1[i]) == std::end(a2)) {
+            return false;
+        }
+    }
+
+    return true;
 }
 
 bool BeginnersMethod::isSideCompleted(Cube &cube, Side leadingSide) {
@@ -213,10 +265,10 @@ bool BeginnersMethod::hasLowerT(Cube &cube, Side leadingSide) {
     Color correct = getSideLeadingColor(cube, leadingSide);
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
     if ((side[1][1] == side[2][0]) && (side[1][1] == side[2][1]) &&
-        (side[1][1] == side[2][2]) && (side[1][1] == correct)) {
+            (side[1][1] == side[2][2]) && (side[1][1] == correct)) {
         return true;
     }
-    
+
     return false;
 }
 
@@ -230,13 +282,13 @@ bool BeginnersMethod::hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide
     return false;
 }
 
-bool BeginnersMethod::checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&)> condition) {
+bool BeginnersMethod::checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&) > condition) {
     bool conditionMatched = false;
-    for(int i=0; i<maxFlips; ++i) {
-        if(condition(cube)) {
+    for (int i = 0; i < maxFlips; ++i) {
+        if (condition(cube)) {
             conditionMatched = true;
             break;
-        } else if (i < maxFlips - 1){
+        } else if (i < maxFlips - 1) {
             cube.flip(flip);
         }
     }
@@ -254,8 +306,8 @@ void BeginnersMethod::ensureColorOnTop(Cube &cube, Color color) {
             break;
         }
     }
-    
-    switch(leadingSide) {
+
+    switch (leadingSide) {
         case UP:
             cout << "Doing nothing, color on top already" << endl;
             break;
@@ -293,8 +345,8 @@ int main(int argc, char** argv) {
 
     BeginnersMethod beginnersMethod = BeginnersMethod();
     //beginnersMethod.ensureColorOnTop(cube, RED);
-    cout << beginnersMethod.isYellowCrossDone(cube);
-    
+    cout << beginnersMethod.areLastLayerCornersPositioned(cube);
+
 
     return 0;
 }

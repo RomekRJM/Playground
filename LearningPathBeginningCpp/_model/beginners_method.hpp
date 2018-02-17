@@ -34,6 +34,7 @@ public:
     bool isYellowLineDone(Cube &cube);
     bool isYellowArcDone(Cube &cube);
     bool isYellowCrossDone(Cube &cube);
+    bool areLastLayerCornersPositioned(Cube &cube);
     bool isStateDone(Cube &cube, State state);
     void ensureColorOnTop(Cube &cube, Color color);
 
@@ -46,11 +47,13 @@ private:
     bool checkYellowLine(Cube &cube);
     bool checkYellowArc(Cube &cube);
     bool checkYellowCross(Cube &cube);
+    bool checkLastLayerCornersPosition(Cube &cube);
     bool checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&)> condition);
     bool isSideCompleted(Cube &cube, Side leadingSide);
     Color getSideLeadingColor(Cube &cube, Side leadingSide);
     bool hasLowerT(Cube &cube, Side leadingSide);
     bool hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide);
+    bool colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> a2);
 };
 
 #endif /* BEGINNERS_METHOD_HPP */
