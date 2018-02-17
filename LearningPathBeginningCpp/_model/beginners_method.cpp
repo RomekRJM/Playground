@@ -13,6 +13,7 @@
 
 #include "beginners_method.hpp"
 #include <iostream>
+#include <functional>
 
 using namespace std;
 
@@ -44,37 +45,49 @@ bool BeginnersMethod::isYellowLineDone(Cube &cube) {
     return isStateDone(cube, State::YELLOW_LINE);
 };
 
+bool BeginnersMethod::isYellowArcDone(Cube &cube) {
+    return isStateDone(cube, State::YELLOW_ARC);
+};
+
 bool BeginnersMethod::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
+            cout << "Checking dasy" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkDasy(cube);
         case WHITE_CROSS:
+            cout << "Checking white cross" << endl;
             ensureColorOnTop(cube, WHITE);
             return checkWhiteCross(cube);
         case FIRST_LAYER_CORNERS:
+            cout << "Checking first layer corners" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkFirstLayerCorners(cube);
         case SECOND_LAYER_EDGES:
+            cout << "Checking second layer edges" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkSecondLayerEdges(cube);
         case YELLOW_DOT:
+            cout << "Checking yellow dot" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkYellowDot(cube);
         case YELLOW_LINE:
         {
+            cout << "Checking yellow line" << endl;
             ensureColorOnTop(cube, YELLOW);
-            
-            bool yellowLineDone = false;
-            for(int i=0; i<2; ++i) {
-                if(checkYellowLine(cube)) {
-                    yellowLineDone = true;
-                    break;
-                } else {
-                    cube.flip(Y_CLOCKWISE_90);
-                }
-            }
-            return yellowLineDone;
+            function<bool(Cube&)> check = [&](Cube &_cube) {
+                return checkYellowLine(_cube);
+            };
+            return checkConditionOnManyAngles(cube, Y_CLOCKWISE_90, 2, check);
+        }
+        case YELLOW_ARC:
+        {
+            cout << "Checking yellow arc" << endl;
+            ensureColorOnTop(cube, YELLOW);
+            function<bool(Cube&)> check = [&](Cube &_cube) {
+                return checkYellowArc(_cube);
+            };
+            return checkConditionOnManyAngles(cube, Y_CLOCKWISE_90, 4, check);
         }
         default:
             return false;
@@ -98,10 +111,10 @@ bool BeginnersMethod::checkWhiteCross(Cube &cube) {
 
 bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
-
+    
     if (getSideLeadingColor(cube, DOWN) != WHITE)
         return false;
-
+    
     if (!isSideCompleted(cube, DOWN))
         return false;
 
@@ -110,12 +123,12 @@ bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
         if (!hasLowerT(cube, neighbour))
             return false;
     }
-
+    
     return true;
 }
 
 bool BeginnersMethod::checkSecondLayerEdges(Cube &cube) {
-    if (!checkFirstLayerCorners(cube)) {
+    if (!areFirstLayerCornersDone(cube)) {
         return false;
     }
     
@@ -130,7 +143,7 @@ bool BeginnersMethod::checkSecondLayerEdges(Cube &cube) {
 }
 
 bool BeginnersMethod::checkYellowDot(Cube &cube) {
-    if (!checkSecondLayerEdges(cube)) {
+    if (!areSecondLayerEdgesDone(cube)) {
         return false;
     }
     
@@ -140,14 +153,23 @@ bool BeginnersMethod::checkYellowDot(Cube &cube) {
 }
 
 bool BeginnersMethod::checkYellowLine(Cube &cube) {
-    if (!checkYellowDot(cube)) {
+    if (!isYellowDotDone(cube)) {
         return false;
     }
     
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
-    return (side[1][0] == side[1][1]) &&  (side[1][0] == side[1][2]) && 
-           (side[1][0] == YELLOW);
+    return (side[1][0] == side[1][2]) && (side[1][0] == YELLOW);
+}
+
+bool BeginnersMethod::checkYellowArc(Cube &cube) {
+    if (!isYellowDotDone(cube)) {
+        return false;
+    }
+    
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
+
+    return (side[1][2] == side[2][1]) &&  (side[1][2] == YELLOW);
 }
 
 bool BeginnersMethod::isSideCompleted(Cube &cube, Side leadingSide) {
@@ -184,6 +206,20 @@ bool BeginnersMethod::hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide
     }
 
     return false;
+}
+
+bool BeginnersMethod::checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&)> condition) {
+    bool conditionMatched = false;
+    for(int i=0; i<maxFlips; ++i) {
+        if(condition(cube)) {
+            conditionMatched = true;
+            break;
+        } else {
+            cube.flip(flip);
+        }
+    }
+
+    return conditionMatched;
 }
 
 void BeginnersMethod::ensureColorOnTop(Cube &cube, Color color) {
@@ -232,12 +268,11 @@ int main(int argc, char** argv) {
     Cube cube = Cube();
     //cube.rotate(Rotation::UP_CLOCKWISE);
     //cube.flip(Flip::UPSIDE_DOWN);
-    //cube.printCube();
 
     BeginnersMethod beginnersMethod = BeginnersMethod();
     //beginnersMethod.ensureColorOnTop(cube, RED);
     cout << beginnersMethod.isYellowLineDone(cube);
-    cube.printCube();
+    
 
     return 0;
 }
