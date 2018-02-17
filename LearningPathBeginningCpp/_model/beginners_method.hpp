@@ -33,6 +33,7 @@ public:
     bool isYellowDotDone(Cube &cube);
     bool isYellowLineDone(Cube &cube);
     bool isYellowArcDone(Cube &cube);
+    bool isYellowCrossDone(Cube &cube);
     bool isStateDone(Cube &cube, State state);
     void ensureColorOnTop(Cube &cube, Color color);
 
@@ -44,6 +45,7 @@ private:
     bool checkYellowDot(Cube &cube);
     bool checkYellowLine(Cube &cube);
     bool checkYellowArc(Cube &cube);
+    bool checkYellowCross(Cube &cube);
     bool checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&)> condition);
     bool isSideCompleted(Cube &cube, Side leadingSide);
     Color getSideLeadingColor(Cube &cube, Side leadingSide);

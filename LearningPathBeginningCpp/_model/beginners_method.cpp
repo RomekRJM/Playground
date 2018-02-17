@@ -49,6 +49,10 @@ bool BeginnersMethod::isYellowArcDone(Cube &cube) {
     return isStateDone(cube, State::YELLOW_ARC);
 };
 
+bool BeginnersMethod::isYellowCrossDone(Cube &cube) {
+    return isStateDone(cube, State::YELLOW_CROSS);
+};
+
 bool BeginnersMethod::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
@@ -89,9 +93,16 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
             };
             return checkConditionOnManyAngles(cube, Y_CLOCKWISE_90, 4, check);
         }
+        case YELLOW_CROSS:
+        {
+            cout << "Checking yellow cross" << endl;
+            ensureColorOnTop(cube, YELLOW);
+            return checkYellowCross(cube);
+        }
         default:
             return false;
     }
+    
 };
 
 bool BeginnersMethod::checkDasy(Cube &cube) {
@@ -169,7 +180,18 @@ bool BeginnersMethod::checkYellowArc(Cube &cube) {
     
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
-    return (side[1][2] == side[2][1]) &&  (side[1][2] == YELLOW);
+    return (side[1][2] == side[2][1]) && (side[1][2] == YELLOW);
+}
+
+bool BeginnersMethod::checkYellowCross(Cube &cube) {
+    if (!isYellowDotDone(cube)) {
+        return false;
+    }
+    
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
+
+    return (side[0][1] == side[1][0]) && (side[0][1] == side[1][2]) && 
+           (side[0][1] == side[2][1]) && (side[0][1] == YELLOW);
 }
 
 bool BeginnersMethod::isSideCompleted(Cube &cube, Side leadingSide) {
@@ -214,7 +236,7 @@ bool BeginnersMethod::checkConditionOnManyAngles(Cube &cube, Flip flip, int maxF
         if(condition(cube)) {
             conditionMatched = true;
             break;
-        } else {
+        } else if (i < maxFlips - 1){
             cube.flip(flip);
         }
     }
@@ -271,7 +293,7 @@ int main(int argc, char** argv) {
 
     BeginnersMethod beginnersMethod = BeginnersMethod();
     //beginnersMethod.ensureColorOnTop(cube, RED);
-    cout << beginnersMethod.isYellowLineDone(cube);
+    cout << beginnersMethod.isYellowCrossDone(cube);
     
 
     return 0;
