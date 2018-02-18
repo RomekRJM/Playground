@@ -61,6 +61,10 @@ bool BeginnersMethod::areLastLayerCornersPermuted(Cube &cube) {
     return isStateDone(cube, State::PERMUTE_LAST_LAYER_CORNERS);
 };
 
+bool BeginnersMethod::isSolved(Cube &cube) {
+    return isStateDone(cube, State::SOLVED);
+};
+
 bool BeginnersMethod::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
@@ -118,6 +122,12 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
             cout << "Checking last layer corners permutation" << endl;
             ensureColorOnTop(cube, WHITE);
             return checkLastLayerCornersPosition(cube);
+        }
+        case SOLVED:
+        {
+            cout << "Checking if cube solved" << endl;
+            ensureColorOnTop(cube, WHITE);
+            return checkSolved(cube);
         }
         default:
             return false;
@@ -262,6 +272,17 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
     return true;
 }
 
+bool BeginnersMethod::checkSolved(Cube& cube) {
+    for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
+        Side currentSide = static_cast<Side> (sideNum);
+        if (!isSideCompleted(cube, currentSide)) {
+            return false;
+        }
+    }
+    
+    return true;
+}
+
 bool BeginnersMethod::colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> a2) {
     for (int i = 0; i < 3; ++i) {
         if (find(std::begin(a2), std::end(a2), a1[i]) == std::end(a2)) {
@@ -371,7 +392,7 @@ int main(int argc, char** argv) {
 
     BeginnersMethod beginnersMethod = BeginnersMethod();
     //beginnersMethod.ensureColorOnTop(cube, RED);
-    cout << beginnersMethod.areLastLayerCornersPermuted(cube);
+    cout << beginnersMethod.isSolved(cube);
 
 
     return 0;

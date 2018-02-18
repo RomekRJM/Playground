@@ -20,7 +20,7 @@ enum State {
     DASY, WHITE_CROSS, FIRST_LAYER_CORNERS, SECOND_LAYER_EDGES, 
     YELLOW_DOT, YELLOW_LINE, YELLOW_ARC,
     YELLOW_CROSS, POSITION_LAST_LAYER_CORNERS, PERMUTE_LAST_LAYER_CORNERS,
-    PERMUTE_LAST_LAYER_EDGES
+    SOLVED//PERMUTE_LAST_LAYER_EDGES
 };
 
 class BeginnersMethod {
@@ -36,6 +36,7 @@ public:
     bool isYellowCrossDone(Cube &cube);
     bool areLastLayerCornersPositioned(Cube &cube);
     bool areLastLayerCornersPermuted(Cube &cube);
+    bool isSolved(Cube &cube);
     bool isStateDone(Cube &cube, State state);
     void ensureColorOnTop(Cube &cube, Color color);
 
@@ -50,6 +51,7 @@ private:
     bool checkYellowCross(Cube &cube);
     bool checkLastLayerCornersPosition(Cube &cube);
     bool checkLastLayerCornersPermutation(Cube &cube);
+    bool checkSolved(Cube &cube);
     bool checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&)> condition);
     bool isSideCompleted(Cube &cube, Side leadingSide);
     Color getSideLeadingColor(Cube &cube, Side leadingSide);
