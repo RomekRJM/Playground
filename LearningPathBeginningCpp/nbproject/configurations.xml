@@ -21,7 +21,8 @@
       <itemPath>30_handson_functions.hpp</itemPath>
       <itemPath>_model/beginners_method.hpp</itemPath>
       <itemPath>builder.hpp</itemPath>
-      <itemPath>_model/cube.h</itemPath>
+      <itemPath>_model/cube.hpp</itemPath>
+      <itemPath>_model/cube_algorithms.hpp</itemPath>
       <itemPath>data.hpp</itemPath>
       <itemPath>file_reader.hpp</itemPath>
       <itemPath>file_system.hpp</itemPath>
@@ -51,6 +52,7 @@
       <itemPath>_model/beginners_method.cpp</itemPath>
       <itemPath>brute.cpp</itemPath>
       <itemPath>_model/cube.cpp</itemPath>
+      <itemPath>_model/cube_algorithms.cpp</itemPath>
       <itemPath>one_day_game.cpp</itemPath>
     </logicalFolder>
     <logicalFolder name="TestFiles"
@@ -160,7 +162,11 @@
       </item>
       <item path="_model/cube.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="_model/cube.h" ex="false" tool="3" flavor2="0">
+      <item path="_model/cube.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="_model/cube_algorithms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="_model/cube_algorithms.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="brute.cpp" ex="false" tool="1" flavor2="0">
       </item>
@@ -355,7 +361,11 @@
       </item>
       <item path="_model/cube.cpp" ex="false" tool="1" flavor2="0">
       </item>
-      <item path="_model/cube.h" ex="false" tool="3" flavor2="0">
+      <item path="_model/cube.hpp" ex="false" tool="3" flavor2="0">
+      </item>
+      <item path="_model/cube_algorithms.cpp" ex="false" tool="1" flavor2="0">
+      </item>
+      <item path="_model/cube_algorithms.hpp" ex="false" tool="3" flavor2="0">
       </item>
       <item path="brute.cpp" ex="false" tool="1" flavor2="0">
       </item>

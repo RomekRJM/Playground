@@ -14,7 +14,7 @@
 #ifndef BEGINNERS_METHOD_HPP
 #define BEGINNERS_METHOD_HPP
 
-#include "cube.h"
+#include "cube.hpp"
 
 enum State {
     DASY, WHITE_CROSS, FIRST_LAYER_CORNERS, SECOND_LAYER_EDGES, 

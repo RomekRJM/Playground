@@ -11,7 +11,7 @@
  * Created on 04 December 2017, 06:57
  */
 
-#include "cube.h"
+#include "cube.hpp"
 #include <stdlib.h>
 #include <iostream>
 

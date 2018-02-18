@@ -41,6 +41,7 @@ OBJECTFILES= \
 	${OBJECTDIR}/49_handson_generic.o \
 	${OBJECTDIR}/_model/beginners_method.o \
 	${OBJECTDIR}/_model/cube.o \
+	${OBJECTDIR}/_model/cube_algorithms.o \
 	${OBJECTDIR}/brute.o \
 	${OBJECTDIR}/one_day_game.o
 
@@ -110,6 +111,11 @@ ${OBJECTDIR}/_model/cube.o: _model/cube.cpp
 	${MKDIR} -p ${OBJECTDIR}/_model
 	${RM} "$@.d"
 	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_model/cube.o _model/cube.cpp
+
+${OBJECTDIR}/_model/cube_algorithms.o: _model/cube_algorithms.cpp
+	${MKDIR} -p ${OBJECTDIR}/_model
+	${RM} "$@.d"
+	$(COMPILE.cc) -g -std=c++11 -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_model/cube_algorithms.o _model/cube_algorithms.cpp
 
 ${OBJECTDIR}/brute.o: brute.cpp
 	${MKDIR} -p ${OBJECTDIR}
@@ -243,6 +249,19 @@ ${OBJECTDIR}/_model/cube_nomain.o: ${OBJECTDIR}/_model/cube.o _model/cube.cpp
 	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_model/cube_nomain.o _model/cube.cpp;\
 	else  \
 	    ${CP} ${OBJECTDIR}/_model/cube.o ${OBJECTDIR}/_model/cube_nomain.o;\
+	fi
+
+${OBJECTDIR}/_model/cube_algorithms_nomain.o: ${OBJECTDIR}/_model/cube_algorithms.o _model/cube_algorithms.cpp 
+	${MKDIR} -p ${OBJECTDIR}/_model
+	@NMOUTPUT=`${NM} ${OBJECTDIR}/_model/cube_algorithms.o`; \
+	if (echo "$$NMOUTPUT" | ${GREP} '|main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T main$$') || \
+	   (echo "$$NMOUTPUT" | ${GREP} 'T _main$$'); \
+	then  \
+	    ${RM} "$@.d";\
+	    $(COMPILE.cc) -g -std=c++11 -Dmain=__nomain -MMD -MP -MF "$@.d" -o ${OBJECTDIR}/_model/cube_algorithms_nomain.o _model/cube_algorithms.cpp;\
+	else  \
+	    ${CP} ${OBJECTDIR}/_model/cube_algorithms.o ${OBJECTDIR}/_model/cube_algorithms_nomain.o;\
 	fi
 
 ${OBJECTDIR}/brute_nomain.o: ${OBJECTDIR}/brute.o brute.cpp 
