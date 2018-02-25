@@ -396,8 +396,7 @@ int main(int argc, char** argv) {
     //cout << beginnersMethod.isSolved(cube);
     
     Dasy dasy = Dasy();
-    dasy.perform(cube);
-
+    cout << dasy.perform(cube);
 
     return 0;
 }

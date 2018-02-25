@@ -16,10 +16,6 @@
 
 using namespace std;
 
-bool CubePosition::operator==(CubePosition &other) {
-    return (side == other.side) && (row == other.row) && (column == other.column);
-}
-
 // rotation string representations
 const string CubeAlgorithm::ROTATE_FRONT_CLOCKWISE = "F";
 const string CubeAlgorithm::ROTATE_UP_CLOCKWISE = "U";
@@ -83,28 +79,67 @@ const array<CubePosition, 4> Dasy::WHITE_PETALS = {
     CubePosition(UP, 1, 2), CubePosition(UP, 2, 1)
 };
 
-const array<PetalSolution, 1> Dasy::PETAL_SOLUTIONS = {
-    PetalSolution(CubePosition(FRONT, 1, 2), CubePosition(UP, 1, 2), ROTATE_RIGHT_CLOCKWISE)
+const array<PetalSolution, 20> Dasy::PETAL_SOLUTIONS = {
+    PetalSolution(CubePosition(FRONT, 0, 1), CubePosition(UP, 2, 1), ROTATE_FRONT_CLOCKWISE),
+    PetalSolution(CubePosition(FRONT, 1, 0), CubePosition(UP, 1, 0), ROTATE_LEFT_COUNTER_CLOCKWISE),
+    PetalSolution(CubePosition(FRONT, 1, 2), CubePosition(UP, 1, 2), ROTATE_RIGHT_CLOCKWISE),
+    PetalSolution(CubePosition(FRONT, 2, 1), CubePosition(UP, 2, 1), ROTATE_FRONT_CLOCKWISE),
+    PetalSolution(CubePosition(RIGHT, 0, 1), CubePosition(UP, 1, 2), ROTATE_RIGHT_CLOCKWISE),
+    PetalSolution(CubePosition(RIGHT, 1, 0), CubePosition(UP, 2, 1), ROTATE_FRONT_COUNTER_CLOCKWISE),
+    PetalSolution(CubePosition(RIGHT, 1, 2), CubePosition(UP, 0, 1), ROTATE_BACK_CLOCKWISE),
+    PetalSolution(CubePosition(RIGHT, 2, 1), CubePosition(UP, 1, 2), ROTATE_RIGHT_CLOCKWISE),
+    PetalSolution(CubePosition(LEFT, 0, 1), CubePosition(UP, 1, 0), ROTATE_LEFT_CLOCKWISE),
+    PetalSolution(CubePosition(LEFT, 1, 0), CubePosition(UP, 0, 1), ROTATE_BACK_COUNTER_CLOCKWISE),
+    PetalSolution(CubePosition(LEFT, 1, 2), CubePosition(UP, 2, 1), ROTATE_FRONT_CLOCKWISE),
+    PetalSolution(CubePosition(LEFT, 2, 1), CubePosition(UP, 1, 0), ROTATE_LEFT_CLOCKWISE),
+    PetalSolution(CubePosition(BACK, 0, 1), CubePosition(UP, 0, 1), ROTATE_BACK_CLOCKWISE),
+    PetalSolution(CubePosition(BACK, 1, 0), CubePosition(UP, 1, 2), ROTATE_RIGHT_COUNTER_CLOCKWISE),
+    PetalSolution(CubePosition(BACK, 1, 2), CubePosition(UP, 1, 0), ROTATE_LEFT_CLOCKWISE),
+    PetalSolution(CubePosition(BACK, 2, 1), CubePosition(UP, 0, 1), ROTATE_BACK_CLOCKWISE),
+    PetalSolution(CubePosition(DOWN, 0, 1), CubePosition(UP, 2, 1), ROTATE_FRONT_CLOCKWISE),
+    PetalSolution(CubePosition(DOWN, 1, 0), CubePosition(UP, 1, 0), ROTATE_LEFT_COUNTER_CLOCKWISE),
+    PetalSolution(CubePosition(DOWN, 1, 2), CubePosition(UP, 1, 2), ROTATE_RIGHT_CLOCKWISE),
+    PetalSolution(CubePosition(DOWN, 2, 1), CubePosition(UP, 0, 1), ROTATE_BACK_CLOCKWISE)
 };
 
-string Dasy::findStartingPosition(Cube &cube) {
-    return "";
-}
-
-string Dasy::rotate(Cube &cube) {
-    const CubePosition *whitePetal = nextMissingWhitePetal(cube);
-
-    if (whitePetal) {
-        cout << whitePetal->side << ", " << whitePetal->row << ", "
-                << whitePetal->column;
+void CubeAlgorithm::doMove(Cube &cube, string move) {
+    map<string, Rotation>::const_iterator itRot = rotations.find(move);
+    
+    if(itRot != rotations.end()) {
+        cube.rotate(itRot->second);
+        ss << move << ","; 
     }
-
-    return "";
+    
+    map<string, Flip>::const_iterator itFlp = flips.find(move);
+    
+    if(itFlp != flips.end()) {
+        cube.flip(itFlp->second);
+        ss << move << ","; 
+    }
 }
 
-const CubePosition* Dasy::nextMissingWhitePetal(Cube cube) {
-    for (auto it = WHITE_PETALS.begin(); it != WHITE_PETALS.end(); ++it) {
-        if (cube.cube[it->side][it->row][it->column] != WHITE) {
+void Dasy::findStartingPosition(Cube &cube) {
+}
+
+void Dasy::rotate(Cube &cube) {
+    const PetalSolution* solution = nextMissingWhiteEdge(cube);
+    
+    if(!solution) {
+        return;
+    }
+    
+    for(int i=0; i<3; ++i) {
+        if(cube.getColor(solution->cantBeWhite) == WHITE) {
+            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+        }
+    }
+    
+    CubeAlgorithm::doMove(cube, solution->rotation);
+}
+
+const PetalSolution* Dasy::nextMissingWhiteEdge(Cube cube) {
+    for(auto it=PETAL_SOLUTIONS.begin(); it != PETAL_SOLUTIONS.end(); ++it) {
+        if(cube.getColor(it->startingPosition) == WHITE) {
             return it;
         }
     }

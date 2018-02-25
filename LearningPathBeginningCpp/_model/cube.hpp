@@ -68,6 +68,18 @@ V findInMap(K key, map<K, V> _map) {
     throw domain_error("Key not found in map.");
 }
 
+struct CubePosition {
+public:
+
+    CubePosition(Side s, int r, int c) : side(s), row(r), column(c) {
+    };
+public:
+    Side side;
+    int row;
+    int column;
+    bool operator==(CubePosition &other);
+};
+
 class Cube {
     friend class BeginnersMethod;
     friend class Dasy;
@@ -97,9 +109,14 @@ public:
     set<Side> getNeighbours(Side side) {
         return findInMap(side, neighbours);
     }
+    
+    Color getColor(CubePosition cp) {
+        return cube[cp.side][cp.row][cp.column];
+    };
 
     void printCube();
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
+
 private:
     void setUpRotations();
     void setUpFlips();
@@ -127,7 +144,7 @@ private:
             {
                 { // FRONT
                     {ORANGE, GREEN, ORANGE},
-                    {ORANGE, ORANGE, ORANGE},
+                    {WHITE, ORANGE, ORANGE},
                     {ORANGE, ORANGE, ORANGE}
                 }
             },
@@ -147,7 +164,7 @@ private:
             },
             {
                 { // DOWN
-                    {WHITE, WHITE, WHITE},
+                    {RED, RED, WHITE},
                     {WHITE, WHITE, WHITE},
                     {WHITE, WHITE, WHITE}
                 }

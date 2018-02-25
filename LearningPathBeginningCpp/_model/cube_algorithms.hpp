@@ -15,38 +15,21 @@
 #define CUBE_ALGORITHMS_HPP
 
 #include <string>
+#include <sstream>
 #include "cube.hpp"
 
 using namespace std;
-
-struct CubePosition {
-public:
-
-    CubePosition(Side s, int r, int c) : side(s), row(r), column(c) {
-    };
-public:
-    Side side;
-    int row;
-    int column;
-    bool operator==(CubePosition &other);
-};
 
 struct PetalSolution {
 public:
 
     PetalSolution(CubePosition s, CubePosition d, string r) :
-        startingPosition(s), destination(d), willAlsoChange(d), rotation(r) {
-    };
-    
-    PetalSolution(CubePosition s, CubePosition d, CubePosition w, string r) :
-        startingPosition(s), destination(d), willAlsoChange(w), rotation(r) {
+        startingPosition(s), cantBeWhite(d), rotation(r) {
     };
     
 public:
     CubePosition startingPosition;
-    CubePosition destination;
-    // in a loop check if both destination and willAlsoChange are free, before moving
-    CubePosition willAlsoChange;
+    CubePosition cantBeWhite;
     string rotation;
 };
 
@@ -57,7 +40,9 @@ public:
     };
 
     string perform(Cube & cube) {
-        return findStartingPosition(cube) + rotate(cube);
+        findStartingPosition(cube);
+        rotate(cube);
+        return ss.str();
     };
 
     // rotation string representations
@@ -89,28 +74,32 @@ public:
 private:
     static const map<string, Rotation> rotations;
     static const map<string, Flip> flips;
-
-    virtual string findStartingPosition(Cube &cube) = 0;
-    virtual string rotate(Cube &cube) = 0;
+    stringstream ss;
+    
+protected:
+    virtual void findStartingPosition(Cube &cube) = 0;
+    virtual void rotate(Cube &cube) = 0;
+    void doMove(Cube &cube, string move);
+    
 };
 
 class Dasy : public CubeAlgorithm {
-    string findStartingPosition(Cube &cube) override;
-    string rotate(Cube &cube) override;
+    void findStartingPosition(Cube &cube) override;
+    void rotate(Cube &cube) override;
 private:
-    const CubePosition* nextMissingWhitePetal(Cube cube);
+    const PetalSolution* nextMissingWhiteEdge(Cube cube);
     static const array<CubePosition, 4> WHITE_PETALS;
-    static const array<PetalSolution, 1> PETAL_SOLUTIONS;
+    static const array<PetalSolution, 20> PETAL_SOLUTIONS;
 };
 
 class WhiteCross : public CubeAlgorithm {
-    string findStartingPosition(Cube &cube) override;
-    string rotate(Cube &cube) override;
+    void findStartingPosition(Cube &cube) override;
+    void rotate(Cube &cube) override;
 };
 
 class FirstLayerCorners : public CubeAlgorithm {
-    string findStartingPosition(Cube &cube) override;
-    string rotate(Cube &cube) override;
+    void findStartingPosition(Cube &cube) override;
+    void rotate(Cube &cube) override;
 };
 
 #endif /* CUBE_ALGORITHMS_HPP */

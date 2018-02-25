@@ -17,6 +17,10 @@
 
 using namespace std;
 
+bool CubePosition::operator==(CubePosition &other) {
+    return (side == other.side) && (row == other.row) && (column == other.column);
+}
+
 Cube::Cube() {
     setUpRotations();
     setUpFlips();
