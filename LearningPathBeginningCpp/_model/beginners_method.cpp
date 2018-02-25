@@ -12,6 +12,7 @@
  */
 
 #include "beginners_method.hpp"
+#include "cube_algorithms.hpp"
 #include <iostream>
 #include <functional>
 
@@ -390,9 +391,12 @@ int main(int argc, char** argv) {
     //cube.rotate(Rotation::UP_CLOCKWISE);
     //cube.flip(Flip::UPSIDE_DOWN);
 
-    BeginnersMethod beginnersMethod = BeginnersMethod();
+    //BeginnersMethod beginnersMethod = BeginnersMethod();
     //beginnersMethod.ensureColorOnTop(cube, RED);
-    cout << beginnersMethod.isSolved(cube);
+    //cout << beginnersMethod.isSolved(cube);
+    
+    Dasy dasy = Dasy();
+    dasy.perform(cube);
 
 
     return 0;

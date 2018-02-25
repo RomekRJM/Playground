@@ -70,6 +70,7 @@ V findInMap(K key, map<K, V> _map) {
 
 class Cube {
     friend class BeginnersMethod;
+    friend class Dasy;
 
 public:
     Cube();
