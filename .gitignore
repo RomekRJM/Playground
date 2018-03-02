@@ -34,3 +34,5 @@ nbproject/
 
 #mac
 .DS_Store
+/BeginnersMethodRubiks/build/
+/BeginnersMethodRubiks/dist/
