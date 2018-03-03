@@ -385,18 +385,3 @@ void BeginnersMethod::ensureColorOnTop(Cube &cube, Color color) {
 Color BeginnersMethod::getSideLeadingColor(Cube &cube, Side leadingSide) {
     return cube.cube[leadingSide][Cube::SIZE - 2][Cube::SIZE - 2];
 }
-
-int main(int argc, char** argv) {
-    Cube cube = Cube();
-    //cube.rotate(Rotation::UP_CLOCKWISE);
-    //cube.flip(Flip::UPSIDE_DOWN);
-
-    //BeginnersMethod beginnersMethod = BeginnersMethod();
-    //beginnersMethod.ensureColorOnTop(cube, RED);
-    //cout << beginnersMethod.isSolved(cube);
-    
-    Dasy dasy = Dasy();
-    cout << dasy.perform(cube);
-
-    return 0;
-}

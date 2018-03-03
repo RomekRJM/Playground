@@ -83,12 +83,9 @@ public:
 class Cube {
     friend class BeginnersMethod;
     friend class Dasy;
+    friend class CubeGenerator;
 
 public:
-    Cube();
-    Cube(const Cube& orig);
-    virtual ~Cube();
-
     static const int SIZE = 3;
     static const int SIDES = 6;
 
@@ -109,15 +106,17 @@ public:
     set<Side> getNeighbours(Side side) {
         return findInMap(side, neighbours);
     }
-    
+
     Color getColor(CubePosition cp) {
         return cube[cp.side][cp.row][cp.column];
     };
 
     void printCube();
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
+    bool operator==(Cube & other);
 
 private:
+    Cube();
     void setUpRotations();
     void setUpFlips();
     void setUpNeighbours();
@@ -137,36 +136,35 @@ private:
     void flipSidesClockwiseOverZ();
     void replaceSide(Side side, array<array<Color, Cube::SIZE>, Cube::SIZE> sideValue);
 
-
     array<array<Color, Cube::SIZE>, Cube::SIZE> copySide(Side side);
     array<array<array<Color, SIZE>, SIZE>, SIDES> cube = {
         {
             {
                 { // FRONT
-                    {ORANGE, GREEN, ORANGE},
-                    {WHITE, ORANGE, ORANGE},
+                    {ORANGE, ORANGE, ORANGE},
+                    {ORANGE, ORANGE, ORANGE},
                     {ORANGE, ORANGE, ORANGE}
                 }
             },
             {
                 { // UP
-                    {YELLOW, YELLOW, YELLOW},
-                    {YELLOW, YELLOW, YELLOW},
-                    {YELLOW, YELLOW, YELLOW}
+                    {WHITE, WHITE, WHITE},
+                    {WHITE, WHITE, WHITE},
+                    {WHITE, WHITE, WHITE}
                 }
             },
             {
                 { // BACK
-                    {RED, ORANGE, RED},
+                    {RED, RED, RED},
                     {RED, RED, RED},
                     {RED, RED, RED}
                 }
             },
             {
                 { // DOWN
-                    {RED, RED, WHITE},
-                    {WHITE, WHITE, WHITE},
-                    {WHITE, WHITE, WHITE}
+                    {YELLOW, YELLOW, YELLOW},
+                    {YELLOW, YELLOW, YELLOW},
+                    {YELLOW, YELLOW, YELLOW}
                 }
             },
             {
@@ -178,7 +176,7 @@ private:
             },
             {
                 { // LEFT
-                    {GREEN, RED, GREEN},
+                    {GREEN, GREEN, GREEN},
                     {GREEN, GREEN, GREEN},
                     {GREEN, GREEN, GREEN}
                 }
@@ -186,6 +184,5 @@ private:
         }
     };
 };
-
 
 #endif /* CUBE_H */

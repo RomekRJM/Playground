@@ -14,6 +14,9 @@
 #include "cube.hpp"
 #include <stdlib.h>
 #include <iostream>
+#include <cstdlib>
+#include <ctime>
+#include <boost/algorithm/string.hpp>
 
 using namespace std;
 
@@ -25,12 +28,6 @@ Cube::Cube() {
     setUpRotations();
     setUpFlips();
     setUpNeighbours();
-}
-
-Cube::Cube(const Cube& orig) {
-}
-
-Cube::~Cube() {
 }
 
 void Cube::setUpRotations() {
@@ -184,6 +181,7 @@ void Cube::setUpNeighbours() {
     neighbours.insert(pair<Side, set < Side >> (LEFT, set<Side>{UP, DOWN, FRONT, BACK}));
 }
 // TODO: Make sure on flips code is right
+
 void Cube::flipSidesClockwiseOverX() {
     array<array<Color, Cube::SIZE>, Cube::SIZE> side1 = copySide(Side::FRONT);
     array<array<Color, Cube::SIZE>, Cube::SIZE> side2 = copySide(Side::UP);
@@ -198,7 +196,7 @@ void Cube::flipSidesClockwiseOverX() {
     for (int i = 0; i < 2; ++i) {
         rotateSideClockwise(BACK);
     }
-    
+
     for (int i = 0; i < 2; ++i) {
         rotateSideClockwise(DOWN);
     }
@@ -226,7 +224,7 @@ void Cube::flipSidesClockwiseOverZ() {
     side2 = copySide(Side::LEFT);
     replaceSide(Side::LEFT, side1);
     replaceSide(Side::UP, side2);
-    
+
     rotateSideClockwise(UP);
     rotateSideClockwise(RIGHT);
     rotateSideClockwise(DOWN);
@@ -442,3 +440,8 @@ void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
         cout << endl;
     }
 }
+
+bool Cube::operator==(Cube & other) {
+    return this->cube == other.cube;
+}
+
