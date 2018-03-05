@@ -36,3 +36,8 @@ nbproject/
 .DS_Store
 /BeginnersMethodRubiks/build/
 /BeginnersMethodRubiks/dist/
+
+#code coverage
+*.gcov
+app.info
+
