@@ -11,6 +11,8 @@ void rotation_test(Rotation rotation, string expectedCube) {
         "WRRGGGGGG,OWWOWWOWW,OOYBBBBBB,RRRYYYYYY,BBBWRRWRR,GGGOOYOOY"
     );
     actual.rotate(rotation);
+//    if(rotation == BACK_CLOCKWISE)
+//    actual.printCube();
 
     Cube expected = CubeGenerator::fromString(expectedCube);
     BOOST_CHECK(actual == expected);
@@ -30,4 +32,36 @@ BOOST_AUTO_TEST_CASE(test_rotate_up_clockwise) {
 
 BOOST_AUTO_TEST_CASE(test_rotate_up_counter_clockwise) {
     rotation_test(UP_COUNTER_CLOCKWISE, "GGGGGGGGG,WWWWWWOOO,BBBBBBBBB,RRRYYYYYY,WRRWRRWRR,OOYOOYOOY");
+}
+
+BOOST_AUTO_TEST_CASE(test_rotate_back_clockwise) {
+    rotation_test(BACK_CLOCKWISE, "WRRGGGGGG,BRROWWOWW,BBOBBOBBY,RRRYYYGOO,BBYWRYWRY,WGGWOYOOY");
+}
+
+BOOST_AUTO_TEST_CASE(test_rotate_back_counter_clockwise) {
+    rotation_test(BACK_COUNTER_CLOCKWISE, "WRRGGGGGG,OOGOWWOWW,YBBOBBOBB,RRRYYYRRB,BBOWRWWRW,YGGYOYYOY");
+}
+
+BOOST_AUTO_TEST_CASE(test_rotate_down_clockwise) {
+    rotation_test(DOWN_CLOCKWISE, "WRRGGGOOY,OWWOWWOWW,OOYBBBWRR,YYRYYRYYR,BBBWRRGGG,GGGOOYBBB");
+}
+
+BOOST_AUTO_TEST_CASE(test_rotate_down_counter_clockwise) {
+    rotation_test(DOWN_COUNTER_CLOCKWISE, "WRRGGGWRR,OWWOWWOWW,OOYBBBOOY,RYYRYYRYY,BBBWRRBBB,GGGOOYGGG");
+}
+
+BOOST_AUTO_TEST_CASE(test_rotate_right_clockwise) {
+    rotation_test(RIGHT_CLOCKWISE, "WRRGGYGGY,OWROWGOWG,WOYWBBWBB,RRBYYBYYO,WWBRRBRRB,GGGOOYOOY");
+}
+
+BOOST_AUTO_TEST_CASE(test_rotate_right_counter_clockwise) {
+    rotation_test(RIGHT_COUNTER_CLOCKWISE, "WRWGGWGGW,OWBOWBOWO,YOYYBBRBB,RRRYYGYYG,BRRBRRBWW,GGGOOYOOY");
+}
+
+BOOST_AUTO_TEST_CASE(test_rotate_left_clockwise) {
+    rotation_test(LEFT_CLOCKWISE, "ORROGGOGG,BWWBWWYWW,OOYBBYBBR,WRRGYYGYY,BBBWRRWRR,OOGOOGYYG");
+}
+
+BOOST_AUTO_TEST_CASE(test_rotate_left_counter_clockwise) {
+    rotation_test(LEFT_COUNTER_CLOCKWISE, "RRRYGGYGG,WWWGWWGWW,OOOBBOBBO,BRRBYYYYY,BBBWRRWRR,GYYGOOGOO");
 }

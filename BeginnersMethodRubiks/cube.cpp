@@ -273,7 +273,9 @@ void Cube::rotateSidesClockwiseForFront() {
 }
 
 void Cube::rotateSidesClockwiseForBack() {
-    rotateSidesClockwiseFrontBack(Side::BACK);
+    for (int i = 0; i < 3; ++i) {
+        rotateSidesClockwiseFrontBack(Side::BACK);
+    }
 }
 
 void Cube::rotateSidesClockwiseFrontBack(Side side) {
@@ -314,7 +316,9 @@ void Cube::rotateSidesClockwiseForUp() {
 }
 
 void Cube::rotateSidesClockwiseForDown() {
-    rotateSidesClockwiseUpDown(Side::DOWN);
+    for (int i = 0; i < 3; ++i) {
+        rotateSidesClockwiseUpDown(Side::DOWN);
+    }
 }
 
 void Cube::rotateSidesClockwiseUpDown(Side side) {
