@@ -79,10 +79,7 @@ void Cube::setUpRotations() {
     };
     function<void() > dcc = [this]() {
         rotateSideCounterClockwise(DOWN);
-
-        for (int i = 0; i < 3; ++i) {
-            rotateSidesClockwiseForDown();
-        }
+        rotateSidesClockwiseUpDown(DOWN);
     };
     rotations.insert(pair<Rotation, function<void()>>(DOWN_CLOCKWISE, dc));
     rotations.insert(pair<Rotation, function<void()>>(DOWN_COUNTER_CLOCKWISE, dcc));

@@ -1,5 +1,4 @@
 #define BOOST_TEST_DYN_LINK
-#define BOOST_TEST_MODULE CUBE_TEST_SUITE
 #include <boost/test/unit_test.hpp>
 #include "cube.hpp"
 #include "cube_generator.hpp"
@@ -11,8 +10,6 @@ void rotation_test(Rotation rotation, string expectedCube) {
         "WRRGGGGGG,OWWOWWOWW,OOYBBBBBB,RRRYYYYYY,BBBWRRWRR,GGGOOYOOY"
     );
     actual.rotate(rotation);
-//    if(rotation == BACK_CLOCKWISE)
-//    actual.printCube();
 
     Cube expected = CubeGenerator::fromString(expectedCube);
     BOOST_CHECK(actual == expected);
@@ -72,8 +69,6 @@ void flip_test(Flip flip, string expectedCube) {
         "WRRGGGGGG,OWWOWWOWW,OOYBBBBBB,RRRYYYYYY,BBBWRRWRR,GGGOOYOOY"
     );
     actual.flip(flip);
-//    if(flip == UPSIDE_DOWN)
-//    actual.printCube();
 
     Cube expected = CubeGenerator::fromString(expectedCube);
     BOOST_CHECK(actual == expected);
