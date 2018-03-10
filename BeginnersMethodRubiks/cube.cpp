@@ -132,7 +132,7 @@ void Cube::setUpFlips() {
 
     function<void() > yc = [this]() {
         rotateSideClockwise(UP);
-        rotateSideClockwise(DOWN);
+        rotateSideCounterClockwise(DOWN);
         flipSidesClockwiseOverY();
     };
     flips.insert(pair<Flip, function<void()>>(Y_CLOCKWISE_90, yc));
@@ -140,7 +140,7 @@ void Cube::setUpFlips() {
     function<void() > ycc = [this]() {
         for (int i = 0; i < 3; ++i) {
             rotateSideClockwise(UP);
-            rotateSideClockwise(DOWN);
+            rotateSideCounterClockwise(DOWN);
             flipSidesClockwiseOverY();
         }
     };
