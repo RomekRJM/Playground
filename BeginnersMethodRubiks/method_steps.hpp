@@ -20,7 +20,7 @@ enum State {
     DASY, WHITE_CROSS, FIRST_LAYER_CORNERS, SECOND_LAYER_EDGES, 
     YELLOW_DOT, YELLOW_LINE, YELLOW_ARC,
     YELLOW_CROSS, POSITION_LAST_LAYER_CORNERS, PERMUTE_LAST_LAYER_CORNERS,
-    SOLVED//PERMUTE_LAST_LAYER_EDGES
+    SOLVED
 };
 
 class BeginnersMethod {
@@ -58,6 +58,7 @@ private:
     bool hasLowerT(Cube &cube, Side leadingSide);
     bool hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide);
     bool colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> a2);
+    bool hasRightColorUnderPetals(Cube &cube);
 };
 
 #endif /* BEGINNERS_METHOD_HPP */

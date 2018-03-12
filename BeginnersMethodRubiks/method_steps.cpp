@@ -11,7 +11,7 @@
  * Created on 16 January 2018, 22:49
  */
 
-#include "beginners_method.hpp"
+#include "method_steps.hpp"
 #include "cube_algorithms.hpp"
 #include <iostream>
 #include <functional>
@@ -139,12 +139,20 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
 bool BeginnersMethod::checkDasy(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
+    if (!hasRightColorUnderPetals(cube)) {
+        return false;
+    }
+
     return (side[1][1] == YELLOW) &&
             (side[0][1] == side[1][0] == side[1][2] == WHITE);
 }
 
 bool BeginnersMethod::checkWhiteCross(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
+
+    if (!hasRightColorUnderPetals(cube)) {
+        return false;
+    }
 
     return (side[0][1] == side[1][1]) && (side[0][1] == side[1][0]) &&
             (side[0][1] == side[1][2]) && (side[0][1] == side[2][1]) &&
@@ -261,7 +269,7 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
     if (!areLastLayerCornersPositioned(cube)) {
         return false;
     }
-    
+
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
 
     if (getSideLeadingColor(cube, DOWN) != YELLOW)
@@ -269,7 +277,7 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
 
     if (!isSideCompleted(cube, DOWN))
         return false;
-    
+
     return true;
 }
 
@@ -280,7 +288,7 @@ bool BeginnersMethod::checkSolved(Cube& cube) {
             return false;
         }
     }
-    
+
     return true;
 }
 
@@ -307,6 +315,13 @@ bool BeginnersMethod::isSideCompleted(Cube &cube, Side leadingSide) {
     }
 
     return true;
+}
+
+bool BeginnersMethod::hasRightColorUnderPetals(Cube &cube) {
+    return (cube.cube[FRONT][0][1] == cube.cube[FRONT][1][1])&&
+            (cube.cube[BACK][0][1] == cube.cube[BACK][1][1]) &&
+            (cube.cube[RIGHT][0][1] == cube.cube[RIGHT][1][1]) &&
+            (cube.cube[LEFT][0][1] == cube.cube[LEFT][1][1]);
 }
 
 bool BeginnersMethod::hasLowerT(Cube &cube, Side leadingSide) {
