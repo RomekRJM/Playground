@@ -145,14 +145,14 @@ BOOST_AUTO_TEST_CASE(test_are_last_layer_corners_positioned_incompleted) {
 
 BOOST_AUTO_TEST_CASE(test_are_last_layer_corners_permuted) {
     Cube cube = CubeGenerator::fromString(
-            "GGGGGGRGR,WWWWWWWWW,BBBBBBOBO,YYYYYYYYY,RRRRRRBOB,OOOOOOGRG"
+            "GRGGGGGGG,YYYYYYYYY,BOBBBBBBB,WWWWWWWWW,OBOOOOOOO,RGRRRRRRR"
             );
     BOOST_CHECK(BeginnersMethod().areLastLayerCornersPermuted(cube));
 }
 
 BOOST_AUTO_TEST_CASE(test_are_last_layer_corners_permuted_incompleted) {
     Cube cube = CubeGenerator::fromString(
-            "GRYGGGGGG,YYOYYYYYO,YOBBBBBBB,WWWWWWWWW,GBBOOOOOO,RGRRRRRRR"
+            "GROGGGGGG,YYYYYYYYY,BOBBBBBBB,WWWWWWWWW,GBOOOOOOO,RGRRRRRRR"
             );
     BOOST_CHECK(!BeginnersMethod().areLastLayerCornersPermuted(cube));
 }

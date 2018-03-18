@@ -121,8 +121,8 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
         case PERMUTE_LAST_LAYER_CORNERS:
         {
             cout << "Checking last layer corners permutation" << endl;
-            ensureColorOnTop(cube, WHITE);
-            return checkLastLayerCornersPosition(cube);
+            ensureColorOnTop(cube, YELLOW);
+            return checkLastLayerCornersPermutation(cube);
         }
         case SOLVED:
         {
@@ -272,11 +272,22 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
 
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
 
-    if (getSideLeadingColor(cube, DOWN) != YELLOW)
+    if (getSideLeadingColor(cube, DOWN) != WHITE) {
         return false;
+    }
 
-    if (!isSideCompleted(cube, DOWN))
+    if (!isSideCompleted(cube, DOWN)) {
         return false;
+    }
+
+    array<Side, 4> topLayerSides = {FRONT, RIGHT, BACK, LEFT};
+
+    for (Side side : topLayerSides) {
+        if ((cube.cube[side][0][0] != cube.cube[side][0][2]) ||
+                (cube.cube[side][0][0] != getSideLeadingColor(cube, side))) {
+            return false;
+        }
+    }
 
     return true;
 }
