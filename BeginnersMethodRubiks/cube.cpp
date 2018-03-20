@@ -442,6 +442,10 @@ void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
     }
 }
 
+Color Cube::getSideLeadingColor(Side leadingSide) {
+    return cube[leadingSide][Cube::SIZE - 2][Cube::SIZE - 2];
+}
+
 bool Cube::operator==(Cube & other) {
     return this->cube == other.cube;
 }

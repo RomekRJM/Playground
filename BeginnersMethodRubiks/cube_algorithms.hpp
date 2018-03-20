@@ -16,6 +16,7 @@
 
 #include <string>
 #include <sstream>
+#include <exception>
 #include "cube.hpp"
 
 using namespace std;
@@ -95,6 +96,9 @@ private:
 class WhiteCross : public CubeAlgorithm {
     void findStartingPosition(Cube &cube) override;
     void rotate(Cube &cube) override;
+private:
+    Side matchingSide;
+    Side findMatchingSide(Cube cube);
 };
 
 class FirstLayerCorners : public CubeAlgorithm {
@@ -102,4 +106,11 @@ class FirstLayerCorners : public CubeAlgorithm {
     void rotate(Cube &cube) override;
 };
 
+class SideNotFoundException: public exception
+{
+  virtual const char* what() const throw()
+  {
+    return "Couldn't find matching side";
+  }
+};
 #endif /* CUBE_ALGORITHMS_HPP */

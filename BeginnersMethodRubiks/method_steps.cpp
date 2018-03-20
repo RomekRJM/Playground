@@ -162,7 +162,7 @@ bool BeginnersMethod::checkWhiteCross(Cube &cube) {
 bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
 
-    if (getSideLeadingColor(cube, DOWN) != WHITE)
+    if (cube.getSideLeadingColor(DOWN) != WHITE)
         return false;
 
     if (!isSideCompleted(cube, DOWN))
@@ -241,19 +241,19 @@ bool BeginnersMethod::checkLastLayerCornersPosition(Cube& cube) {
     map<array<Color, 3>, array<Color, 3 >> cornersToSides;
 
     array<Color, 3> uflCornerColors = {cube.cube[UP][2][0], cube.cube[FRONT][0][0], cube.cube[LEFT][0][2]};
-    array<Color, 3> uflSideColors = {getSideLeadingColor(cube, UP), getSideLeadingColor(cube, FRONT), getSideLeadingColor(cube, LEFT)};
+    array<Color, 3> uflSideColors = {cube.getSideLeadingColor(UP), cube.getSideLeadingColor(FRONT), cube.getSideLeadingColor(LEFT)};
     cornersToSides.insert(pair<array<Color, 3>, array<Color, 3 >> (uflCornerColors, uflSideColors));
 
     array<Color, 3> ufrCornerColors = {cube.cube[UP][2][2], cube.cube[FRONT][0][2], cube.cube[RIGHT][0][0]};
-    array<Color, 3> ufrSideColors = {getSideLeadingColor(cube, UP), getSideLeadingColor(cube, FRONT), getSideLeadingColor(cube, RIGHT)};
+    array<Color, 3> ufrSideColors = {cube.getSideLeadingColor(UP), cube.getSideLeadingColor(FRONT), cube.getSideLeadingColor(RIGHT)};
     cornersToSides.insert(pair<array<Color, 3>, array<Color, 3 >> (ufrCornerColors, ufrSideColors));
 
     array<Color, 3> ublCornerColors = {cube.cube[UP][0][0], cube.cube[BACK][0][2], cube.cube[LEFT][0][0]};
-    array<Color, 3> ublSideColors = {getSideLeadingColor(cube, UP), getSideLeadingColor(cube, BACK), getSideLeadingColor(cube, LEFT)};
+    array<Color, 3> ublSideColors = {cube.getSideLeadingColor(UP), cube.getSideLeadingColor(BACK), cube.getSideLeadingColor(LEFT)};
     cornersToSides.insert(pair<array<Color, 3>, array<Color, 3 >> (ublCornerColors, ublSideColors));
 
     array<Color, 3> ubrCornerColors = {cube.cube[UP][0][2], cube.cube[BACK][0][0], cube.cube[RIGHT][0][2]};
-    array<Color, 3> ubrSideColors = {getSideLeadingColor(cube, UP), getSideLeadingColor(cube, BACK), getSideLeadingColor(cube, RIGHT)};
+    array<Color, 3> ubrSideColors = {cube.getSideLeadingColor(UP), cube.getSideLeadingColor(BACK), cube.getSideLeadingColor(RIGHT)};
     cornersToSides.insert(pair<array<Color, 3>, array<Color, 3 >> (ubrCornerColors, ubrSideColors));
 
     for (map<array<Color, 3>, array < Color, 3 >> ::iterator it = cornersToSides.begin(); it != cornersToSides.end(); ++it) {
@@ -272,7 +272,7 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
 
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
 
-    if (getSideLeadingColor(cube, DOWN) != WHITE) {
+    if (cube.getSideLeadingColor(DOWN) != WHITE) {
         return false;
     }
 
@@ -284,7 +284,7 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
 
     for (Side side : topLayerSides) {
         if ((cube.cube[side][0][0] != cube.cube[side][0][2]) ||
-                (cube.cube[side][0][0] != getSideLeadingColor(cube, side))) {
+                (cube.cube[side][0][0] != cube.getSideLeadingColor(side))) {
             return false;
         }
     }
@@ -336,7 +336,7 @@ bool BeginnersMethod::hasRightColorUnderPetals(Cube &cube) {
 }
 
 bool BeginnersMethod::hasLowerT(Cube &cube, Side leadingSide) {
-    Color correct = getSideLeadingColor(cube, leadingSide);
+    Color correct = cube.getSideLeadingColor(leadingSide);
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
     if ((side[1][1] == side[2][0]) && (side[1][1] == side[2][1]) &&
             (side[1][1] == side[2][2]) && (side[1][1] == correct)) {
@@ -347,7 +347,7 @@ bool BeginnersMethod::hasLowerT(Cube &cube, Side leadingSide) {
 }
 
 bool BeginnersMethod::hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide) {
-    Color correct = getSideLeadingColor(cube, leadingSide);
+    Color correct = cube.getSideLeadingColor(leadingSide);
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
     if ((side[1][2] == side[1][0]) and (side[1][2] == correct)) {
         return true;
@@ -375,7 +375,7 @@ void BeginnersMethod::ensureColorOnTop(Cube &cube, Color color) {
 
     for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
         Side currentSide = static_cast<Side> (sideNum);
-        if (getSideLeadingColor(cube, currentSide) == color) {
+        if (cube.getSideLeadingColor(currentSide) == color) {
             leadingSide = currentSide;
             break;
         }
@@ -408,6 +408,3 @@ void BeginnersMethod::ensureColorOnTop(Cube &cube, Color color) {
     }
 }
 
-Color BeginnersMethod::getSideLeadingColor(Cube &cube, Side leadingSide) {
-    return cube.cube[leadingSide][Cube::SIZE - 2][Cube::SIZE - 2];
-}

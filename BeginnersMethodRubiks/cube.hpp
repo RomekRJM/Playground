@@ -83,6 +83,7 @@ public:
 class Cube {
     friend class BeginnersMethod;
     friend class Dasy;
+    friend class WhiteCross;
     friend class CubeGenerator;
 
 public:
@@ -113,6 +114,7 @@ public:
 
     void printCube();
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
+    Color getSideLeadingColor(Side side);
     bool operator==(Cube & other);
 
 private:

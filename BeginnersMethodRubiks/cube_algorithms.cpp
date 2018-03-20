@@ -146,3 +146,52 @@ const PetalSolution* Dasy::nextMissingWhiteEdge(Cube cube) {
 
     return nullptr;
 }
+
+void WhiteCross::findStartingPosition(Cube &cube) {
+    for(int i=0; i<3; ++i) {
+        try {
+            matchingSide = findMatchingSide(cube);
+            break;
+        } catch (SideNotFoundException exc) {
+            cout << "Another rotation - side was not found" << endl;
+            cube.rotate(Rotation::UP_CLOCKWISE);
+        }
+    }
+}
+
+Side WhiteCross::findMatchingSide(Cube cube) {
+    array<Side, 4> topLayerSides = {FRONT, RIGHT, BACK, LEFT};
+    
+    for (Side side : topLayerSides) {
+        if ((cube.cube[side][0][1] = cube.cube[side][1][1]) &&
+                (cube.cube[side][0][1] != cube.getSideLeadingColor(side))) {
+            return side;
+        }
+    }
+    
+    throw SideNotFoundException();
+}
+
+void WhiteCross::rotate(Cube &cube) {
+    string rotation;
+    
+    switch(matchingSide) {
+        case FRONT:
+            rotation = CubeAlgorithm::ROTATE_FRONT_CLOCKWISE;
+            break;
+        case LEFT:
+            rotation = CubeAlgorithm::ROTATE_LEFT_CLOCKWISE;
+            break;
+        case RIGHT:
+            rotation = CubeAlgorithm::ROTATE_RIGHT_CLOCKWISE;
+            break;
+        case BACK:
+            rotation = CubeAlgorithm::ROTATE_BACK_CLOCKWISE;
+            break;
+        default:
+            break;
+    }
+    
+    CubeAlgorithm::doMove(cube, rotation);
+    CubeAlgorithm::doMove(cube, rotation);
+}
