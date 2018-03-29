@@ -43,7 +43,8 @@ public:
     string perform(Cube & cube) {
         findStartingPosition(cube);
         rotate(cube);
-        return ss.str();
+        string moves = ss.str();
+        return moves.size() > 1 ? moves.substr(0, moves.size()-1) : moves;
     };
 
     // rotation string representations

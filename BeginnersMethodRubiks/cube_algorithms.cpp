@@ -154,7 +154,7 @@ void WhiteCross::findStartingPosition(Cube &cube) {
             break;
         } catch (SideNotFoundException exc) {
             cout << "Another rotation - side was not found" << endl;
-            cube.rotate(Rotation::UP_CLOCKWISE);
+            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
         }
     }
 }
@@ -163,8 +163,8 @@ Side WhiteCross::findMatchingSide(Cube cube) {
     array<Side, 4> topLayerSides = {FRONT, RIGHT, BACK, LEFT};
     
     for (Side side : topLayerSides) {
-        if ((cube.cube[side][0][1] = cube.cube[side][1][1]) &&
-                (cube.cube[side][0][1] != cube.getSideLeadingColor(side))) {
+        if ((cube.cube[side][0][1] == cube.cube[side][1][1]) &&
+                (cube.cube[side][0][1] == cube.getSideLeadingColor(side))) {
             return side;
         }
     }
@@ -193,5 +193,5 @@ void WhiteCross::rotate(Cube &cube) {
     }
     
     CubeAlgorithm::doMove(cube, rotation);
-    CubeAlgorithm::doMove(cube, rotation);
+    //CubeAlgorithm::doMove(cube, rotation);
 }

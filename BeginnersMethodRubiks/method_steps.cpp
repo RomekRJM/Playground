@@ -69,28 +69,22 @@ bool BeginnersMethod::isSolved(Cube &cube) {
 bool BeginnersMethod::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
-            cout << "Checking dasy" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkDasy(cube);
         case WHITE_CROSS:
-            cout << "Checking white cross" << endl;
             ensureColorOnTop(cube, WHITE);
             return checkWhiteCross(cube);
         case FIRST_LAYER_CORNERS:
-            cout << "Checking first layer corners" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkFirstLayerCorners(cube);
         case SECOND_LAYER_EDGES:
-            cout << "Checking second layer edges" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkSecondLayerEdges(cube);
         case YELLOW_DOT:
-            cout << "Checking yellow dot" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkYellowDot(cube);
         case YELLOW_LINE:
         {
-            cout << "Checking yellow line" << endl;
             ensureColorOnTop(cube, YELLOW);
             function<bool(Cube&) > check = [&](Cube & _cube) {
                 return checkYellowLine(_cube);
@@ -99,7 +93,6 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
         }
         case YELLOW_ARC:
         {
-            cout << "Checking yellow arc" << endl;
             ensureColorOnTop(cube, YELLOW);
             function<bool(Cube&) > check = [&](Cube & _cube) {
                 return checkYellowArc(_cube);
@@ -108,25 +101,21 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
         }
         case YELLOW_CROSS:
         {
-            cout << "Checking yellow cross" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkYellowCross(cube);
         }
         case POSITION_LAST_LAYER_CORNERS:
         {
-            cout << "Checking last layer corners position" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkLastLayerCornersPosition(cube);
         }
         case PERMUTE_LAST_LAYER_CORNERS:
         {
-            cout << "Checking last layer corners permutation" << endl;
             ensureColorOnTop(cube, YELLOW);
             return checkLastLayerCornersPermutation(cube);
         }
         case SOLVED:
         {
-            cout << "Checking if cube solved" << endl;
             ensureColorOnTop(cube, WHITE);
             return checkSolved(cube);
         }
@@ -383,26 +372,20 @@ void BeginnersMethod::ensureColorOnTop(Cube &cube, Color color) {
 
     switch (leadingSide) {
         case UP:
-            cout << "Doing nothing, color on top already" << endl;
             break;
         case DOWN:
-            cout << "Filipping upside down." << endl;
             cube.flip(UPSIDE_DOWN);
             break;
         case FRONT:
-            cout << "Filipping X_CLOCKWISE_90." << endl;
             cube.flip(X_CLOCKWISE_90);
             break;
         case BACK:
-            cout << "Filipping X_COUNTER_CLOCKWISE_90." << endl;
             cube.flip(X_COUNTER_CLOCKWISE_90);
             break;
         case RIGHT:
-            cout << "Filipping Z_COUNTER_CLOCKWISE_90." << endl;
             cube.flip(Z_COUNTER_CLOCKWISE_90);
             break;
         case LEFT:
-            cout << "Filipping Z_CLOCKWISE_90." << endl;
             cube.flip(Z_CLOCKWISE_90);
             break;
     }
