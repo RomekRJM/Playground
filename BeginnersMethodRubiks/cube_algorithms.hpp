@@ -17,6 +17,7 @@
 #include <string>
 #include <sstream>
 #include <exception>
+#include <vector>
 #include "cube.hpp"
 
 using namespace std;
@@ -70,8 +71,8 @@ public:
     static const string FLIP_Z_COUNTER_CLOCKWISE_90;
     static const string FLIP_UPSIDE_DOWN;
 
-    static const array<string, 4> RIGHTY;
-    static const array<string, 4> LEFTY;
+    static const vector<string> RIGHTY;
+    static const vector<string> LEFTY;
 
 private:
     static const map<string, Rotation> rotations;
@@ -82,7 +83,7 @@ protected:
     virtual void findStartingPosition(Cube &cube) = 0;
     virtual void rotate(Cube &cube) = 0;
     void doMove(Cube &cube, string move);
-    
+    void doMove(Cube &cube, vector<string> moves);
 };
 
 class Dasy : public CubeAlgorithm {
@@ -103,6 +104,11 @@ private:
 };
 
 class FirstLayerCorners : public CubeAlgorithm {
+    void findStartingPosition(Cube &cube) override;
+    void rotate(Cube &cube) override;
+};
+
+class YellowDot : public CubeAlgorithm {
     void findStartingPosition(Cube &cube) override;
     void rotate(Cube &cube) override;
 };

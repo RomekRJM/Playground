@@ -64,12 +64,12 @@ const map<string, Flip> CubeAlgorithm::flips = {
     {CubeAlgorithm::FLIP_UPSIDE_DOWN, UPSIDE_DOWN}
 };
 
-const array<string, 4> CubeAlgorithm::RIGHTY = {
+const vector<string> CubeAlgorithm::RIGHTY = {
     ROTATE_RIGHT_CLOCKWISE, ROTATE_UP_CLOCKWISE,
     ROTATE_RIGHT_COUNTER_CLOCKWISE, ROTATE_UP_COUNTER_CLOCKWISE
 };
 
-const array<string, 4> CubeAlgorithm::LEFTY = {
+const vector<string> CubeAlgorithm::LEFTY = {
     ROTATE_LEFT_COUNTER_CLOCKWISE, ROTATE_UP_COUNTER_CLOCKWISE,
     ROTATE_LEFT_CLOCKWISE, ROTATE_UP_CLOCKWISE
 };
@@ -115,6 +115,12 @@ void CubeAlgorithm::doMove(Cube &cube, string move) {
     if(itFlp != flips.end()) {
         cube.flip(itFlp->second);
         ss << move << ","; 
+    }
+}
+
+void CubeAlgorithm::doMove(Cube &cube, vector<string> moves) {
+    for(string move : moves) {
+        doMove(cube, move);
     }
 }
 
@@ -194,4 +200,13 @@ void WhiteCross::rotate(Cube &cube) {
     
     CubeAlgorithm::doMove(cube, rotation);
     //CubeAlgorithm::doMove(cube, rotation);
+}
+
+void YellowDot::findStartingPosition(Cube &cube) {
+}
+
+void YellowDot::rotate(Cube &cube) {
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_CLOCKWISE);
+    CubeAlgorithm::doMove(cube, RIGHTY);
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE);
 }

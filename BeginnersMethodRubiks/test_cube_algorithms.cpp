@@ -52,3 +52,12 @@ BOOST_AUTO_TEST_CASE(test_white_cross_b) {
     string s = whiteCross.perform(cube);
     BOOST_CHECK(s == "B");
 }
+
+BOOST_AUTO_TEST_CASE(test_yellow_dot) {
+    Cube cube = CubeGenerator::fromString(
+            "GYBGGGGGG,YYYBYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR"
+            );
+    YellowDot yellowDot = YellowDot();
+    string s = yellowDot.perform(cube);
+    BOOST_CHECK(s == "F,R,U,R',U',F'");
+}
