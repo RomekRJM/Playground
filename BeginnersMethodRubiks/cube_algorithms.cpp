@@ -102,50 +102,62 @@ const array<PetalSolution, 20> Dasy::PETAL_SOLUTIONS = {
     PetalSolution(CubePosition(DOWN, 2, 1), CubePosition(UP, 0, 1), ROTATE_BACK_CLOCKWISE)
 };
 
-void CubeAlgorithm::doMove(Cube &cube, string move) {
-    map<string, Rotation>::const_iterator itRot = rotations.find(move);
-    
-    if(itRot != rotations.end()) {
-        cube.rotate(itRot->second);
-        ss << move << ","; 
+string CubeAlgorithm::perform(Cube & cube) {
+    if (!initialPositionSet) {
+        findInitialPosition(cube);
     }
     
+    findPositionBeforeRotation(cube);
+    rotate(cube);
+    return getMovesAsString();
+}
+
+string CubeAlgorithm::getMovesAsString() {
+    string moves = ss.str();
+    return moves.size() > 1 ? moves.substr(0, moves.size() - 1) : moves;
+}
+
+void CubeAlgorithm::doMove(Cube &cube, string move) {
+    map<string, Rotation>::const_iterator itRot = rotations.find(move);
+
+    if (itRot != rotations.end()) {
+        cube.rotate(itRot->second);
+        ss << move << ",";
+    }
+
     map<string, Flip>::const_iterator itFlp = flips.find(move);
-    
-    if(itFlp != flips.end()) {
+
+    if (itFlp != flips.end()) {
         cube.flip(itFlp->second);
-        ss << move << ","; 
+        ss << move << ",";
     }
 }
 
-void CubeAlgorithm::doMove(Cube &cube, vector<string> moves) {
-    for(string move : moves) {
+void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves) {
+    for (string move : moves) {
         doMove(cube, move);
     }
 }
 
-void Dasy::findStartingPosition(Cube &cube) {
-}
-
 void Dasy::rotate(Cube &cube) {
     const PetalSolution* solution = nextMissingWhiteEdge(cube);
-    
-    if(!solution) {
+
+    if (!solution) {
         return;
     }
-    
-    for(int i=0; i<3; ++i) {
-        if(cube.getColor(solution->cantBeWhite) == WHITE) {
+
+    for (int i = 0; i < 3; ++i) {
+        if (cube.getColor(solution->cantBeWhite) == WHITE) {
             CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
         }
     }
-    
+
     CubeAlgorithm::doMove(cube, solution->rotation);
 }
 
 const PetalSolution* Dasy::nextMissingWhiteEdge(Cube cube) {
-    for(auto it=PETAL_SOLUTIONS.begin(); it != PETAL_SOLUTIONS.end(); ++it) {
-        if(cube.getColor(it->startingPosition) == WHITE) {
+    for (auto it = PETAL_SOLUTIONS.begin(); it != PETAL_SOLUTIONS.end(); ++it) {
+        if (cube.getColor(it->startingPosition) == WHITE) {
             return it;
         }
     }
@@ -153,8 +165,8 @@ const PetalSolution* Dasy::nextMissingWhiteEdge(Cube cube) {
     return nullptr;
 }
 
-void WhiteCross::findStartingPosition(Cube &cube) {
-    for(int i=0; i<3; ++i) {
+void WhiteCross::findPositionBeforeRotation(Cube &cube) {
+    for (int i = 0; i < 3; ++i) {
         try {
             matchingSide = findMatchingSide(cube);
             break;
@@ -167,21 +179,21 @@ void WhiteCross::findStartingPosition(Cube &cube) {
 
 Side WhiteCross::findMatchingSide(Cube cube) {
     array<Side, 4> topLayerSides = {FRONT, RIGHT, BACK, LEFT};
-    
+
     for (Side side : topLayerSides) {
         if ((cube.cube[side][0][1] == cube.cube[side][1][1]) &&
                 (cube.cube[side][0][1] == cube.getSideLeadingColor(side))) {
             return side;
         }
     }
-    
+
     throw SideNotFoundException();
 }
 
 void WhiteCross::rotate(Cube &cube) {
     string rotation;
-    
-    switch(matchingSide) {
+
+    switch (matchingSide) {
         case FRONT:
             rotation = CubeAlgorithm::ROTATE_FRONT_CLOCKWISE;
             break;
@@ -197,16 +209,55 @@ void WhiteCross::rotate(Cube &cube) {
         default:
             break;
     }
-    
+
     CubeAlgorithm::doMove(cube, rotation);
     //CubeAlgorithm::doMove(cube, rotation);
 }
 
-void YellowDot::findStartingPosition(Cube &cube) {
-}
-
 void YellowDot::rotate(Cube &cube) {
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_CLOCKWISE);
-    CubeAlgorithm::doMove(cube, RIGHTY);
+    CubeAlgorithm::doMoves(cube, RIGHTY);
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE);
+}
+
+void YellowLine::findInitialPosition(Cube &cube) {
+    for (int i = 0; i < 2; ++i) {
+        if (!isYellowLine(cube)) {
+            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+        }
+    }
+}
+
+bool YellowLine::isYellowLine(Cube cube) {
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
+    return (side[1][0] == side[1][2]) && (side[1][0] == side[1][1])
+            && (side[1][0] == YELLOW);
+}
+
+void YellowLine::rotate(Cube &cube) {
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_CLOCKWISE);
+    CubeAlgorithm::doMoves(cube, RIGHTY);
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE);
+}
+
+void YellowArc::findInitialPosition(Cube &cube) {
+    for (int i = 0; i < 3; ++i) {
+        if (!isYellowArc(cube)) {
+            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+        }
+    }
+}
+
+bool YellowArc::isYellowArc(Cube cube) {
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
+    return (side[1][1] == side[1][2]) && (side[1][1] == side[2][1])
+            && (side[1][1] == YELLOW);
+}
+
+void YellowArc::rotate(Cube &cube) {
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Z_CLOCKWISE_90);
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_BACK_CLOCKWISE);
+    CubeAlgorithm::doMoves(cube, RIGHTY);
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_BACK_COUNTER_CLOCKWISE);
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Z_COUNTER_CLOCKWISE_90);
 }

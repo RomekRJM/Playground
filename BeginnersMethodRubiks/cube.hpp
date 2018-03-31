@@ -85,6 +85,9 @@ class Cube {
     friend class Dasy;
     friend class WhiteCross;
     friend class CubeGenerator;
+    friend class YellowDot;
+    friend class YellowLine;
+    friend class YellowArc;
 
 public:
     static const int SIZE = 3;

@@ -41,12 +41,7 @@ public:
     CubeAlgorithm() {
     };
 
-    string perform(Cube & cube) {
-        findStartingPosition(cube);
-        rotate(cube);
-        string moves = ss.str();
-        return moves.size() > 1 ? moves.substr(0, moves.size()-1) : moves;
-    };
+    string perform(Cube & cube);
 
     // rotation string representations
     static const string ROTATE_FRONT_CLOCKWISE;
@@ -75,19 +70,22 @@ public:
     static const vector<string> LEFTY;
 
 private:
+    string getMovesAsString();
     static const map<string, Rotation> rotations;
     static const map<string, Flip> flips;
     stringstream ss;
+    bool initialPositionSet = false;
     
 protected:
-    virtual void findStartingPosition(Cube &cube) = 0;
+    void findPositionBeforeRotation(Cube &cube) {};
+    void findInitialPosition(Cube &cube) {};
     virtual void rotate(Cube &cube) = 0;
     void doMove(Cube &cube, string move);
-    void doMove(Cube &cube, vector<string> moves);
+    void doMoves(Cube &cube, vector<string> moves);
 };
 
 class Dasy : public CubeAlgorithm {
-    void findStartingPosition(Cube &cube) override;
+    void findPositionBeforeRotation(Cube &cube);
     void rotate(Cube &cube) override;
 private:
     const PetalSolution* nextMissingWhiteEdge(Cube cube);
@@ -96,7 +94,7 @@ private:
 };
 
 class WhiteCross : public CubeAlgorithm {
-    void findStartingPosition(Cube &cube) override;
+    void findPositionBeforeRotation(Cube &cube);
     void rotate(Cube &cube) override;
 private:
     Side matchingSide;
@@ -104,13 +102,27 @@ private:
 };
 
 class FirstLayerCorners : public CubeAlgorithm {
-    void findStartingPosition(Cube &cube) override;
+    void findPositionBeforeRotation(Cube &cube);
     void rotate(Cube &cube) override;
 };
 
 class YellowDot : public CubeAlgorithm {
-    void findStartingPosition(Cube &cube) override;
+    void findPositionBeforeRotation(Cube &cube);
     void rotate(Cube &cube) override;
+};
+
+class YellowLine : public CubeAlgorithm {
+    void findInitialPosition(Cube &cube);
+    void rotate(Cube &cube) override;
+private:
+    bool isYellowLine(Cube cube);
+};
+
+class YellowArc : public CubeAlgorithm {
+    void findInitialPosition(Cube &cube);
+    void rotate(Cube &cube) override;
+private:
+    bool isYellowArc(Cube cube);
 };
 
 class SideNotFoundException: public exception
