@@ -61,3 +61,39 @@ BOOST_AUTO_TEST_CASE(test_yellow_dot) {
     string s = yellowDot.perform(cube);
     BOOST_CHECK(s == "F,R,U,R',U',F'");
 }
+
+BOOST_AUTO_TEST_CASE(test_yellow_line) {
+    Cube cube = CubeGenerator::fromString(
+            "GYBGGGGGG,YYYYYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYBRRRRRR"
+            );
+    YellowLine yellowLine = YellowLine();
+    string s = yellowLine.perform(cube);
+    BOOST_CHECK(s == "F,R,U,R',U',F'");
+}
+
+BOOST_AUTO_TEST_CASE(test_yellow_line_with_initial_move) {
+    Cube cube = CubeGenerator::fromString(
+            "GYBGGGGGG,YYOYYRYYO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYBRRRRRR"
+            );
+    YellowLine yellowLine = YellowLine();
+    string s = yellowLine.perform(cube);
+    BOOST_CHECK(s == "U,F,R,U,R',U',F'");
+}
+
+BOOST_AUTO_TEST_CASE(test_yellow_arc) {
+    Cube cube = CubeGenerator::fromString(
+            "GYBGGGGGG,OBYRYYOYY,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR"
+            );
+    YellowArc yellowArc = YellowArc();
+    string s = yellowArc.perform(cube);
+    BOOST_CHECK(s == "z,B,R,U,R',U',B',z'");
+}
+
+BOOST_AUTO_TEST_CASE(test_yellow_arc_with_initial_move) {
+    Cube cube = CubeGenerator::fromString(
+            "GYBGGGGGG,YYYBYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR"
+            );
+    YellowArc yellowArc = YellowArc();
+    string s = yellowArc.perform(cube);
+    BOOST_CHECK(s == "U,z,B,R,U,R',U',B',z'");
+}
