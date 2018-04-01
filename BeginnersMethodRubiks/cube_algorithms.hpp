@@ -77,15 +77,15 @@ private:
     bool initialPositionSet = false;
     
 protected:
-    void findPositionBeforeRotation(Cube &cube) {};
-    void findInitialPosition(Cube &cube) {};
+    virtual void findPositionBeforeRotation(Cube &cube) {};
+    virtual void findInitialPosition(Cube &cube) {};
     virtual void rotate(Cube &cube) = 0;
     void doMove(Cube &cube, string move);
     void doMoves(Cube &cube, vector<string> moves);
 };
 
 class Dasy : public CubeAlgorithm {
-    void findPositionBeforeRotation(Cube &cube);
+    void findPositionBeforeRotation(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
     const PetalSolution* nextMissingWhiteEdge(Cube cube);
@@ -94,7 +94,7 @@ private:
 };
 
 class WhiteCross : public CubeAlgorithm {
-    void findPositionBeforeRotation(Cube &cube);
+    void findPositionBeforeRotation(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
     Side matchingSide;
@@ -102,24 +102,23 @@ private:
 };
 
 class FirstLayerCorners : public CubeAlgorithm {
-    void findPositionBeforeRotation(Cube &cube);
+    void findPositionBeforeRotation(Cube &cube) override;
     void rotate(Cube &cube) override;
 };
 
 class YellowDot : public CubeAlgorithm {
-    void findPositionBeforeRotation(Cube &cube);
     void rotate(Cube &cube) override;
 };
 
 class YellowLine : public CubeAlgorithm {
-    void findInitialPosition(Cube &cube);
+    void findInitialPosition(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
     bool isYellowLine(Cube cube);
 };
 
 class YellowArc : public CubeAlgorithm {
-    void findInitialPosition(Cube &cube);
+    void findInitialPosition(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
     bool isYellowArc(Cube cube);

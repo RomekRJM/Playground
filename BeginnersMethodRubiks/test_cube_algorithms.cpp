@@ -50,7 +50,6 @@ BOOST_AUTO_TEST_CASE(test_white_cross_b) {
             );
     WhiteCross whiteCross = WhiteCross();
     string s = whiteCross.perform(cube);
-    cout << s;
     BOOST_CHECK(s == "B");
 }
 
