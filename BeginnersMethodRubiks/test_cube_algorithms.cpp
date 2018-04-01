@@ -97,3 +97,31 @@ BOOST_AUTO_TEST_CASE(test_yellow_arc_with_initial_move) {
     string s = yellowArc.perform(cube);
     BOOST_CHECK(s == "U,z,B,R,U,R',U',B',z'");
 }
+
+void single_dasy_test(pair<string, string> p) {
+    string cubeAsString = p.first;
+    string expectedMoves = p.second;
+    int numberOfIterations = (expectedMoves.size() + 1) / 2;
+
+    Cube cube = CubeGenerator::fromString(cubeAsString);
+    Dasy dasy = Dasy();
+    string s = "";
+    
+    for(int i=0; i<numberOfIterations; ++i) {
+        s = dasy.perform(cube);
+    }
+
+    if (s != expectedMoves) {
+        cout << "Expected: " << expectedMoves << ", but actual: " << s << endl;
+    }
+
+    BOOST_CHECK(s == expectedMoves);
+}
+
+BOOST_AUTO_TEST_CASE(test_dasy) {
+    map <string, string> dasy_scenarios = {
+        {"GYBGGGGGG,YYYBYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR", "F,F"}
+    };
+
+    std::for_each(dasy_scenarios.begin(), dasy_scenarios.end(), &single_dasy_test);
+}

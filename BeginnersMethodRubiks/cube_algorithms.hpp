@@ -85,7 +85,6 @@ protected:
 };
 
 class Dasy : public CubeAlgorithm {
-    void findPositionBeforeRotation(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
     const PetalSolution* nextMissingWhiteEdge(Cube cube);
