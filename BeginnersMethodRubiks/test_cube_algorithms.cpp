@@ -98,16 +98,15 @@ BOOST_AUTO_TEST_CASE(test_yellow_arc_with_initial_move) {
     BOOST_CHECK(s == "U,z,B,R,U,R',U',B',z'");
 }
 
-void single_dasy_test(pair<string, string> p) {
-    string cubeAsString = p.first;
-    string expectedMoves = p.second;
+void single_dasy_test(pair<string, Cube> p) {
+    string expectedMoves = p.first;
+    Cube cube = p.second;
     int numberOfIterations = (expectedMoves.size() + 1) / 2;
-
-    Cube cube = CubeGenerator::fromString(cubeAsString);
+    
     Dasy dasy = Dasy();
     string s = "";
-    
-    for(int i=0; i<numberOfIterations; ++i) {
+
+    for (int i = 0; i < numberOfIterations; ++i) {
         s = dasy.perform(cube);
     }
 
@@ -119,8 +118,19 @@ void single_dasy_test(pair<string, string> p) {
 }
 
 BOOST_AUTO_TEST_CASE(test_dasy) {
-    map <string, string> dasy_scenarios = {
-        {"GYBGGGGGG,YYYBYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR", "F,F"}
+    Cube SOLVE_BY_SINGLE_FRONT_CLOCKWISE = CubeGenerator::fromString(
+            "YGORGBBOO,RWRWYWORG,YBWOBBRBW,YGWRWYORW,YOGOOYBGB,GGBYRWGYR"
+            );
+    Cube SOLVE_BY_DOUBLE_FRONT_CLOCKWISE = CubeGenerator::fromString(
+            "YGORGBBOO,RWRWYWORG,YBWOBBRBW,YGWRWYORW,YOGOOYBGB,GGBYRWGYR"
+            );
+    Cube SOLVE_BY_SINGLE_FRONT_COUNTER_CLOCKWISE = CubeGenerator::fromString(
+            "OOBBGROGY,RWRWYWWGY,YBWOBBRBW,GRORWYORW,ROGWOYBGB,GGBYROGYY"
+            );
+    map <string, Cube> dasy_scenarios = {
+        {"F", SOLVE_BY_SINGLE_FRONT_CLOCKWISE},
+        {"F,F", SOLVE_BY_DOUBLE_FRONT_CLOCKWISE},
+        {"F'", SOLVE_BY_SINGLE_FRONT_COUNTER_CLOCKWISE}
     };
 
     std::for_each(dasy_scenarios.begin(), dasy_scenarios.end(), &single_dasy_test);

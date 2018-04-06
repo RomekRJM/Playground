@@ -442,6 +442,28 @@ void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
     }
 }
 
+string Cube::asShortString() {
+    stringstream ss;
+    for (int s = Side::FRONT; s <= Side::LEFT; ++s) {
+        ss << sideAsShortString(cube[s]);
+        if (s != LEFT) {
+            ss << ",";
+        }
+    }
+    return ss.str();
+}
+
+string Cube::sideAsShortString(array<array<Color, SIZE>, SIZE> side) {
+    stringstream ss;
+    int i, j;
+    for (i = 0; i < Cube::SIZE; ++i) {
+        for (j = 0; j < Cube::SIZE; ++j) {
+            ss << getColorName(side[i][j]);
+        }
+    }
+    return ss.str();
+}
+
 Color Cube::getSideLeadingColor(Side leadingSide) {
     return cube[leadingSide][Cube::SIZE - 2][Cube::SIZE - 2];
 }

@@ -95,14 +95,16 @@ public:
 
     map<Rotation, function<void() >> rotations;
 
-    void rotate(Rotation rotation) {
-        return executeFunctionFromMap(rotation, rotations);
+    Cube* rotate(Rotation rotation) {
+        executeFunctionFromMap(rotation, rotations);
+        return this;
     }
 
     map<Flip, function<void() >> flips;
 
-    void flip(Flip flip) {
-        return executeFunctionFromMap(flip, flips);
+    Cube* flip(Flip flip) {
+        executeFunctionFromMap(flip, flips);
+        return this;
     }
 
     map<Side, set<Side>> neighbours;
@@ -117,6 +119,8 @@ public:
 
     void printCube();
     void printCubeSide(array<array<Color, SIZE>, SIZE> side);
+    string asShortString();
+    string sideAsShortString(array<array<Color, SIZE>, SIZE> side);
     Color getSideLeadingColor(Side side);
     bool operator==(Cube & other);
 
