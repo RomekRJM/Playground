@@ -102,7 +102,7 @@ const array<PetalSolution, 20> Dasy::PETAL_SOLUTIONS = {
     PetalSolution(CubePosition(DOWN, 2, 1), CubePosition(UP, 0, 1), ROTATE_BACK_CLOCKWISE)
 };
 
-string CubeAlgorithm::perform(Cube & cube) {
+string CubeAlgorithm::perform(Cube &cube) {
     if (!initialPositionSet) {
         findInitialPosition(cube);
     }
@@ -141,6 +141,9 @@ void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves) {
 
 void Dasy::rotate(Cube &cube) {
     const PetalSolution* solution = nextMissingWhiteEdge(cube);
+//    cout << "solution: " << solution->rotation << solution->startingPosition.side 
+//            << solution->startingPosition.row << solution->startingPosition.column << ", to: "
+//            << solution->cantBeWhite.side << solution->cantBeWhite.row << solution->cantBeWhite.column << endl;
 
     if (!solution) {
         return;

@@ -31,142 +31,142 @@ Cube::Cube() {
 }
 
 void Cube::setUpRotations() {
-    function<void() > fc = [this]() {
-        rotateSideClockwise(FRONT);
-        rotateSidesClockwiseForFront();
+    function<void(Cube*)> fc = [](Cube* cube) {
+        cube->rotateSideClockwise(FRONT);
+        cube->rotateSidesClockwiseForFront();
     };
-    function<void() > fcc = [this]() {
-        rotateSideCounterClockwise(FRONT);
+    function<void(Cube*)> fcc = [](Cube* cube) {
+        cube->rotateSideCounterClockwise(FRONT);
 
         for (int i = 0; i < 3; ++i) {
-            rotateSidesClockwiseForFront();
+            cube->rotateSidesClockwiseForFront();
         }
     };
-    rotations.insert(pair<Rotation, function<void()>>(FRONT_CLOCKWISE, fc));
-    rotations.insert(pair<Rotation, function<void()>>(FRONT_COUNTER_CLOCKWISE, fcc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(FRONT_CLOCKWISE, fc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(FRONT_COUNTER_CLOCKWISE, fcc));
 
-    function<void() > bc = [this]() {
-        rotateSideClockwise(BACK);
-        rotateSidesClockwiseForBack();
+    function<void(Cube*)> bc = [](Cube* cube) {
+        cube->rotateSideClockwise(BACK);
+        cube->rotateSidesClockwiseForBack();
     };
-    function<void() > bcc = [this]() {
-        rotateSideCounterClockwise(BACK);
+    function<void(Cube*)> bcc = [](Cube* cube) {
+        cube->rotateSideCounterClockwise(BACK);
 
         for (int i = 0; i < 3; ++i) {
-            rotateSidesClockwiseForBack();
+            cube->rotateSidesClockwiseForBack();
         }
     };
-    rotations.insert(pair<Rotation, function<void()>>(BACK_CLOCKWISE, bc));
-    rotations.insert(pair<Rotation, function<void()>>(BACK_COUNTER_CLOCKWISE, bcc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(BACK_CLOCKWISE, bc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(BACK_COUNTER_CLOCKWISE, bcc));
 
-    function<void() > uc = [this]() {
-        rotateSideClockwise(UP);
-        rotateSidesClockwiseForUp();
+    function<void(Cube*)> uc = [](Cube* cube) {
+        cube->rotateSideClockwise(UP);
+        cube->rotateSidesClockwiseForUp();
     };
-    function<void() > ucc = [this]() {
-        rotateSideCounterClockwise(UP);
+    function<void(Cube*)> ucc = [](Cube* cube) {
+        cube->rotateSideCounterClockwise(UP);
 
         for (int i = 0; i < 3; ++i) {
-            rotateSidesClockwiseForUp();
+            cube->rotateSidesClockwiseForUp();
         }
     };
-    rotations.insert(pair<Rotation, function<void()>>(UP_CLOCKWISE, uc));
-    rotations.insert(pair<Rotation, function<void()>>(UP_COUNTER_CLOCKWISE, ucc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(UP_CLOCKWISE, uc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(UP_COUNTER_CLOCKWISE, ucc));
 
-    function<void() > dc = [this]() {
-        rotateSideClockwise(DOWN);
-        rotateSidesClockwiseForDown();
+    function<void(Cube*)> dc = [](Cube* cube) {
+        cube->rotateSideClockwise(DOWN);
+        cube->rotateSidesClockwiseForDown();
     };
-    function<void() > dcc = [this]() {
-        rotateSideCounterClockwise(DOWN);
-        rotateSidesClockwiseUpDown(DOWN);
+    function<void(Cube*)> dcc = [](Cube* cube) {
+        cube->rotateSideCounterClockwise(DOWN);
+        cube->rotateSidesClockwiseUpDown(DOWN);
     };
-    rotations.insert(pair<Rotation, function<void()>>(DOWN_CLOCKWISE, dc));
-    rotations.insert(pair<Rotation, function<void()>>(DOWN_COUNTER_CLOCKWISE, dcc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(DOWN_CLOCKWISE, dc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(DOWN_COUNTER_CLOCKWISE, dcc));
 
-    function<void() > rc = [this]() {
-        rotateSideClockwise(RIGHT);
-        rotateSidesClockwiseForRight();
+    function<void(Cube*)> rc = [](Cube* cube) {
+        cube->rotateSideClockwise(RIGHT);
+        cube->rotateSidesClockwiseForRight();
     };
-    function<void() > rcc = [this]() {
-        rotateSideCounterClockwise(RIGHT);
-        rotateSidesClockwiseLeftOrCounterClockwiseRight(RIGHT);
+    function<void(Cube*)> rcc = [](Cube* cube) {
+        cube->rotateSideCounterClockwise(RIGHT);
+        cube->rotateSidesClockwiseLeftOrCounterClockwiseRight(RIGHT);
     };
-    rotations.insert(pair<Rotation, function<void()>>(RIGHT_CLOCKWISE, rc));
-    rotations.insert(pair<Rotation, function<void()>>(RIGHT_COUNTER_CLOCKWISE, rcc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(RIGHT_CLOCKWISE, rc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(RIGHT_COUNTER_CLOCKWISE, rcc));
 
-    function<void() > lc = [this]() {
-        rotateSideClockwise(LEFT);
-        rotateSidesClockwiseForLeft();
+    function<void(Cube*)> lc = [](Cube* cube) {
+        cube->rotateSideClockwise(LEFT);
+        cube->rotateSidesClockwiseForLeft();
     };
-    function<void() > lcc = [this]() {
-        rotateSideCounterClockwise(LEFT);
+    function<void(Cube*)> lcc = [](Cube* cube) {
+        cube->rotateSideCounterClockwise(LEFT);
 
         for (int i = 0; i < 3; ++i) {
-            rotateSidesClockwiseForLeft();
+            cube->rotateSidesClockwiseForLeft();
         }
     };
-    rotations.insert(pair<Rotation, function<void()>>(LEFT_CLOCKWISE, lc));
-    rotations.insert(pair<Rotation, function<void()>>(LEFT_COUNTER_CLOCKWISE, lcc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(LEFT_CLOCKWISE, lc));
+    rotations.insert(pair<Rotation, function<void(Cube*)>>(LEFT_COUNTER_CLOCKWISE, lcc));
 }
 
 void Cube::setUpFlips() {
-    function<void() > xc = [this]() {
-        rotateSideCounterClockwise(LEFT);
-        rotateSideClockwise(RIGHT);
-        flipSidesClockwiseOverX();
+    function<void(Cube*) > xc = [](Cube* cube) {
+        cube->rotateSideCounterClockwise(LEFT);
+        cube->rotateSideClockwise(RIGHT);
+        cube->flipSidesClockwiseOverX();
     };
-    flips.insert(pair<Flip, function<void()>>(X_CLOCKWISE_90, xc));
+    flips.insert(pair<Flip, function<void(Cube*)>>(X_CLOCKWISE_90, xc));
 
-    function<void() > xcc = [this]() {
+    function<void(Cube*) > xcc = [](Cube* cube) {
         for (int i = 0; i < 3; ++i) {
-            rotateSideCounterClockwise(LEFT);
-            rotateSideClockwise(RIGHT);
-            flipSidesClockwiseOverX();
+            cube->rotateSideCounterClockwise(LEFT);
+            cube->rotateSideClockwise(RIGHT);
+            cube->flipSidesClockwiseOverX();
         }
     };
-    flips.insert(pair<Flip, function<void()>>(X_COUNTER_CLOCKWISE_90, xcc));
+    flips.insert(pair<Flip, function<void(Cube*)>>(X_COUNTER_CLOCKWISE_90, xcc));
 
-    function<void() > yc = [this]() {
-        rotateSideClockwise(UP);
-        rotateSideCounterClockwise(DOWN);
-        flipSidesClockwiseOverY();
+    function<void(Cube*) > yc = [](Cube* cube) {
+        cube->rotateSideClockwise(UP);
+        cube->rotateSideCounterClockwise(DOWN);
+        cube->flipSidesClockwiseOverY();
     };
-    flips.insert(pair<Flip, function<void()>>(Y_CLOCKWISE_90, yc));
+    flips.insert(pair<Flip, function<void(Cube*)>>(Y_CLOCKWISE_90, yc));
 
-    function<void() > ycc = [this]() {
+    function<void(Cube*) > ycc = [](Cube* cube) {
         for (int i = 0; i < 3; ++i) {
-            rotateSideClockwise(UP);
-            rotateSideCounterClockwise(DOWN);
-            flipSidesClockwiseOverY();
+            cube->rotateSideClockwise(UP);
+            cube->rotateSideCounterClockwise(DOWN);
+            cube->flipSidesClockwiseOverY();
         }
     };
-    flips.insert(pair<Flip, function<void()>>(Y_COUNTER_CLOCKWISE_90, ycc));
+    flips.insert(pair<Flip, function<void(Cube*)>>(Y_COUNTER_CLOCKWISE_90, ycc));
 
-    function<void() > zc = [this]() {
-        rotateSideClockwise(FRONT);
-        rotateSideCounterClockwise(BACK);
-        flipSidesClockwiseOverZ();
+    function<void(Cube*) > zc = [](Cube* cube) {
+        cube->rotateSideClockwise(FRONT);
+        cube->rotateSideCounterClockwise(BACK);
+        cube->flipSidesClockwiseOverZ();
     };
-    flips.insert(pair<Flip, function<void()>>(Z_CLOCKWISE_90, zc));
+    flips.insert(pair<Flip, function<void(Cube*)>>(Z_CLOCKWISE_90, zc));
 
-    function<void() > zcc = [this]() {
+    function<void(Cube*) > zcc = [](Cube* cube) {
         for (int i = 0; i < 3; ++i) {
-            rotateSideClockwise(FRONT);
-            rotateSideCounterClockwise(BACK);
-            flipSidesClockwiseOverZ();
+            cube->rotateSideClockwise(FRONT);
+            cube->rotateSideCounterClockwise(BACK);
+            cube->flipSidesClockwiseOverZ();
         }
     };
-    flips.insert(pair<Flip, function<void()>>(Z_COUNTER_CLOCKWISE_90, zcc));
+    flips.insert(pair<Flip, function<void(Cube*)>>(Z_COUNTER_CLOCKWISE_90, zcc));
 
-    function<void() > z180 = [this]() {
+    function<void(Cube*) > z180 = [](Cube* cube) {
         for (int i = 0; i < 2; ++i) {
-            rotateSideClockwise(FRONT);
-            rotateSideClockwise(BACK);
-            flipSidesClockwiseOverZ();
+            cube->rotateSideClockwise(FRONT);
+            cube->rotateSideClockwise(BACK);
+            cube->flipSidesClockwiseOverZ();
         }
     };
-    flips.insert(pair<Flip, function<void()>>(UPSIDE_DOWN, z180));
+    flips.insert(pair<Flip, function<void(Cube*)>>(UPSIDE_DOWN, z180));
 }
 
 void Cube::setUpNeighbours() {
@@ -458,7 +458,7 @@ string Cube::sideAsShortString(array<array<Color, SIZE>, SIZE> side) {
     int i, j;
     for (i = 0; i < Cube::SIZE; ++i) {
         for (j = 0; j < Cube::SIZE; ++j) {
-            ss << getColorName(side[i][j]);
+            ss << getColorName(side[i][j]).substr(0, 1);
         }
     }
     return ss.str();
@@ -471,4 +471,3 @@ Color Cube::getSideLeadingColor(Side leadingSide) {
 bool Cube::operator==(Cube & other) {
     return this->cube == other.cube;
 }
-

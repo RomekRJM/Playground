@@ -19,7 +19,7 @@
 #include <array>
 #include <map>
 #include <set>
-
+#include <iostream>
 using namespace std;
 
 enum Color {
@@ -31,8 +31,6 @@ string getColorName(Color c);
 enum Side {
     FRONT, UP, BACK, DOWN, RIGHT, LEFT
 };
-
-//map<Side, array<Side> neighbours;
 
 string getSideName(Side s);
 
@@ -50,24 +48,6 @@ enum Flip {
     UPSIDE_DOWN
 };
 
-template<typename T, typename U>
-void executeFunctionFromMap(T key, map<T, U> _map) {
-    auto iter = _map.find(key);
-    if (iter != end(_map)) {
-        iter->second();
-    }
-}
-
-template<typename K, typename V>
-V findInMap(K key, map<K, V> _map) {
-    auto iter = _map.find(key);
-    if (iter != end(_map)) {
-        return iter->second;
-    }
-
-    throw domain_error("Key not found in map.");
-}
-
 struct CubePosition {
 public:
 
@@ -79,6 +59,16 @@ public:
     int column;
     bool operator==(CubePosition &other);
 };
+
+template<typename K, typename V>
+V findInMap(K key, map<K, V> _map) {
+    auto iter = _map.find(key);
+    if (iter != end(_map)) {
+        return iter->second;
+    }
+
+    throw domain_error("Key not found in map.");
+}
 
 class Cube {
     friend class BeginnersMethod;
@@ -92,19 +82,26 @@ class Cube {
 public:
     static const int SIZE = 3;
     static const int SIDES = 6;
-
-    map<Rotation, function<void() >> rotations;
-
-    Cube* rotate(Rotation rotation) {
-        executeFunctionFromMap(rotation, rotations);
+    
+    template<typename T, typename U>
+    Cube* executeFunctionFromMap(T key, map<T, U> _map) {
+        auto iter = _map.find(key);
+        if (iter != end(_map)) {
+            iter->second(this);
+        }
         return this;
     }
 
-    map<Flip, function<void() >> flips;
+    map<Rotation, function<void(Cube*)>> rotations;
+
+    Cube* rotate(Rotation rotation) {
+        return executeFunctionFromMap(rotation, rotations);
+    }
+
+    map<Flip, function<void(Cube*)>> flips;
 
     Cube* flip(Flip flip) {
-        executeFunctionFromMap(flip, flips);
-        return this;
+        return executeFunctionFromMap(flip, flips);
     }
 
     map<Side, set<Side>> neighbours;
