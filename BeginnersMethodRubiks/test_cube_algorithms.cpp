@@ -105,27 +105,31 @@ void single_dasy_test(pair<string, Cube> p) {
 
     Dasy dasy = Dasy();
     string s = "";
+    const string U_GROUP = "U,";
+    int uCount = std::count(expectedMoves.begin(), expectedMoves.end(), 'U');
+    int howManyMoves = std::count(expectedMoves.begin(), expectedMoves.end(), ',') - uCount + 1;
+    int moves = 0;
 
     do {
-        s += dasy.perform(cube) + ",";
-        cout << cube.asShortString() << endl;
-    } while (s.size() < expectedMoves.size());
+        s = dasy.perform(cube) + ",";
+        ++moves;
+    } while (moves < howManyMoves);
     
     s = s.substr(0, s.size()-1);
 
     if (s != expectedMoves) {
         cout << "Expected: " << expectedMoves << " but actual: " << s << endl;
     }
-
+    
     BOOST_CHECK(s == expectedMoves);
 }
 
 BOOST_AUTO_TEST_CASE(test_dasy) {
     Cube DOWN_EDGE_PIECE = CubeGenerator::fromString(
-            "YGORGBBOO,RWRWYWORG,YBWOBBRBW,YGWRWYORW,YOGOOYBGB,GGBYRWGYR"
+            "WGBRGYYRW,GWOWYWRYY,GOBGRRGRB,OWOGWYGBO,RGWBBBROY,YBBOOYWOR"
             );
     Cube FIRST_LAYER_EDGE_PIECE = CubeGenerator::fromString(
-            "BBOBBOYWO,WYWWYWRRY,RORYGGWGG,ORWWWGYYG,BGGBRRBOO,BBYROYROG"
+            "WGBOGYOWY,WWYWWORBW,GGGORBBRW,ROGWYROBY,GROGOGBYR,ORBYBYRBY"
             );
     Cube SECOND_LAYER_RIGHT_EDGE_PIECE = CubeGenerator::fromString(
             "YGORGBBOO,RWRWYWORG,YBWOBBRBW,YGWRWYORW,YOGOOYBGB,GGBYRWGYR"
@@ -133,28 +137,35 @@ BOOST_AUTO_TEST_CASE(test_dasy) {
     Cube SECOND_LAYER_LEFT_EDGE_PIECE = CubeGenerator::fromString(
             "OOBBGROGY,RWRWYWWGY,YBWOBBRBW,GRORWYORW,ROGWOYBGB,GGBYROGYY"
             );
-
+    Cube THIRD_LAYER_LEFT_EDGE_PIECE = CubeGenerator::fromString(
+            "YWWYBRWYB,WWBWYBGOR,YGGGOGGYO,GRWOWWYBO,OGRBRORRY,OBBYGORRB"
+            );
 
     map <string, Cube> dasy_scenarios = {
-
+        // { "expected_move", cube } // begining_white_position
         {"F,F", DOWN_EDGE_PIECE}, // DOWN, 0, 1
         {"F,U,L'", FIRST_LAYER_EDGE_PIECE}, // FRONT, 2, 1
         {"F", SECOND_LAYER_RIGHT_EDGE_PIECE}, // LEFT, 1, 2
         {"F'", SECOND_LAYER_LEFT_EDGE_PIECE}, // RIGHT, 1, 0
+        {"F,R", THIRD_LAYER_LEFT_EDGE_PIECE}, // FRONT, 0, 1
 
-        {"L,L", *DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // DOWN, 1, 0
-        {"F,U,L'", *FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)},
+        {"L',L'", *DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // DOWN, 1, 0
+        {"L,U,B'", *FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // LEFT, 2, 1
         {"L", *SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // BACK, 1, 2
         {"L'", *SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // BACK, 1, 0
+        {"L,F", *THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // LEFT, 0, 1
 
-
-        {"B", *SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // RIGHT, 1, 2
         {"B,B", *DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // DOWN, 2, 1
+        {"B,U,R'", *FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // BACK, 2, 1
+        {"B", *SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // RIGHT, 1, 2
         {"B'", *SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // LEFT, 1, 0
+        {"B,L", *THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // BACK, 0, 1
 
-        {"R", *SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // FRONT, 1, 2
         {"R,R", *DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // DOWN, 1, 2
+        {"R,U,F'", *FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // RIGHT, 2, 1
+        {"R", *SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // FRONT, 1, 2
         {"R'", *SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // FRONT, 1, 0
+        {"R,B", *THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)} // RIGHT, 0, 1
     };
 
     std::for_each(dasy_scenarios.begin(), dasy_scenarios.end(), &single_dasy_test);

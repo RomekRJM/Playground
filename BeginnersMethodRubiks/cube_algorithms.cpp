@@ -119,7 +119,7 @@ string CubeAlgorithm::getMovesAsString() {
 
 void CubeAlgorithm::doMove(Cube &cube, string move) {
     map<string, Rotation>::const_iterator itRot = rotations.find(move);
-
+    
     if (itRot != rotations.end()) {
         cube.rotate(itRot->second);
         ss << move << ",";
@@ -141,9 +141,6 @@ void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves) {
 
 void Dasy::rotate(Cube &cube) {
     const PetalSolution* solution = nextMissingWhiteEdge(cube);
-//    cout << "solution: " << solution->rotation << solution->startingPosition.side 
-//            << solution->startingPosition.row << solution->startingPosition.column << ", to: "
-//            << solution->cantBeWhite.side << solution->cantBeWhite.row << solution->cantBeWhite.column << endl;
 
     if (!solution) {
         return;
