@@ -102,6 +102,31 @@ const array<PetalSolution, 20> Dasy::PETAL_SOLUTIONS = {
     PetalSolution(CubePosition(DOWN, 2, 1), CubePosition(UP, 0, 1), ROTATE_BACK_CLOCKWISE)
 };
 
+const int Corner::IS_ON_THE_RIGHT_SPOT = 3;
+const int Corner::REQUIRES_PLACING_UPSIDE_DOWN = 2;
+
+int Corner::countMatchedSides(Cube cube) const {
+    array<Color, 3> colors = getColors(cube);
+    int matchedSides = 0;
+    
+    for(CubePosition position : pieces) {
+        Color sideColor = cube.getSideLeadingColor(position.side);
+        if(find(colors.begin(), colors.end(), sideColor) != colors.end()) {
+            ++matchedSides;
+        }
+    }
+    
+    return matchedSides;
+}
+
+array<Color, 3> Corner::getColors(Cube cube) const {
+    return array<Color, 3> {
+        cube.getColor(pieces[0]),
+        cube.getColor(pieces[1]),
+        cube.getColor(pieces[2])
+    };
+}
+
 string CubeAlgorithm::perform(Cube &cube) {
     if (!initialPositionSet) {
         findInitialPosition(cube);

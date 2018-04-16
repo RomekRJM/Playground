@@ -44,17 +44,18 @@ public:
     };
     
 public:
-    array<CubePosition, 3> pieces;
-    int countMatchedSides(Cube cube);
+    const array<CubePosition, 3> pieces;
+    int countMatchedSides(Cube cube) const;
+    array<Color, 3> getColors(Cube cube) const;
     
-    static const string REQUIRES_PLACING_UPSIDE_DOWN;
-    static const string IS_ON_THE_RIGHT_SPOT;
+    static const int REQUIRES_PLACING_UPSIDE_DOWN;
+    static const int IS_ON_THE_RIGHT_SPOT;
 };
 
 const array<Corner, 4> UPPER_CORNERS = {
     Corner(CubePosition(RIGHT, 0, 0), CubePosition(UP, 2, 2), CubePosition(FRONT, 0, 2)),
     Corner(CubePosition(BACK, 0, 0), CubePosition(UP, 0, 2), CubePosition(RIGHT, 0, 2)),
-    Corner(CubePosition(RIGHT, 0, 0), CubePosition(UP, 0, 0), CubePosition(BACK, 0, 2)),
+    Corner(CubePosition(LEFT, 0, 0), CubePosition(UP, 0, 0), CubePosition(BACK, 0, 2)),
     Corner(CubePosition(FRONT, 0, 0), CubePosition(UP, 2, 0), CubePosition(LEFT, 0, 2)),
 };
 
