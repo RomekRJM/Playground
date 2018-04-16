@@ -214,6 +214,14 @@ void WhiteCross::rotate(Cube &cube) {
     //CubeAlgorithm::doMove(cube, rotation);
 }
 
+void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
+    
+}
+
+void FirstLayerCorners::rotate(Cube &cube) {
+    
+}
+
 void YellowDot::rotate(Cube &cube) {
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_CLOCKWISE);
     CubeAlgorithm::doMoves(cube, RIGHTY);

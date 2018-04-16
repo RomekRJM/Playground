@@ -14,6 +14,7 @@
 #ifndef CUBE_ALGORITHMS_HPP
 #define CUBE_ALGORITHMS_HPP
 
+#include <array>
 #include <string>
 #include <sstream>
 #include <exception>
@@ -33,6 +34,35 @@ public:
     CubePosition startingPosition;
     CubePosition cantBeWhite;
     string rotation;
+};
+
+class Corner {
+public:
+
+    Corner(CubePosition c1, CubePosition c2, CubePosition c3) : pieces({c1, c2, c3})
+    {
+    };
+    
+public:
+    array<CubePosition, 3> pieces;
+    int countMatchedSides(Cube cube);
+    
+    static const string REQUIRES_PLACING_UPSIDE_DOWN;
+    static const string IS_ON_THE_RIGHT_SPOT;
+};
+
+const array<Corner, 4> UPPER_CORNERS = {
+    Corner(CubePosition(RIGHT, 0, 0), CubePosition(UP, 2, 2), CubePosition(FRONT, 0, 2)),
+    Corner(CubePosition(BACK, 0, 0), CubePosition(UP, 0, 2), CubePosition(RIGHT, 0, 2)),
+    Corner(CubePosition(RIGHT, 0, 0), CubePosition(UP, 0, 0), CubePosition(BACK, 0, 2)),
+    Corner(CubePosition(FRONT, 0, 0), CubePosition(UP, 2, 0), CubePosition(LEFT, 0, 2)),
+};
+
+const array<Corner, 4> LOWER_CORNERS = {
+    Corner(CubePosition(RIGHT, 2, 0), CubePosition(DOWN, 0, 2), CubePosition(FRONT, 2, 2)),
+    Corner(CubePosition(BACK, 2, 0), CubePosition(DOWN, 2, 2), CubePosition(RIGHT, 2, 2)),
+    Corner(CubePosition(LEFT, 2, 0), CubePosition(DOWN, 2, 0), CubePosition(BACK, 2, 2)),
+    Corner(CubePosition(FRONT, 2, 0), CubePosition(DOWN, 0, 0), CubePosition(LEFT, 2, 2)),
 };
 
 class CubeAlgorithm {
