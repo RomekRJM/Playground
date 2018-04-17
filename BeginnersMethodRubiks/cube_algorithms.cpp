@@ -111,7 +111,7 @@ int Corner::countPartiallyMatchedSides(Cube cube) const {
     
     for(CubePosition position : pieces) {
         Color sideColor = cube.getSideLeadingColor(position.side);
-        if(find(colors.begin(), colors.end(), sideColor) != colors.end()) {
+        if(hasColorOnAnySide(sideColor, cube)) {
             ++matchedSides;
         }
     }
@@ -142,6 +142,11 @@ array<Color, 3> Corner::getColors(Cube cube) const {
         cube.getColor(pieces[1]),
         cube.getColor(pieces[2])
     };
+}
+
+bool Corner::hasColorOnAnySide(Color color, Cube cube) const {
+    array<Color, 3> colors = getColors(cube);
+    return find(colors.begin(), colors.end(), color) != colors.end();
 }
 
 string CubeAlgorithm::perform(Cube &cube) {

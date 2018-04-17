@@ -47,6 +47,7 @@ public:
     const array<CubePosition, 3> pieces;
     int countFullyMatchedSides(Cube cube) const;
     int countPartiallyMatchedSides(Cube cube) const;
+    bool hasColorOnAnySide(Color color, Cube cube) const;
     array<Color, 3> getColors(Cube cube) const;
     
     static const int REQUIRES_PLACING_UPSIDE_DOWN;
