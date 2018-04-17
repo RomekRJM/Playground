@@ -105,13 +105,30 @@ const array<PetalSolution, 20> Dasy::PETAL_SOLUTIONS = {
 const int Corner::IS_ON_THE_RIGHT_SPOT = 3;
 const int Corner::REQUIRES_PLACING_UPSIDE_DOWN = 2;
 
-int Corner::countMatchedSides(Cube cube) const {
+int Corner::countPartiallyMatchedSides(Cube cube) const {
     array<Color, 3> colors = getColors(cube);
     int matchedSides = 0;
     
     for(CubePosition position : pieces) {
         Color sideColor = cube.getSideLeadingColor(position.side);
         if(find(colors.begin(), colors.end(), sideColor) != colors.end()) {
+            ++matchedSides;
+        }
+    }
+    
+    return matchedSides;
+}
+
+int Corner::countFullyMatchedSides(Cube cube) const {
+    array<Color, 3> colors = getColors(cube);
+    int matchedSides = 0;
+    
+    for(int i=0; i < colors.size(); ++i) {
+        Color cornerColor = colors[i];
+        CubePosition position = pieces[i];
+        Color sideColor = cube.getSideLeadingColor(position.side);
+        
+        if(cornerColor == sideColor) {
             ++matchedSides;
         }
     }

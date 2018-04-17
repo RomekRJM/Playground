@@ -6,20 +6,36 @@
 #include <algorithm>
 #include <iostream>
 
-BOOST_AUTO_TEST_CASE(test_corner_count_matched_sides) {
+BOOST_AUTO_TEST_CASE(test_corner_count_partially_matched_sides) {
     Cube cube = CubeGenerator::fromString(
             "RRWYGWGGR,BYOGYBGBG,GOWYBYWBO,WWYWWGBWO,OOYOOGBRB,ROYRRBYRR"
             );
     
-    BOOST_CHECK(UPPER_CORNERS[0].countMatchedSides(cube) == 2);
-    BOOST_CHECK(UPPER_CORNERS[1].countMatchedSides(cube) == 2);
-    BOOST_CHECK(UPPER_CORNERS[2].countMatchedSides(cube) == 2);
-    BOOST_CHECK(UPPER_CORNERS[3].countMatchedSides(cube) == 3);
+    BOOST_CHECK(UPPER_CORNERS[0].countPartiallyMatchedSides(cube) == 2);
+    BOOST_CHECK(UPPER_CORNERS[1].countPartiallyMatchedSides(cube) == 2);
+    BOOST_CHECK(UPPER_CORNERS[2].countPartiallyMatchedSides(cube) == 2);
+    BOOST_CHECK(UPPER_CORNERS[3].countPartiallyMatchedSides(cube) == 3);
     
-    BOOST_CHECK(LOWER_CORNERS[0].countMatchedSides(cube) == 0);
-    BOOST_CHECK(LOWER_CORNERS[1].countMatchedSides(cube) == 3);
-    BOOST_CHECK(LOWER_CORNERS[2].countMatchedSides(cube) == 1);
-    BOOST_CHECK(LOWER_CORNERS[3].countMatchedSides(cube) == 3);
+    BOOST_CHECK(LOWER_CORNERS[0].countPartiallyMatchedSides(cube) == 0);
+    BOOST_CHECK(LOWER_CORNERS[1].countPartiallyMatchedSides(cube) == 3);
+    BOOST_CHECK(LOWER_CORNERS[2].countPartiallyMatchedSides(cube) == 1);
+    BOOST_CHECK(LOWER_CORNERS[3].countPartiallyMatchedSides(cube) == 3);
+}
+
+BOOST_AUTO_TEST_CASE(test_corner_count_fully_matched_sides) {
+    Cube cube = CubeGenerator::fromString(
+            "RRWYGWGGR,BYOGYBGBG,GOWYBYWBO,WWYWWGBWO,OOYOOGBRB,ROYRRBYRR"
+            );
+    
+    BOOST_CHECK(UPPER_CORNERS[0].countFullyMatchedSides(cube) == 1);
+    BOOST_CHECK(UPPER_CORNERS[1].countFullyMatchedSides(cube) == 0);
+    BOOST_CHECK(UPPER_CORNERS[2].countFullyMatchedSides(cube) == 1);
+    BOOST_CHECK(UPPER_CORNERS[3].countFullyMatchedSides(cube) == 0);
+    
+    BOOST_CHECK(LOWER_CORNERS[0].countFullyMatchedSides(cube) == 0);
+    BOOST_CHECK(LOWER_CORNERS[1].countFullyMatchedSides(cube) == 0);
+    BOOST_CHECK(LOWER_CORNERS[2].countFullyMatchedSides(cube) == 0);
+    BOOST_CHECK(LOWER_CORNERS[3].countFullyMatchedSides(cube) == 3);
 }
 
 BOOST_AUTO_TEST_CASE(test_white_cross_r) {
