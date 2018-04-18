@@ -86,6 +86,16 @@ BOOST_AUTO_TEST_CASE(test_white_cross_b) {
     BOOST_CHECK(s == "B");
 }
 
+BOOST_AUTO_TEST_CASE(test_first_layer_corners_5_rightys) {
+    Cube cube = CubeGenerator::fromString(
+            "RRWYGWGGR,BYOGYBGBG,GOWYBYWBO,WWYWWGBWO,OOYOOGBRB,ROYRRBYRR"
+            );
+    
+    FirstLayerCorners firstLayerCorners = FirstLayerCorners();
+    string s = firstLayerCorners.perform(cube); cout << s << endl;
+    BOOST_CHECK(s == "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'");
+}
+
 BOOST_AUTO_TEST_CASE(test_yellow_dot) {
     Cube cube = CubeGenerator::fromString(
             "GYBGGGGGG,YYYBYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR"

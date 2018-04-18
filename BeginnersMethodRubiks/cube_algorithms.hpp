@@ -136,6 +136,8 @@ private:
 class FirstLayerCorners : public CubeAlgorithm {
     void findPositionBeforeRotation(Cube &cube) override;
     void rotate(Cube &cube) override;
+private:
+    bool isCandidateForSwap(Corner corner, Cube cube);
 };
 
 class YellowDot : public CubeAlgorithm {

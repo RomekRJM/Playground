@@ -262,11 +262,33 @@ void WhiteCross::rotate(Cube &cube) {
 }
 
 void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
+    bool match = false;
+    int numberOfRotations = 0;
     
+    while(!match) {
+        if(LOWER_CORNERS[0].countFullyMatchedSides(cube) == 3) {
+            // already solved, move to the next corner
+            CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
+        }
+        
+        if(!isCandidateForSwap(UPPER_CORNERS[0], cube) 
+                && !isCandidateForSwap(LOWER_CORNERS[0], cube)) {
+            CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
+        } else {
+            match = true;
+        }
+    }
 }
 
 void FirstLayerCorners::rotate(Cube &cube) {
-    
+    while(LOWER_CORNERS[0].countFullyMatchedSides(cube) < 3) {
+        CubeAlgorithm::doMoves(cube, RIGHTY);
+    }
+}
+
+bool FirstLayerCorners::isCandidateForSwap(Corner corner, Cube cube) {
+    return corner.hasColorOnAnySide(Color::WHITE, cube) && 
+           (corner.countPartiallyMatchedSides(cube) >= 2);
 }
 
 void YellowDot::rotate(Cube &cube) {
