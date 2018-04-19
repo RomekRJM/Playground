@@ -86,14 +86,26 @@ BOOST_AUTO_TEST_CASE(test_white_cross_b) {
     BOOST_CHECK(s == "B");
 }
 
+void single_first_layer_corners_test(pair<string, Cube> p) {
+    string expectedMoves = p.first;
+    Cube cube = p.second;
+
+    FirstLayerCorners firstLayerCorners = FirstLayerCorners();
+    string s = firstLayerCorners.perform(cube);
+    BOOST_CHECK(s == expectedMoves);
+}
+
 BOOST_AUTO_TEST_CASE(test_first_layer_corners_5_rightys) {
-    Cube cube = CubeGenerator::fromString(
+    Cube RIGHTY_5 = CubeGenerator::fromString(
             "RRWYGWGGR,BYOGYBGBG,GOWYBYWBO,WWYWWGBWO,OOYOOGBRB,ROYRRBYRR"
             );
     
-    FirstLayerCorners firstLayerCorners = FirstLayerCorners();
-    string s = firstLayerCorners.perform(cube); cout << s << endl;
-    BOOST_CHECK(s == "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'");
+    map <string, Cube> first_layer_corner_scenarios = {
+        {"R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'", RIGHTY_5}
+    };
+    
+    std::for_each(first_layer_corner_scenarios.begin(), 
+            first_layer_corner_scenarios.end(), &single_first_layer_corners_test);
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_dot) {
