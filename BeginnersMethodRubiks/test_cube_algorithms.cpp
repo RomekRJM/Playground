@@ -10,12 +10,12 @@ BOOST_AUTO_TEST_CASE(test_corner_count_partially_matched_sides) {
     Cube cube = CubeGenerator::fromString(
             "RRWYGWGGR,BYOGYBGBG,GOWYBYWBO,WWYWWGBWO,OOYOOGBRB,ROYRRBYRR"
             );
-    
+
     BOOST_CHECK(UPPER_CORNERS[0].countPartiallyMatchedSides(cube) == 2);
     BOOST_CHECK(UPPER_CORNERS[1].countPartiallyMatchedSides(cube) == 2);
     BOOST_CHECK(UPPER_CORNERS[2].countPartiallyMatchedSides(cube) == 2);
     BOOST_CHECK(UPPER_CORNERS[3].countPartiallyMatchedSides(cube) == 3);
-    
+
     BOOST_CHECK(LOWER_CORNERS[0].countPartiallyMatchedSides(cube) == 0);
     BOOST_CHECK(LOWER_CORNERS[1].countPartiallyMatchedSides(cube) == 3);
     BOOST_CHECK(LOWER_CORNERS[2].countPartiallyMatchedSides(cube) == 1);
@@ -26,12 +26,12 @@ BOOST_AUTO_TEST_CASE(test_corner_count_fully_matched_sides) {
     Cube cube = CubeGenerator::fromString(
             "RRWYGWGGR,BYOGYBGBG,GOWYBYWBO,WWYWWGBWO,OOYOOGBRB,ROYRRBYRR"
             );
-    
+
     BOOST_CHECK(UPPER_CORNERS[0].countFullyMatchedSides(cube) == 1);
     BOOST_CHECK(UPPER_CORNERS[1].countFullyMatchedSides(cube) == 0);
     BOOST_CHECK(UPPER_CORNERS[2].countFullyMatchedSides(cube) == 1);
     BOOST_CHECK(UPPER_CORNERS[3].countFullyMatchedSides(cube) == 0);
-    
+
     BOOST_CHECK(LOWER_CORNERS[0].countFullyMatchedSides(cube) == 0);
     BOOST_CHECK(LOWER_CORNERS[1].countFullyMatchedSides(cube) == 0);
     BOOST_CHECK(LOWER_CORNERS[2].countFullyMatchedSides(cube) == 0);
@@ -92,23 +92,45 @@ void single_first_layer_corners_test(pair<string, Cube> p) {
 
     FirstLayerCorners firstLayerCorners = FirstLayerCorners();
     string s = firstLayerCorners.perform(cube);
+    
+    if (s != expectedMoves) {
+        cout << "Expected: " << expectedMoves << " but actual: " << s << endl;
+    }
+    
     BOOST_CHECK(s == expectedMoves);
 }
 
 BOOST_AUTO_TEST_CASE(test_first_layer_corners_5_rightys) {
+    Cube RIGHTY = CubeGenerator::fromString(
+            "YORRRYWRG,OBGOYYRGG,YOBRORBOB,OWWWWWRWR,WBOGGYOGW,YYGGBBYBB"
+            );
+    Cube RIGHTY_3 = CubeGenerator::fromString(
+            "RRORGGBGO,BYRYYRBYW,YGRBBYGBR,WWBWWWWWY,GGGOOOYOO,YBWORBGRO"
+            );
     Cube RIGHTY_5 = CubeGenerator::fromString(
             "RRWYGWGGR,BYOGYBGBG,GOWYBYWBO,WWYWWGBWO,OOYOOGBRB,ROYRRBYRR"
             );
-    
+    Cube YCLOCKWISE_UP_3_RIGHTY_5 = CubeGenerator::fromString(
+            "YOWRRBWRR,GYYOYYRGG,BBORORBOB,OWWWWWRWR,OGOOGYGGW,YYGGBBYBB"
+            );
+    Cube RIGHTY_2 = CubeGenerator::fromString(
+            "YORGOBOOB,OYGOYRRGB,YRBBRBRRR,WWOWWWWWW,YGORBYWBB,YYGOGYGGG"
+            );
+
     map <string, Cube> first_layer_corner_scenarios = {
-        {"R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'", RIGHTY_5}
+        {"R,U,R',U'", RIGHTY},
+        {"R,U,R',U',R,U,R',U',R,U,R',U'", RIGHTY_3},
+        {"R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'", RIGHTY_5},
+        {"y,U,U,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'", YCLOCKWISE_UP_3_RIGHTY_5},
+        {"R,U,R',U',R,U,R',U'", RIGHTY_2},
     };
-    
-    std::for_each(first_layer_corner_scenarios.begin(), 
+
+    std::for_each(first_layer_corner_scenarios.begin(),
             first_layer_corner_scenarios.end(), &single_first_layer_corners_test);
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_dot) {
+
     Cube cube = CubeGenerator::fromString(
             "GYBGGGGGG,YYYBYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR"
             );
@@ -118,6 +140,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_dot) {
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_line) {
+
     Cube cube = CubeGenerator::fromString(
             "GYBGGGGGG,YYYYYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYBRRRRRR"
             );
@@ -127,6 +150,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_line) {
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_line_with_initial_move) {
+
     Cube cube = CubeGenerator::fromString(
             "GYBGGGGGG,YYOYYRYYO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYBRRRRRR"
             );
@@ -136,6 +160,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_line_with_initial_move) {
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_arc) {
+
     Cube cube = CubeGenerator::fromString(
             "GYBGGGGGG,OBYRYYOYY,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR"
             );
@@ -145,6 +170,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_arc) {
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_arc_with_initial_move) {
+
     Cube cube = CubeGenerator::fromString(
             "GYBGGGGGG,YYYBYYORO,GGBBBBBBB,WWWWWWWWW,YOROOOOOO,RYYRRRRRR"
             );
@@ -168,13 +194,13 @@ void single_dasy_test(pair<string, Cube> p) {
         s = dasy.perform(cube) + ",";
         ++moves;
     } while (moves < howManyMoves);
-    
-    s = s.substr(0, s.size()-1);
+
+    s = s.substr(0, s.size() - 1);
 
     if (s != expectedMoves) {
         cout << "Expected: " << expectedMoves << " but actual: " << s << endl;
     }
-    
+
     BOOST_CHECK(s == expectedMoves);
 }
 
