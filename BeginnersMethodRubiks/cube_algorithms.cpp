@@ -298,12 +298,14 @@ bool FirstLayerCorners::isCandidateForSwap(Corner corner, Cube cube) {
 }
 
 void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
+    int rotations = 0;
     currentSwap = Swap::NOTHING;
 
     while (currentSwap == Swap::NOTHING) {
         
-        if (sideSolved(cube)) {
+        if (sideSolved(cube) || rotations >= 3) {
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
+            rotations = 0;
             continue;
         }
         
@@ -311,6 +313,7 @@ void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
         
         if (currentSwap == Swap::NOTHING) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
+            ++rotations;
         }
         
     }
@@ -342,9 +345,9 @@ SecondLayerEdges::Swap SecondLayerEdges::findSwap(Cube cube) {
     Color secondLayerRightEdgeColor = cube.getColor(SECOND_LAYER_RIGHT_EDGE.getCubePosition(Side::RIGHT));
 
     if (thirdLayerFrontEdgeColor == cube.getSideLeadingColor(FRONT)) {
-        if (secondLayerLeftEdgeColor == cube.getSideLeadingColor(LEFT)) {
+        if (thirdLayerUpEdgeColor == cube.getSideLeadingColor(LEFT)) {
             return Swap::LEFT_FRONT_EDGE;
-        } else if (secondLayerRightEdgeColor == cube.getSideLeadingColor(RIGHT)) {
+        } else if (thirdLayerUpEdgeColor == cube.getSideLeadingColor(RIGHT)) {
             return Swap::RIGHT_FRONT_EDGE;
         }
     }

@@ -129,6 +129,19 @@ BOOST_AUTO_TEST_CASE(test_first_layer_corners_5_rightys) {
             first_layer_corner_scenarios.end(), &single_first_layer_corners_test);
 }
 
+BOOST_AUTO_TEST_CASE(test_second_layer_edges) {
+    Cube cube = CubeGenerator::fromString(
+            "YRBRRRRRR,OBYOYOOGY,GYYOOYOOO,WWWWWWWWW,RBRYGGGGG,GYBGBBBBB"
+            );
+    
+    SecondLayerEdges secondLayerEdges = SecondLayerEdges();
+    string s = secondLayerEdges.perform(cube);
+    
+    cout << s << endl;
+    
+    BOOST_CHECK(s == "B");
+}
+
 BOOST_AUTO_TEST_CASE(test_yellow_dot) {
 
     Cube cube = CubeGenerator::fromString(
