@@ -27,31 +27,44 @@ struct PetalSolution {
 public:
 
     PetalSolution(CubePosition s, CubePosition d, string r) :
-        startingPosition(s), cantBeWhite(d), rotation(r) {
+    startingPosition(s), cantBeWhite(d), rotation(r) {
     };
-    
+
 public:
     CubePosition startingPosition;
     CubePosition cantBeWhite;
     string rotation;
 };
 
-class Corner {
-public:
+class Cublet {
+    
+protected:    
+    Cublet(CubePosition c1, CubePosition c2) : pieces({c1, c2}) {
+    };
 
-    Corner(CubePosition c1, CubePosition c2, CubePosition c3) : pieces({c1, c2, c3})
-    {
+    Cublet(CubePosition c1, CubePosition c2, CubePosition c3) : pieces({c1, c2, c3}) {
     };
     
-public:
-    const array<CubePosition, 3> pieces;
+public: 
     int countFullyMatchedSides(Cube cube) const;
     int countPartiallyMatchedSides(Cube cube) const;
     bool hasColorOnAnySide(Color color, Cube cube) const;
-    array<Color, 3> getColors(Cube cube) const;
+    vector<Color> getColors(Cube cube) const;
     
-    static const int REQUIRES_PLACING_UPSIDE_DOWN;
-    static const int IS_ON_THE_RIGHT_SPOT;
+protected:
+    const vector<CubePosition> pieces;
+};
+
+class Corner : public Cublet {
+public:
+    Corner(CubePosition c1, CubePosition c2, CubePosition c3) : Cublet(c1, c2, c3) {
+    };
+};
+
+class Edge : public Cublet {
+public:
+    Edge(CubePosition c1, CubePosition c2) : Cublet(c1, c2) {
+    };
 };
 
 const array<Corner, 4> UPPER_CORNERS = {
@@ -108,10 +121,14 @@ private:
     static const map<string, Flip> flips;
     stringstream ss;
     bool initialPositionSet = false;
-    
+
 protected:
-    virtual void findPositionBeforeRotation(Cube &cube) {};
-    virtual void findInitialPosition(Cube &cube) {};
+
+    virtual void findPositionBeforeRotation(Cube &cube) {
+    };
+
+    virtual void findInitialPosition(Cube &cube) {
+    };
     virtual void rotate(Cube &cube) = 0;
     void doMove(Cube &cube, string move);
     void doMoves(Cube &cube, vector<string> moves);
@@ -140,6 +157,13 @@ private:
     bool isCandidateForSwap(Corner corner, Cube cube);
 };
 
+class SecondLayerEdges : public CubeAlgorithm {
+    void findPositionBeforeRotation(Cube &cube) override;
+    void rotate(Cube &cube) override;
+private:
+    bool isCandidateForSwap(Corner corner, Cube cube);
+};
+
 class YellowDot : public CubeAlgorithm {
     void rotate(Cube &cube) override;
 };
@@ -158,11 +182,10 @@ private:
     bool isYellowArc(Cube cube);
 };
 
-class SideNotFoundException: public exception
-{
-  virtual const char* what() const throw()
-  {
-    return "Couldn't find matching side";
-  }
+class SideNotFoundException : public exception {
+
+    virtual const char* what() const throw () {
+        return "Couldn't find matching side";
+    }
 };
 #endif /* CUBE_ALGORITHMS_HPP */

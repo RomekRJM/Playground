@@ -102,11 +102,8 @@ const array<PetalSolution, 20> Dasy::PETAL_SOLUTIONS = {
     PetalSolution(CubePosition(DOWN, 2, 1), CubePosition(UP, 0, 1), ROTATE_BACK_CLOCKWISE)
 };
 
-const int Corner::IS_ON_THE_RIGHT_SPOT = 3;
-const int Corner::REQUIRES_PLACING_UPSIDE_DOWN = 2;
-
-int Corner::countPartiallyMatchedSides(Cube cube) const {
-    array<Color, 3> colors = getColors(cube);
+int Cublet::countPartiallyMatchedSides(Cube cube) const {
+    vector<Color> colors = getColors(cube);
     int matchedSides = 0;
     
     for(CubePosition position : pieces) {
@@ -119,16 +116,16 @@ int Corner::countPartiallyMatchedSides(Cube cube) const {
     return matchedSides;
 }
 
-int Corner::countFullyMatchedSides(Cube cube) const {
-    array<Color, 3> colors = getColors(cube);
+int Cublet::countFullyMatchedSides(Cube cube) const {
+    vector<Color> colors = getColors(cube);
     int matchedSides = 0;
     
     for(int i=0; i < colors.size(); ++i) {
-        Color cornerColor = colors[i];
+        Color cubletColor = colors[i];
         CubePosition position = pieces[i];
         Color sideColor = cube.getSideLeadingColor(position.side);
         
-        if(cornerColor == sideColor) {
+        if(cubletColor == sideColor) {
             ++matchedSides;
         }
     }
@@ -136,16 +133,16 @@ int Corner::countFullyMatchedSides(Cube cube) const {
     return matchedSides;
 }
 
-array<Color, 3> Corner::getColors(Cube cube) const {
-    return array<Color, 3> {
-        cube.getColor(pieces[0]),
-        cube.getColor(pieces[1]),
-        cube.getColor(pieces[2])
-    };
+vector<Color> Cublet::getColors(Cube cube) const {
+    vector<Color> colors;
+    for(CubePosition piece : pieces) {
+        colors.push_back(cube.getColor(piece));
+    }
+    return colors;
 }
 
-bool Corner::hasColorOnAnySide(Color color, Cube cube) const {
-    array<Color, 3> colors = getColors(cube);
+bool Cublet::hasColorOnAnySide(Color color, Cube cube) const {
+    vector<Color> colors = getColors(cube);
     return find(colors.begin(), colors.end(), color) != colors.end();
 }
 
