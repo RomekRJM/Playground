@@ -86,18 +86,29 @@ BOOST_AUTO_TEST_CASE(test_white_cross_b) {
     BOOST_CHECK(s == "B");
 }
 
-void single_first_layer_corners_test(pair<string, Cube> p) {
+void single_algorithm_test(pair<string, Cube> p, CubeAlgorithm* algorithm) {
     string expectedMoves = p.first;
     Cube cube = p.second;
 
-    FirstLayerCorners firstLayerCorners = FirstLayerCorners();
-    string s = firstLayerCorners.perform(cube);
+    string s = algorithm->perform(cube);
     
     if (s != expectedMoves) {
         cout << "Expected: " << expectedMoves << " but actual: " << s << endl;
     }
     
     BOOST_CHECK(s == expectedMoves);
+}
+
+void single_first_layer_corners_test(pair<string, Cube> p) {
+    FirstLayerCorners* firstLayerCorners = new FirstLayerCorners();
+    single_algorithm_test(p, firstLayerCorners);
+    delete firstLayerCorners;
+}
+
+void single_second_layer_edges_test(pair<string, Cube> p) {
+    SecondLayerEdges* secondLayerEdges = new SecondLayerEdges();
+    single_algorithm_test(p, secondLayerEdges);
+    delete secondLayerEdges;
 }
 
 BOOST_AUTO_TEST_CASE(test_first_layer_corners_5_rightys) {
@@ -130,16 +141,28 @@ BOOST_AUTO_TEST_CASE(test_first_layer_corners_5_rightys) {
 }
 
 BOOST_AUTO_TEST_CASE(test_second_layer_edges) {
-    Cube cube = CubeGenerator::fromString(
+    Cube TO_THE_RIGHT = CubeGenerator::fromString(
             "YRBRRRRRR,OBYOYOOGY,GYYOOYOOO,WWWWWWWWW,RBRYGGGGG,GYBGBBBBB"
             );
-    
-    SecondLayerEdges secondLayerEdges = SecondLayerEdges();
-    string s = secondLayerEdges.perform(cube);
-    
-    cout << s << endl;
-    
-    BOOST_CHECK(s == "B");
+    Cube TO_THE_LEFT = CubeGenerator::fromString(
+            "YBOBBRBBB,YOOBYYROY,GGBGGYGGG,WWWWWWWWW,BGYYRRRRR,RRGOOYOOO"
+            );
+    Cube Y3_UP_TO_THE_LEFT = CubeGenerator::fromString(
+            "RBGRRRRRR,YRYBYYYOY,GYOOOYOOO,WWWWWWWWW,OORGGGGGG,BYBGBBBBB"
+            );
+    Cube RIGHT_IN_PLACE_BUT_TWISTED = CubeGenerator::fromString(
+            "GROBBRBBB,OYBGYBYGY,YOYRGGGGG,WWWWWWWWW,BORBRYRRR,GYROOYOOO"
+            );
+
+    map <string, Cube> second_layer_edges_scenarios = {
+        {"U,R,U,R',U',y,L',U',L,U", TO_THE_RIGHT},
+        {"U',L',U',L,U,y',R,U,R',U'", TO_THE_LEFT},
+        {"y,y,U',L',U',L,U,y',R,U,R',U'", Y3_UP_TO_THE_LEFT},
+        {"U,R,U,R',U',y,L',U',L,U", RIGHT_IN_PLACE_BUT_TWISTED},
+    };
+
+    std::for_each(second_layer_edges_scenarios.begin(),
+            second_layer_edges_scenarios.end(), &single_second_layer_edges_test);
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_dot) {

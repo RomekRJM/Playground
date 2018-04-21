@@ -134,6 +134,10 @@ protected:
 
     virtual void findInitialPosition(Cube &cube) {
     };
+    
+    virtual void shorten(stringstream &ss) {
+    };
+    
     virtual void rotate(Cube &cube) = 0;
     void doMove(Cube &cube, string move);
     void doMoves(Cube &cube, vector<string> moves);
@@ -165,6 +169,7 @@ private:
 class SecondLayerEdges : public CubeAlgorithm {
     void findPositionBeforeRotation(Cube &cube) override;
     void rotate(Cube &cube) override;
+    void shorten(stringstream &ss) override;
 private:
     enum Swap {
         NOTHING, LEFT_FRONT_EDGE, RIGHT_FRONT_EDGE

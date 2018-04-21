@@ -152,7 +152,7 @@ CubePosition Cublet::getCubePosition(Side side) const {
             return cubePosition;
         }
     }
-    
+
     throw SideNotFoundException();
 }
 
@@ -163,6 +163,7 @@ string CubeAlgorithm::perform(Cube &cube) {
 
     findPositionBeforeRotation(cube);
     rotate(cube);
+    shorten(ss);
     return getMovesAsString();
 }
 
@@ -302,20 +303,20 @@ void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
     currentSwap = Swap::NOTHING;
 
     while (currentSwap == Swap::NOTHING) {
-        
+
         if (sideSolved(cube) || rotations >= 3) {
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
             rotations = 0;
             continue;
         }
-        
+
         currentSwap = findSwap(cube);
-        
+
         if (currentSwap == Swap::NOTHING) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
             ++rotations;
         }
-        
+
     }
 }
 
@@ -352,11 +353,21 @@ SecondLayerEdges::Swap SecondLayerEdges::findSwap(Cube cube) {
         }
     }
 
-    if (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) < 2) {
+    if (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) < 2 && 
+            !SECOND_LAYER_LEFT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
         return Swap::LEFT_FRONT_EDGE;
     }
 
-    if (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) < 2) {
+    if (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) < 2 && 
+            !SECOND_LAYER_RIGHT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
+        return Swap::RIGHT_FRONT_EDGE;
+    }
+    
+    if (SECOND_LAYER_LEFT_EDGE.countPartiallyMatchedSides(cube) == 2) {
+        return Swap::LEFT_FRONT_EDGE;
+    }
+
+    if (SECOND_LAYER_RIGHT_EDGE.countPartiallyMatchedSides(cube) == 2) {
         return Swap::RIGHT_FRONT_EDGE;
     }
 
@@ -366,6 +377,21 @@ SecondLayerEdges::Swap SecondLayerEdges::findSwap(Cube cube) {
 bool SecondLayerEdges::sideSolved(Cube cube) {
     return (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) == 2) &&
             (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) == 2);
+}
+
+void SecondLayerEdges::shorten(stringstream &ss) {
+    std::string s = ss.str();
+    const string FAILED_SIDE = "U,U,U,y,U";
+    size_t found;
+    
+    do {
+        found = s.find(FAILED_SIDE);
+        if (found != std::string::npos) {
+            s.replace(s.find(FAILED_SIDE), FAILED_SIDE.length(), "y");
+        }
+    } while (found != std::string::npos);
+    
+    ss.str(s);
 }
 
 void YellowDot::rotate(Cube & cube) {
