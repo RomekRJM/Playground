@@ -50,6 +50,7 @@ public:
     int countPartiallyMatchedSides(Cube cube) const;
     bool hasColorOnAnySide(Color color, Cube cube) const;
     vector<Color> getColors(Cube cube) const;
+    CubePosition getCubePosition(Side side) const;
     
 protected:
     const vector<CubePosition> pieces;
@@ -58,12 +59,6 @@ protected:
 class Corner : public Cublet {
 public:
     Corner(CubePosition c1, CubePosition c2, CubePosition c3) : Cublet(c1, c2, c3) {
-    };
-};
-
-class Edge : public Cublet {
-public:
-    Edge(CubePosition c1, CubePosition c2) : Cublet(c1, c2) {
     };
 };
 
@@ -80,6 +75,16 @@ const array<Corner, 4> LOWER_CORNERS = {
     Corner(CubePosition(LEFT, 2, 0), CubePosition(DOWN, 2, 0), CubePosition(BACK, 2, 2)),
     Corner(CubePosition(FRONT, 2, 0), CubePosition(DOWN, 0, 0), CubePosition(LEFT, 2, 2)),
 };
+
+class Edge : public Cublet {
+public:
+    Edge(CubePosition c1, CubePosition c2) : Cublet(c1, c2) {
+    };
+};
+
+const Edge THIRD_LAYER_FRONT_EDGE = Edge(CubePosition(FRONT, 0, 1), CubePosition(UP, 2, 1));
+const Edge SECOND_LAYER_LEFT_EDGE = Edge(CubePosition(LEFT, 1, 2), CubePosition(FRONT, 1, 0));
+const Edge SECOND_LAYER_RIGHT_EDGE = Edge(CubePosition(RIGHT, 1, 0), CubePosition(FRONT, 1, 2));
 
 class CubeAlgorithm {
 public:
@@ -161,7 +166,12 @@ class SecondLayerEdges : public CubeAlgorithm {
     void findPositionBeforeRotation(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
-    bool isCandidateForSwap(Corner corner, Cube cube);
+    enum Swap {
+        NOTHING, LEFT_FRONT_EDGE, RIGHT_FRONT_EDGE
+    };
+    Swap findSwap(Cube cube);
+    bool sideSolved(Cube cube);
+    Swap currentSwap;
 };
 
 class YellowDot : public CubeAlgorithm {

@@ -105,37 +105,37 @@ const array<PetalSolution, 20> Dasy::PETAL_SOLUTIONS = {
 int Cublet::countPartiallyMatchedSides(Cube cube) const {
     vector<Color> colors = getColors(cube);
     int matchedSides = 0;
-    
-    for(CubePosition position : pieces) {
+
+    for (CubePosition position : pieces) {
         Color sideColor = cube.getSideLeadingColor(position.side);
-        if(hasColorOnAnySide(sideColor, cube)) {
+        if (hasColorOnAnySide(sideColor, cube)) {
             ++matchedSides;
         }
     }
-    
+
     return matchedSides;
 }
 
 int Cublet::countFullyMatchedSides(Cube cube) const {
     vector<Color> colors = getColors(cube);
     int matchedSides = 0;
-    
-    for(int i=0; i < colors.size(); ++i) {
+
+    for (int i = 0; i < colors.size(); ++i) {
         Color cubletColor = colors[i];
         CubePosition position = pieces[i];
         Color sideColor = cube.getSideLeadingColor(position.side);
-        
-        if(cubletColor == sideColor) {
+
+        if (cubletColor == sideColor) {
             ++matchedSides;
         }
     }
-    
+
     return matchedSides;
 }
 
 vector<Color> Cublet::getColors(Cube cube) const {
     vector<Color> colors;
-    for(CubePosition piece : pieces) {
+    for (CubePosition piece : pieces) {
         colors.push_back(cube.getColor(piece));
     }
     return colors;
@@ -146,11 +146,21 @@ bool Cublet::hasColorOnAnySide(Color color, Cube cube) const {
     return find(colors.begin(), colors.end(), color) != colors.end();
 }
 
+CubePosition Cublet::getCubePosition(Side side) const {
+    for (CubePosition cubePosition : pieces) {
+        if (cubePosition.side == side) {
+            return cubePosition;
+        }
+    }
+    
+    throw SideNotFoundException();
+}
+
 string CubeAlgorithm::perform(Cube &cube) {
     if (!initialPositionSet) {
         findInitialPosition(cube);
     }
-    
+
     findPositionBeforeRotation(cube);
     rotate(cube);
     return getMovesAsString();
@@ -163,7 +173,7 @@ string CubeAlgorithm::getMovesAsString() {
 
 void CubeAlgorithm::doMove(Cube &cube, string move) {
     map<string, Rotation>::const_iterator itRot = rotations.find(move);
-    
+
     if (itRot != rotations.end()) {
         cube.rotate(itRot->second);
         ss << move << ",";
@@ -255,20 +265,19 @@ void WhiteCross::rotate(Cube &cube) {
     }
 
     CubeAlgorithm::doMove(cube, rotation);
-    //CubeAlgorithm::doMove(cube, rotation);
 }
 
 void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
     bool match = false;
     int numberOfRotations = 0;
-    
-    while(!match) {
-        if(LOWER_CORNERS[0].countFullyMatchedSides(cube) == 3) {
+
+    while (!match) {
+        if (LOWER_CORNERS[0].countFullyMatchedSides(cube) == 3) {
             // already solved, move to the next corner
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
         }
-        
-        if(!isCandidateForSwap(UPPER_CORNERS[0], cube) 
+
+        if (!isCandidateForSwap(UPPER_CORNERS[0], cube)
                 && !isCandidateForSwap(LOWER_CORNERS[0], cube)) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
         } else {
@@ -278,23 +287,91 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
 }
 
 void FirstLayerCorners::rotate(Cube &cube) {
-    while(LOWER_CORNERS[0].countFullyMatchedSides(cube) < 3) {
+    while (LOWER_CORNERS[0].countFullyMatchedSides(cube) < 3) {
         CubeAlgorithm::doMoves(cube, RIGHTY);
     }
 }
 
 bool FirstLayerCorners::isCandidateForSwap(Corner corner, Cube cube) {
-    return corner.hasColorOnAnySide(Color::WHITE, cube) && 
-           (corner.countPartiallyMatchedSides(cube) >= 2);
+    return corner.hasColorOnAnySide(Color::WHITE, cube) &&
+            (corner.countPartiallyMatchedSides(cube) >= 2);
 }
 
-void YellowDot::rotate(Cube &cube) {
+void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
+    currentSwap = Swap::NOTHING;
+
+    while (currentSwap == Swap::NOTHING) {
+        
+        if (sideSolved(cube)) {
+            CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
+            continue;
+        }
+        
+        currentSwap = findSwap(cube);
+        
+        if (currentSwap == Swap::NOTHING) {
+            CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
+        }
+        
+    }
+}
+
+void SecondLayerEdges::rotate(Cube &cube) {
+    switch (currentSwap) {
+        case Swap::LEFT_FRONT_EDGE:
+            CubeAlgorithm::doMove(cube, ROTATE_UP_COUNTER_CLOCKWISE);
+            CubeAlgorithm::doMoves(cube, LEFTY);
+            CubeAlgorithm::doMove(cube, FLIP_Y_COUNTER_CLOCKWISE_90);
+            CubeAlgorithm::doMoves(cube, RIGHTY);
+            break;
+        case Swap::RIGHT_FRONT_EDGE:
+            CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
+            CubeAlgorithm::doMoves(cube, RIGHTY);
+            CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
+            CubeAlgorithm::doMoves(cube, LEFTY);
+            break;
+        case NOTHING:
+            break;
+    }
+}
+
+SecondLayerEdges::Swap SecondLayerEdges::findSwap(Cube cube) {
+    Color thirdLayerFrontEdgeColor = cube.getColor(THIRD_LAYER_FRONT_EDGE.getCubePosition(Side::FRONT));
+    Color thirdLayerUpEdgeColor = cube.getColor(THIRD_LAYER_FRONT_EDGE.getCubePosition(Side::UP));
+    Color secondLayerLeftEdgeColor = cube.getColor(SECOND_LAYER_LEFT_EDGE.getCubePosition(Side::LEFT));
+    Color secondLayerRightEdgeColor = cube.getColor(SECOND_LAYER_RIGHT_EDGE.getCubePosition(Side::RIGHT));
+
+    if (thirdLayerFrontEdgeColor == cube.getSideLeadingColor(FRONT)) {
+        if (secondLayerLeftEdgeColor == cube.getSideLeadingColor(LEFT)) {
+            return Swap::LEFT_FRONT_EDGE;
+        } else if (secondLayerRightEdgeColor == cube.getSideLeadingColor(RIGHT)) {
+            return Swap::RIGHT_FRONT_EDGE;
+        }
+    }
+
+    if (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) < 2) {
+        return Swap::LEFT_FRONT_EDGE;
+    }
+
+    if (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) < 2) {
+        return Swap::RIGHT_FRONT_EDGE;
+    }
+
+    return Swap::NOTHING;
+}
+
+bool SecondLayerEdges::sideSolved(Cube cube) {
+    return (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) == 2) &&
+            (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) == 2);
+}
+
+void YellowDot::rotate(Cube & cube) {
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_CLOCKWISE);
     CubeAlgorithm::doMoves(cube, RIGHTY);
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE);
 }
 
-void YellowLine::findInitialPosition(Cube &cube) {
+void YellowLine::findInitialPosition(Cube & cube) {
     for (int i = 0; i < 2; ++i) {
         if (!isYellowLine(cube)) {
             CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
@@ -308,13 +385,13 @@ bool YellowLine::isYellowLine(Cube cube) {
             && (side[1][0] == YELLOW);
 }
 
-void YellowLine::rotate(Cube &cube) {
+void YellowLine::rotate(Cube & cube) {
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_CLOCKWISE);
     CubeAlgorithm::doMoves(cube, RIGHTY);
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE);
 }
 
-void YellowArc::findInitialPosition(Cube &cube) {
+void YellowArc::findInitialPosition(Cube & cube) {
     for (int i = 0; i < 3; ++i) {
         if (!isYellowArc(cube)) {
             CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
@@ -328,7 +405,7 @@ bool YellowArc::isYellowArc(Cube cube) {
             && (side[1][1] == YELLOW);
 }
 
-void YellowArc::rotate(Cube &cube) {
+void YellowArc::rotate(Cube & cube) {
     CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Z_CLOCKWISE_90);
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_BACK_CLOCKWISE);
     CubeAlgorithm::doMoves(cube, RIGHTY);
