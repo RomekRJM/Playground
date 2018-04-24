@@ -6,6 +6,7 @@
  */
 
 #include "cube_algorithms.hpp"
+#include <algorithm>
 #include <iostream>
 
 using namespace std;
@@ -182,9 +183,11 @@ void CubeAlgorithm::doMove(Cube &cube, string move) {
     }
 }
 
-void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves) {
-    for (string move : moves) {
-        doMove(cube, move);
+void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves, int repeat = 1) {
+    for (int i = 0; i < repeat; ++i) {
+        for (string move : moves) {
+            doMove(cube, move);
+        }
     }
 }
 
@@ -347,16 +350,16 @@ SecondLayerEdges::Swap SecondLayerEdges::findSwap(Cube cube) {
         }
     }
 
-    if (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) < 2 && 
+    if (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) < 2 &&
             !SECOND_LAYER_LEFT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
         return Swap::LEFT_FRONT_EDGE;
     }
 
-    if (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) < 2 && 
+    if (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) < 2 &&
             !SECOND_LAYER_RIGHT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
         return Swap::RIGHT_FRONT_EDGE;
     }
-    
+
     if (SECOND_LAYER_LEFT_EDGE.countPartiallyMatchedSides(cube) == 2) {
         return Swap::LEFT_FRONT_EDGE;
     }
@@ -377,14 +380,14 @@ void SecondLayerEdges::shorten(stringstream &ss) {
     std::string s = ss.str();
     const string FAILED_SIDE = "U,U,U,y,U";
     size_t found;
-    
+
     do {
         found = s.find(FAILED_SIDE);
         if (found != std::string::npos) {
             s.replace(s.find(FAILED_SIDE), FAILED_SIDE.length(), "y");
         }
     } while (found != std::string::npos);
-    
+
     ss.str(s);
 }
 
@@ -434,4 +437,45 @@ void YellowArc::rotate(Cube & cube) {
     CubeAlgorithm::doMoves(cube, RIGHTY);
     CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_BACK_COUNTER_CLOCKWISE);
     CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Z_COUNTER_CLOCKWISE_90);
+}
+
+void PositionLayerCorners::findPositionBeforeRotation(Cube &cube) {
+    int currentMatch = 0;
+    int bestMatch = 0;
+    int bestMatchOnTurn = 0;
+    array<int, 4> matchedCorners = countUpperCornersInRightPlace(cube);
+
+    for (int i = 0; i < 3; ++i) {
+        for_each(matchedCorners.begin(), matchedCorners.end(), 
+                [&](int c){ currentMatch += c/3; }
+        );
+
+        if (currentMatch > bestMatch) {
+            bestMatch = currentMatch;
+            bestMatchOnTurn = i;
+        }
+                
+        currentMatch = 0;
+        CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+    }
+    
+    // TODO: Rotate back to best option
+    // TODO: Flip to a moment, when unsolved Corners are on right side
+}
+
+void PositionLayerCorners::rotate(Cube &cube) {
+    CubeAlgorithm::doMoves(cube, CubeAlgorithm::RIGHTY, 3);
+    CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
+    CubeAlgorithm::doMoves(cube, CubeAlgorithm::LEFTY, 3);
+}
+
+array<int, 4> PositionLayerCorners::countUpperCornersInRightPlace(Cube cube) {
+    array<int, 4> corners = {
+        UPPER_CORNERS[0].countPartiallyMatchedSides(cube),
+        UPPER_CORNERS[1].countPartiallyMatchedSides(cube),
+        UPPER_CORNERS[2].countPartiallyMatchedSides(cube),
+        UPPER_CORNERS[3].countPartiallyMatchedSides(cube)
+    };
+    
+    return corners;
 }

@@ -134,7 +134,7 @@ protected:
     
     virtual void rotate(Cube &cube) = 0;
     void doMove(Cube &cube, string move);
-    void doMoves(Cube &cube, vector<string> moves);
+    void doMoves(Cube &cube, vector<string> moves, int repeat);
 };
 
 class Dasy : public CubeAlgorithm {
@@ -189,6 +189,13 @@ class YellowArc : public CubeAlgorithm {
     void rotate(Cube &cube) override;
 private:
     bool isYellowArc(Cube cube);
+};
+
+class PositionLayerCorners : public CubeAlgorithm {
+    void findPositionBeforeRotation(Cube &cube) override;
+    void rotate(Cube &cube) override;
+private:
+    array<int, 4> countUpperCornersInRightPlace(Cube cube);
 };
 
 class SideNotFoundException : public exception {
