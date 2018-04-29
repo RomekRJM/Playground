@@ -133,8 +133,9 @@ protected:
     };
     
     virtual void rotate(Cube &cube) = 0;
-    void doMove(Cube &cube, string move);
-    void doMoves(Cube &cube, vector<string> moves, int repeat);
+    void doMove(Cube &cube, string move, bool recordInString);
+    void doMoves(Cube &cube, vector<string> moves, int repeat, bool recordInString);
+    void cancelLastMoves(Cube &cube, int number);
 };
 
 class Dasy : public CubeAlgorithm {
@@ -192,10 +193,12 @@ private:
 };
 
 class PositionLayerCorners : public CubeAlgorithm {
-    void findPositionBeforeRotation(Cube &cube) override;
+    void findInitialPosition(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
     array<int, 4> countUpperCornersInRightPlace(Cube cube);
+    void findOptimalLastLayerRotation(Cube &cube);
+    void findOptimalCubeFlip(Cube &cube);
 };
 
 class SideNotFoundException : public exception {

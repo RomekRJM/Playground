@@ -154,6 +154,7 @@ CubePosition Cublet::getCubePosition(Side side) const {
 string CubeAlgorithm::perform(Cube &cube) {
     if (!initialPositionSet) {
         findInitialPosition(cube);
+        initialPositionSet = true;
     }
 
     findPositionBeforeRotation(cube);
@@ -167,28 +168,59 @@ string CubeAlgorithm::getMovesAsString() {
     return moves.size() > 1 ? moves.substr(0, moves.size() - 1) : moves;
 }
 
-void CubeAlgorithm::doMove(Cube &cube, string move) {
+void CubeAlgorithm::doMove(Cube &cube, string move, bool recordInString = true) {
     map<string, Rotation>::const_iterator itRot = rotations.find(move);
 
     if (itRot != rotations.end()) {
         cube.rotate(itRot->second);
-        ss << move << ",";
+        if (recordInString)
+            ss << move << ",";
     }
 
     map<string, Flip>::const_iterator itFlp = flips.find(move);
 
     if (itFlp != flips.end()) {
         cube.flip(itFlp->second);
-        ss << move << ",";
+        if (recordInString)
+            ss << move << ",";
     }
 }
 
-void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves, int repeat = 1) {
+void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves, int repeat = 1,
+        bool recordInString = true) {
     for (int i = 0; i < repeat; ++i) {
         for (string move : moves) {
-            doMove(cube, move);
+            doMove(cube, move, recordInString);
         }
     }
+}
+
+void CubeAlgorithm::cancelLastMoves(Cube &cube, int moves) {
+    string allMoves = ss.str();
+    int revertToPos = allMoves.length() - 2 * moves;
+    revertToPos = max(revertToPos, 0);
+    string toBeReverted = allMoves.substr(revertToPos);
+    stringstream tokenizer(toBeReverted);
+
+    while (tokenizer.good()) {
+        string move;
+        string newMove;
+        getline(tokenizer, move, ',');
+
+        if (move == CubeAlgorithm::FLIP_UPSIDE_DOWN) {
+            newMove = CubeAlgorithm::FLIP_UPSIDE_DOWN;
+        } else if (move.length() == 2) {
+            // change counterclockwise to clockwise, like U' => U
+            newMove = move.substr(0, 1);
+        } else if (move.length() == 1) {
+            // change clockwise to counterclockwise, like U => U'
+            newMove = move + "'";
+        }
+
+        CubeAlgorithm::doMove(cube, newMove, false);
+    }
+
+    ss.seekp(revertToPos);
 }
 
 void Dasy::rotate(Cube &cube) {
@@ -439,28 +471,51 @@ void YellowArc::rotate(Cube & cube) {
     CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Z_COUNTER_CLOCKWISE_90);
 }
 
-void PositionLayerCorners::findPositionBeforeRotation(Cube &cube) {
+void PositionLayerCorners::findInitialPosition(Cube &cube) {
+    findOptimalLastLayerRotation(cube);
+    findOptimalCubeFlip(cube);
+}
+
+void PositionLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
     int currentMatch = 0;
     int bestMatch = 0;
     int bestMatchOnTurn = 0;
-    array<int, 4> matchedCorners = countUpperCornersInRightPlace(cube);
 
     for (int i = 0; i < 3; ++i) {
-        for_each(matchedCorners.begin(), matchedCorners.end(), 
-                [&](int c){ currentMatch += c/3; }
+        array<int, 4> matchedCorners = countUpperCornersInRightPlace(cube);
+
+        for_each(matchedCorners.begin(), matchedCorners.end(),
+                [&](int c) {
+                    currentMatch += c / 3; }
         );
 
         if (currentMatch > bestMatch) {
             bestMatch = currentMatch;
             bestMatchOnTurn = i;
         }
-                
+        
         currentMatch = 0;
         CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
     }
-    
-    // TODO: Rotate back to best option
-    // TODO: Flip to a moment, when unsolved Corners are on right side
+
+    cancelLastMoves(cube, 3 - bestMatchOnTurn);
+}
+
+void PositionLayerCorners::findOptimalCubeFlip(Cube &cube) {
+    while (true) {
+        if (UPPER_CORNERS[0].countPartiallyMatchedSides(cube) == 3) {
+            CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
+            continue;
+        }
+        
+        if (UPPER_CORNERS[1].countPartiallyMatchedSides(cube) == 3 && 
+                UPPER_CORNERS[2].countPartiallyMatchedSides(cube) == 3) {
+            CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
+            continue;
+        }
+        
+        break;
+    }
 }
 
 void PositionLayerCorners::rotate(Cube &cube) {
@@ -476,6 +531,6 @@ array<int, 4> PositionLayerCorners::countUpperCornersInRightPlace(Cube cube) {
         UPPER_CORNERS[2].countPartiallyMatchedSides(cube),
         UPPER_CORNERS[3].countPartiallyMatchedSides(cube)
     };
-    
+
     return corners;
 }
