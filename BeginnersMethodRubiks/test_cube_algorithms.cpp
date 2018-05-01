@@ -53,151 +53,6 @@ BOOST_AUTO_TEST_CASE(test_corner_count_fully_matched_sides) {
     BOOST_CHECK(LOWER_CORNERS[3].countFullyMatchedSides(cube) == 3);
 }
 
-void single_dasy_test(pair<string, Cube> p) {
-    string expectedMoves = p.first;
-    Cube cube = p.second;
-
-    Dasy dasy = Dasy();
-    string s = "";
-    const string U_GROUP = "U,";
-    int uCount = std::count(expectedMoves.begin(), expectedMoves.end(), 'U');
-    int howManyMoves = std::count(expectedMoves.begin(), expectedMoves.end(), ',') - uCount + 1;
-    int moves = 0;
-
-    do {
-        s = dasy.perform(cube) + ",";
-        ++moves;
-    } while (moves < howManyMoves);
-
-    s = s.substr(0, s.size() - 1);
-
-    if (s != expectedMoves) {
-        cout << "Expected: " << expectedMoves << " but actual: " << s << endl;
-    }
-
-    BOOST_CHECK(s == expectedMoves);
-}
-
-BOOST_AUTO_TEST_CASE(test_dasy) {
-    Cube DOWN_EDGE_PIECE = CubeGenerator::fromString(
-            "WGBRGYYRW,GWOWYWRYY,GOBGRRGRB,OWOGWYGBO,RGWBBBROY,YBBOOYWOR"
-            );
-    Cube FIRST_LAYER_EDGE_PIECE = CubeGenerator::fromString(
-            "WGBOGYOWY,WWYWWORBW,GGGORBBRW,ROGWYROBY,GROGOGBYR,ORBYBYRBY"
-            );
-    Cube SECOND_LAYER_RIGHT_EDGE_PIECE = CubeGenerator::fromString(
-            "YGORGBBOO,RWRWYWORG,YBWOBBRBW,YGWRWYORW,YOGOOYBGB,GGBYRWGYR"
-            );
-    Cube SECOND_LAYER_LEFT_EDGE_PIECE = CubeGenerator::fromString(
-            "OOBBGROGY,RWRWYWWGY,YBWOBBRBW,GRORWYORW,ROGWOYBGB,GGBYROGYY"
-            );
-    Cube THIRD_LAYER_LEFT_EDGE_PIECE = CubeGenerator::fromString(
-            "YWWYBRWYB,WWBWYBGOR,YGGGOGGYO,GRWOWWYBO,OGRBRORRY,OBBYGORRB"
-            );
-
-    map <string, Cube> dasy_scenarios = {
-        // { "expected_move", cube } // begining_white_position
-        {"F,F", DOWN_EDGE_PIECE}, // DOWN, 0, 1
-        {"F,U,L'", FIRST_LAYER_EDGE_PIECE}, // FRONT, 2, 1
-        {"F", SECOND_LAYER_RIGHT_EDGE_PIECE}, // LEFT, 1, 2
-        {"F'", SECOND_LAYER_LEFT_EDGE_PIECE}, // RIGHT, 1, 0
-        {"F,R", THIRD_LAYER_LEFT_EDGE_PIECE}, // FRONT, 0, 1
-
-        {"L',L'", *DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // DOWN, 1, 0
-        {"L,U,B'", *FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // LEFT, 2, 1
-        {"L", *SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // BACK, 1, 2
-        {"L'", *SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // BACK, 1, 0
-        {"L,F", *THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // LEFT, 0, 1
-
-        {"B,B", *DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // DOWN, 2, 1
-        {"B,U,R'", *FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // BACK, 2, 1
-        {"B", *SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // RIGHT, 1, 2
-        {"B'", *SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // LEFT, 1, 0
-        {"B,L", *THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // BACK, 0, 1
-
-        {"R,R", *DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // DOWN, 1, 2
-        {"R,U,F'", *FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // RIGHT, 2, 1
-        {"R", *SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // FRONT, 1, 2
-        {"R'", *SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)}, // FRONT, 1, 0
-        {"R,B", *THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90)} // RIGHT, 0, 1
-    };
-
-    std::for_each(dasy_scenarios.begin(), dasy_scenarios.end(), &single_dasy_test);
-}
-
-BOOST_AUTO_TEST_CASE(test_white_cross_r) {
-    Cube cube = CubeGenerator::fromString(
-            "GGYRRYRRY,WWGWWRWWR,WBBWOOWOO,YYOYYOYYB,BBRBBRBBR,OOOGGGGGG"
-            );
-    WhiteCross whiteCross = WhiteCross();
-    string s = whiteCross.perform(cube);
-    BOOST_CHECK(s == "R");
-}
-
-BOOST_AUTO_TEST_CASE(test_white_cross_rr) {
-    Cube cube = CubeGenerator::fromString(
-            "GGORRORRB,WWYWWYWWY,RBBROOGOO,YYWYYWYYW,BBBBBBRRR,OOOGGGGGG"
-            );
-    WhiteCross whiteCross = WhiteCross();
-    whiteCross.perform(cube);
-    string s = whiteCross.perform(cube);
-    BOOST_CHECK(s == "R,R");
-}
-
-BOOST_AUTO_TEST_CASE(test_white_cross_fff) {
-    Cube cube = CubeGenerator::fromString(
-            "RRGRRGRRG,OGGWWWWWW,BBBOOOOOO,BBRYYYYYY,WRRWBBWBB,OOYGGYGGY"
-            );
-    WhiteCross whiteCross = WhiteCross();
-    whiteCross.perform(cube);
-    whiteCross.perform(cube);
-    string s = whiteCross.perform(cube);
-    BOOST_CHECK(s == "F,F,F");
-}
-
-BOOST_AUTO_TEST_CASE(test_white_cross_l) {
-    Cube cube = CubeGenerator::fromString(
-            "YGGYRRYRR,GWWRWWRWW,BBWOOWOOW,OYYOYYBYY,RRRBBBBBB,OGGOGGOGG"
-            );
-    WhiteCross whiteCross = WhiteCross();
-    string s = whiteCross.perform(cube);
-    BOOST_CHECK(s == "L");
-}
-
-BOOST_AUTO_TEST_CASE(test_white_cross_b) {
-    Cube cube = CubeGenerator::fromString(
-            "GGGRRRRRR,GGOWWWWWW,BOOBOOBOO,YYYYYYBBR,RRWBBWBBW,YOOYGGYGG"
-            );
-    WhiteCross whiteCross = WhiteCross();
-    string s = whiteCross.perform(cube);
-    BOOST_CHECK(s == "B");
-}
-
-void single_algorithm_test(pair<string, Cube> p, CubeAlgorithm* algorithm) {
-    string expectedMoves = p.first;
-    Cube cube = p.second;
-
-    string s = algorithm->perform(cube);
-
-    if (s != expectedMoves) {
-        cout << "Expected: " << expectedMoves << " but actual: " << s << endl;
-    }
-
-    BOOST_CHECK(s == expectedMoves);
-}
-
-void single_first_layer_corners_test(pair<string, Cube> p) {
-    FirstLayerCorners* firstLayerCorners = new FirstLayerCorners();
-    single_algorithm_test(p, firstLayerCorners);
-    delete firstLayerCorners;
-}
-
-void single_second_layer_edges_test(pair<string, Cube> p) {
-    SecondLayerEdges* secondLayerEdges = new SecondLayerEdges();
-    single_algorithm_test(p, secondLayerEdges);
-    delete secondLayerEdges;
-}
-
 void single_algorithm_test(CubeTest test) {
     string s = "";
     
@@ -216,7 +71,87 @@ void single_algorithm_test(CubeTest test) {
     BOOST_CHECK(s == test.expectedMoves);
 }
 
-BOOST_AUTO_TEST_CASE(test_first_layer_corners_5_rightys) {
+BOOST_AUTO_TEST_CASE(test_dasy) {
+    Cube DOWN_EDGE_PIECE = CubeGenerator::fromString(
+            "WGBRGYYRW,GWOWYWRYY,GOBGRRGRB,OWOGWYGBO,RGWBBBROY,YBBOOYWOR"
+            );
+    Cube FIRST_LAYER_EDGE_PIECE = CubeGenerator::fromString(
+            "WGBOGYOWY,WWYWWORBW,GGGORBBRW,ROGWYROBY,GROGOGBYR,ORBYBYRBY"
+            );
+    Cube SECOND_LAYER_RIGHT_EDGE_PIECE = CubeGenerator::fromString(
+            "YGORGBBOO,RWRWYWORG,YBWOBBRBW,YGWRWYORW,YOGOOYBGB,GGBYRWGYR"
+            );
+    Cube SECOND_LAYER_LEFT_EDGE_PIECE = CubeGenerator::fromString(
+            "OOBBGROGY,RWRWYWWGY,YBWOBBRBW,GRORWYORW,ROGWOYBGB,GGBYROGYY"
+            );
+    Cube THIRD_LAYER_LEFT_EDGE_PIECE = CubeGenerator::fromString(
+            "YWWYBRWYB,WWBWYBGOR,YGGGOGGYO,GRWOWWYBO,OGRBRORRY,OBBYGORRB"
+            );
+    
+    vector<CubeTest> dasy_scenarios = {
+        CubeTest(DOWN_EDGE_PIECE, new Dasy(), "F,F", 2),                // DOWN, 0, 1
+        CubeTest(FIRST_LAYER_EDGE_PIECE, new Dasy(), "F,U,L'", 2),      // FRONT, 2, 1
+        CubeTest(SECOND_LAYER_RIGHT_EDGE_PIECE, new Dasy(), "F", 1),    // LEFT, 1, 2
+        CubeTest(SECOND_LAYER_LEFT_EDGE_PIECE, new Dasy(), "F'", 1),    // RIGHT, 1, 0
+        CubeTest(THIRD_LAYER_LEFT_EDGE_PIECE, new Dasy(), "F,R", 2),    // FRONT, 0, 1
+        
+        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L',L'", 2),              // DOWN, 1, 0
+        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L,U,B'", 2),      // LEFT, 2, 1
+        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L", 1),    // BACK, 1, 2
+        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L'", 1),    // BACK, 1, 0
+        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L,F", 2),    // LEFT, 0, 1
+        
+        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,B", 2),                // DOWN, 2, 1
+        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,U,R'", 2),      // BACK, 2, 1
+        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B", 1),    // RIGHT, 1, 2
+        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B'", 1),    // LEFT, 1, 0
+        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,L", 2),    // BACK, 0, 1
+        
+        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,R", 2),                // DOWN, 1, 2
+        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,U,F'", 2),      // RIGHT, 2, 1
+        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R", 1),    // FRONT, 1, 2
+        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R'", 1),    // FRONT, 1, 0
+        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,B", 2),    // RIGHT, 0, 1
+    };
+
+    for (CubeTest scenario : dasy_scenarios) {
+        single_algorithm_test(scenario);
+        delete dynamic_cast<Dasy*>(scenario.algorithm);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(test_white_cross) {
+    Cube R = CubeGenerator::fromString(
+            "GGYRRYRRY,WWGWWRWWR,WBBWOOWOO,YYOYYOYYB,BBRBBRBBR,OOOGGGGGG"
+            );
+    Cube RR = CubeGenerator::fromString(
+            "GGORRORRB,WWYWWYWWY,RBBROOGOO,YYWYYWYYW,BBBBBBRRR,OOOGGGGGG"
+            );
+    Cube FFF = CubeGenerator::fromString(
+            "RRGRRGRRG,OGGWWWWWW,BBBOOOOOO,BBRYYYYYY,WRRWBBWBB,OOYGGYGGY"
+            );
+    Cube L = CubeGenerator::fromString(
+            "YGGYRRYRR,GWWRWWRWW,BBWOOWOOW,OYYOYYBYY,RRRBBBBBB,OGGOGGOGG"
+            );
+    Cube B = CubeGenerator::fromString(
+            "GGGRRRRRR,GGOWWWWWW,BOOBOOBOO,YYYYYYBBR,RRWBBWBBW,YOOYGGYGG"
+            );
+    
+    vector<CubeTest> white_cross_scenarios = {
+        CubeTest(R, new WhiteCross(), "R"),
+        CubeTest(RR, new WhiteCross(), "R,R", 2),
+        CubeTest(FFF, new WhiteCross(), "F,F,F", 3),
+        CubeTest(L, new WhiteCross(), "L"),
+        CubeTest(B, new WhiteCross(), "B")
+    };
+
+    for (CubeTest scenario : white_cross_scenarios) {
+        single_algorithm_test(scenario);
+        delete dynamic_cast<WhiteCross*>(scenario.algorithm);
+    }
+}
+
+BOOST_AUTO_TEST_CASE(test_first_layer_corners) {
     Cube RIGHTY = CubeGenerator::fromString(
             "YORRRYWRG,OBGOYYRGG,YOBRORBOB,OWWWWWRWR,WBOGGYOGW,YYGGBBYBB"
             );
@@ -232,17 +167,24 @@ BOOST_AUTO_TEST_CASE(test_first_layer_corners_5_rightys) {
     Cube RIGHTY_2 = CubeGenerator::fromString(
             "YORGOBOOB,OYGOYRRGB,YRBBRBRRR,WWOWWWWWW,YGORBYWBB,YYGOGYGGG"
             );
-
-    map <string, Cube> first_layer_corner_scenarios = {
-        {"R,U,R',U'", RIGHTY},
-        {"R,U,R',U',R,U,R',U',R,U,R',U'", RIGHTY_3},
-        {"R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'", RIGHTY_5},
-        {"y,U,U,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'", YCLOCKWISE_UP_3_RIGHTY_5},
-        {"R,U,R',U',R,U,R',U'", RIGHTY_2},
+    
+    vector<CubeTest> first_layer_corner_scenarios = {
+        CubeTest(RIGHTY, new FirstLayerCorners(), 
+                "R,U,R',U'"),
+        CubeTest(RIGHTY_2, new FirstLayerCorners(), 
+                "R,U,R',U',R,U,R',U'"),
+        CubeTest(RIGHTY_3, new FirstLayerCorners(), 
+                "R,U,R',U',R,U,R',U',R,U,R',U'"),
+        CubeTest(RIGHTY_5, new FirstLayerCorners(), 
+                "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'"),
+        CubeTest(YCLOCKWISE_UP_3_RIGHTY_5, new FirstLayerCorners(), 
+                "y,U,U,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'")
     };
 
-    std::for_each(first_layer_corner_scenarios.begin(),
-            first_layer_corner_scenarios.end(), &single_first_layer_corners_test);
+    for (CubeTest scenario : first_layer_corner_scenarios) {
+        single_algorithm_test(scenario);
+        delete dynamic_cast<FirstLayerCorners*>(scenario.algorithm);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(test_second_layer_edges) {
@@ -258,16 +200,22 @@ BOOST_AUTO_TEST_CASE(test_second_layer_edges) {
     Cube RIGHT_IN_PLACE_BUT_TWISTED = CubeGenerator::fromString(
             "GROBBRBBB,OYBGYBYGY,YOYRGGGGG,WWWWWWWWW,BORBRYRRR,GYROOYOOO"
             );
-
-    map <string, Cube> second_layer_edges_scenarios = {
-        {"U,R,U,R',U',y,L',U',L,U", TO_THE_RIGHT},
-        {"U',L',U',L,U,y',R,U,R',U'", TO_THE_LEFT},
-        {"y,y,U',L',U',L,U,y',R,U,R',U'", Y3_UP_TO_THE_LEFT},
-        {"U,R,U,R',U',y,L',U',L,U", RIGHT_IN_PLACE_BUT_TWISTED},
+    
+    vector<CubeTest> second_layer_edges_scenarios = {
+        CubeTest(TO_THE_RIGHT, new SecondLayerEdges(), 
+                "U,R,U,R',U',y,L',U',L,U"),
+        CubeTest(TO_THE_LEFT, new SecondLayerEdges(), 
+                "U',L',U',L,U,y',R,U,R',U'"),
+        CubeTest(Y3_UP_TO_THE_LEFT, new SecondLayerEdges(), 
+                "y,y,U',L',U',L,U,y',R,U,R',U'"),
+        CubeTest(RIGHT_IN_PLACE_BUT_TWISTED, new SecondLayerEdges(), 
+                "U,R,U,R',U',y,L',U',L,U")
     };
 
-    std::for_each(second_layer_edges_scenarios.begin(),
-            second_layer_edges_scenarios.end(), &single_second_layer_edges_test);
+    for (CubeTest scenario : second_layer_edges_scenarios) {
+        single_algorithm_test(scenario);
+        delete dynamic_cast<SecondLayerEdges*>(scenario.algorithm);
+    }
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_dot) {
