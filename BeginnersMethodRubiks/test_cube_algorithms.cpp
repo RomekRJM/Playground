@@ -268,7 +268,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_arc_with_initial_move) {
     BOOST_CHECK(s == "U,z,B,R,U,R',U',B',z'");
 }
 
-BOOST_AUTO_TEST_CASE(test_position_last_layer_corner) {
+BOOST_AUTO_TEST_CASE(test_position_last_layer_corners) {
     Cube FLIP_Y_THEN_ALG = CubeGenerator::fromString(
             "OROOOOOOO,YYYYYYYYY,GGBRRRRRR,WWWWWWWWW,BORBBBBBB,RBGGGGGGG"
             );
@@ -280,16 +280,30 @@ BOOST_AUTO_TEST_CASE(test_position_last_layer_corner) {
             );
     
     vector<CubeTest> position_last_layer_corner_scenarios = {
-        CubeTest(FLIP_Y_THEN_ALG, new PositionLayerCorners(),
+        CubeTest(FLIP_Y_THEN_ALG, new PositionLastLayerCorners(),
             "y,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U"),
-        CubeTest(ALG_TWICE, new PositionLayerCorners(),
-            "R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U"),
-        CubeTest(UP_TRIPLE_THEN_ALG_TWICE, new PositionLayerCorners(),
-            "U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U")
+        CubeTest(ALG_TWICE, new PositionLastLayerCorners(),
+            "R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',"
+                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U"),
+        CubeTest(UP_TRIPLE_THEN_ALG_TWICE, new PositionLastLayerCorners(),
+            "U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',"
+                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U")
     };
 
     for (CubeTest scenario : position_last_layer_corner_scenarios) {
         single_algorithm_test(scenario);
-        delete dynamic_cast<PositionLayerCorners*>(scenario.algorithm);
+        delete dynamic_cast<PositionLastLayerCorners*>(scenario.algorithm);
     }
+}
+
+BOOST_AUTO_TEST_CASE(test_permute_last_layer_corners) {
+    Cube cube = CubeGenerator::fromString(
+            "RRRRRRGGB,WWWWWWWWW,OOOOOOBOG,RYRYYYOYO,BBBBBBYRY,GGGGGGYBY"
+            );
+    PermuteLastLayerCorners permuteLastLayerCorners = PermuteLastLayerCorners();
+    string s = permuteLastLayerCorners.perform(cube);
+    
+    BOOST_CHECK(s == "R,U,R',U',R,U,R',U',D',R,U,R',U',R,U,R',U',R,U,R',U',"
+            "R,U,R',U',D',R,U,R',U',R,U,R',U',D',R,U,R',U',R,U,R',U',R,U,R',U',"
+            "R,U,R',U',D'");
 }

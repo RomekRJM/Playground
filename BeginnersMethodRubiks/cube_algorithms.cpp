@@ -471,12 +471,12 @@ void YellowArc::rotate(Cube & cube) {
     CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Z_COUNTER_CLOCKWISE_90);
 }
 
-void PositionLayerCorners::findInitialPosition(Cube &cube) {
+void PositionLastLayerCorners::findInitialPosition(Cube &cube) {
     findOptimalLastLayerRotation(cube);
     findOptimalCubeFlip(cube);
 }
 
-void PositionLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
+void PositionLastLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
     int currentMatch = 0;
     int bestMatch = 0;
     int bestMatchOnTurn = 0;
@@ -501,7 +501,7 @@ void PositionLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
     cancelLastMoves(cube, 3 - bestMatchOnTurn);
 }
 
-void PositionLayerCorners::findOptimalCubeFlip(Cube &cube) {
+void PositionLastLayerCorners::findOptimalCubeFlip(Cube &cube) {
     while (true) {
         if (UPPER_CORNERS[0].countPartiallyMatchedSides(cube) == 3) {
             CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
@@ -518,7 +518,7 @@ void PositionLayerCorners::findOptimalCubeFlip(Cube &cube) {
     }
 }
 
-void PositionLayerCorners::rotate(Cube &cube) {
+void PositionLastLayerCorners::rotate(Cube &cube) {
     int repeat = 0;
     
     if (UPPER_CORNERS[1].countPartiallyMatchedSides(cube) < 3) {
@@ -536,7 +536,7 @@ void PositionLayerCorners::rotate(Cube &cube) {
     findOptimalLastLayerRotation(cube);
 }
 
-array<int, 4> PositionLayerCorners::countUpperCornersInRightPlace(Cube cube) {
+array<int, 4> PositionLastLayerCorners::countUpperCornersInRightPlace(Cube cube) {
     array<int, 4> corners = {
         UPPER_CORNERS[0].countPartiallyMatchedSides(cube),
         UPPER_CORNERS[1].countPartiallyMatchedSides(cube),
@@ -545,4 +545,46 @@ array<int, 4> PositionLayerCorners::countUpperCornersInRightPlace(Cube cube) {
     };
 
     return corners;
+}
+
+void PermuteLastLayerCorners::rotate(Cube &cube) {
+    orientLowerCubletsYellowDown(cube);
+    findOptimalFirstLayerRotation(cube);
+}
+
+void PermuteLastLayerCorners::orientLowerCubletsYellowDown(Cube &cube) {
+    for(int i=0; i<4; ++i) {
+        while(!hasLowerFrontRightCornerFacingYellowDown(cube)) {
+            CubeAlgorithm::doMoves(cube, CubeAlgorithm::RIGHTY);
+        }
+        if (i != 3) {
+            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_DOWN_COUNTER_CLOCKWISE);
+        }
+    }
+}
+
+void PermuteLastLayerCorners::findOptimalFirstLayerRotation(Cube &cube) {
+    int optimalMatchOnTurn = 0;
+
+    for (int i = 0; i < 3; ++i) {
+        int cornerPiecesInPlace = 0;
+        for_each(LOWER_CORNERS.begin(), LOWER_CORNERS.end(), 
+                [&](Corner corner) {
+                   cornerPiecesInPlace += corner.countFullyMatchedSides(cube);
+                });
+                
+        if (cornerPiecesInPlace == 12) {
+            optimalMatchOnTurn = i;
+            break;
+        }
+                
+        CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_DOWN_COUNTER_CLOCKWISE);
+    }
+
+    cancelLastMoves(cube, 3 - optimalMatchOnTurn);
+}
+
+bool PermuteLastLayerCorners::hasLowerFrontRightCornerFacingYellowDown(Cube cube) {
+    CubePosition corner = LOWER_CORNERS[0].getCubePosition(Side::DOWN);
+    return cube.getColor(corner) == Color::YELLOW;
 }

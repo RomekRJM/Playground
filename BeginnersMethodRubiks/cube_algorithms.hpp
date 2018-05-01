@@ -192,13 +192,21 @@ private:
     bool isYellowArc(Cube cube);
 };
 
-class PositionLayerCorners : public CubeAlgorithm {
+class PositionLastLayerCorners : public CubeAlgorithm {
     void findInitialPosition(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
     array<int, 4> countUpperCornersInRightPlace(Cube cube);
     void findOptimalLastLayerRotation(Cube &cube);
     void findOptimalCubeFlip(Cube &cube);
+};
+
+class PermuteLastLayerCorners : public CubeAlgorithm {
+    void rotate(Cube &cube) override;
+private:
+    void orientLowerCubletsYellowDown(Cube &cube);
+    void findOptimalFirstLayerRotation(Cube &cube);
+    bool hasLowerFrontRightCornerFacingYellowDown(Cube cube);
 };
 
 class SideNotFoundException : public exception {
