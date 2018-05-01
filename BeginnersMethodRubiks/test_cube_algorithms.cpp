@@ -333,13 +333,11 @@ BOOST_AUTO_TEST_CASE(test_position_last_layer_corner) {
     
     vector<CubeTest> position_last_layer_corner_scenarios = {
         CubeTest(FLIP_Y_THEN_ALG, new PositionLayerCorners(),
-            "y,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U"),
+            "y,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U"),
         CubeTest(ALG_TWICE, new PositionLayerCorners(),
-            "R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U",
-            2),
+            "R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U"),
         CubeTest(UP_TRIPLE_THEN_ALG_TWICE, new PositionLayerCorners(),
-            "U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U",
-            2),
+            "U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U")
     };
 
     for (CubeTest scenario : position_last_layer_corner_scenarios) {

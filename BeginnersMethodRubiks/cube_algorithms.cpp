@@ -519,9 +519,21 @@ void PositionLayerCorners::findOptimalCubeFlip(Cube &cube) {
 }
 
 void PositionLayerCorners::rotate(Cube &cube) {
-    CubeAlgorithm::doMoves(cube, CubeAlgorithm::RIGHTY, 3);
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
-    CubeAlgorithm::doMoves(cube, CubeAlgorithm::LEFTY, 3);
+    int repeat = 0;
+    
+    if (UPPER_CORNERS[1].countPartiallyMatchedSides(cube) < 3) {
+        repeat = 1;
+    } else if (UPPER_CORNERS[2].countPartiallyMatchedSides(cube) < 3) {
+        repeat = 2;
+    }
+    
+    for(int i=0; i < repeat; ++i) {
+        CubeAlgorithm::doMoves(cube, CubeAlgorithm::RIGHTY, 3);
+        CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
+        CubeAlgorithm::doMoves(cube, CubeAlgorithm::LEFTY, 3);
+    }
+    
+    findOptimalLastLayerRotation(cube);
 }
 
 array<int, 4> PositionLayerCorners::countUpperCornersInRightPlace(Cube cube) {
