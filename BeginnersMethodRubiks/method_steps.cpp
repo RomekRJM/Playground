@@ -12,55 +12,55 @@
 
 using namespace std;
 
-BeginnersMethod::BeginnersMethod() {
+MethodSteps::MethodSteps() {
 
 }
 
-bool BeginnersMethod::isDasyDone(Cube &cube) {
+bool MethodSteps::isDasyDone(Cube &cube) {
     return isStateDone(cube, State::DASY);
 }
 
-bool BeginnersMethod::isWhiteCrossDone(Cube &cube) {
+bool MethodSteps::isWhiteCrossDone(Cube &cube) {
     return isStateDone(cube, State::WHITE_CROSS);
 }
 
-bool BeginnersMethod::areFirstLayerCornersDone(Cube &cube) {
+bool MethodSteps::areFirstLayerCornersDone(Cube &cube) {
     return isStateDone(cube, State::FIRST_LAYER_CORNERS);
 }
 
-bool BeginnersMethod::areSecondLayerEdgesDone(Cube &cube) {
+bool MethodSteps::areSecondLayerEdgesDone(Cube &cube) {
     return isStateDone(cube, State::SECOND_LAYER_EDGES);
 }
 
-bool BeginnersMethod::isYellowDotDone(Cube &cube) {
+bool MethodSteps::isYellowDotDone(Cube &cube) {
     return isStateDone(cube, State::YELLOW_DOT);
 };
 
-bool BeginnersMethod::isYellowLineDone(Cube &cube) {
+bool MethodSteps::isYellowLineDone(Cube &cube) {
     return isStateDone(cube, State::YELLOW_LINE);
 };
 
-bool BeginnersMethod::isYellowArcDone(Cube &cube) {
+bool MethodSteps::isYellowArcDone(Cube &cube) {
     return isStateDone(cube, State::YELLOW_ARC);
 };
 
-bool BeginnersMethod::isYellowCrossDone(Cube &cube) {
+bool MethodSteps::isYellowCrossDone(Cube &cube) {
     return isStateDone(cube, State::YELLOW_CROSS);
 };
 
-bool BeginnersMethod::areLastLayerCornersPositioned(Cube &cube) {
+bool MethodSteps::areLastLayerCornersPositioned(Cube &cube) {
     return isStateDone(cube, State::POSITION_LAST_LAYER_CORNERS);
 };
 
-bool BeginnersMethod::areLastLayerCornersPermuted(Cube &cube) {
+bool MethodSteps::areLastLayerCornersPermuted(Cube &cube) {
     return isStateDone(cube, State::PERMUTE_LAST_LAYER_CORNERS);
 };
 
-bool BeginnersMethod::isSolved(Cube &cube) {
+bool MethodSteps::isSolved(Cube &cube) {
     return isStateDone(cube, State::SOLVED);
 };
 
-bool BeginnersMethod::isStateDone(Cube &cube, State state) {
+bool MethodSteps::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
             ensureColorOnTop(cube, YELLOW);
@@ -119,7 +119,7 @@ bool BeginnersMethod::isStateDone(Cube &cube, State state) {
 
 };
 
-bool BeginnersMethod::checkDasy(Cube &cube) {
+bool MethodSteps::checkDasy(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
     if (!hasRightColorUnderPetals(cube)) {
@@ -130,7 +130,7 @@ bool BeginnersMethod::checkDasy(Cube &cube) {
             (side[0][1] == side[1][0] == side[1][2] == WHITE);
 }
 
-bool BeginnersMethod::checkWhiteCross(Cube &cube) {
+bool MethodSteps::checkWhiteCross(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
 
     if (!hasRightColorUnderPetals(cube)) {
@@ -142,7 +142,7 @@ bool BeginnersMethod::checkWhiteCross(Cube &cube) {
             (side[0][1] == WHITE);
 }
 
-bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
+bool MethodSteps::checkFirstLayerCorners(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
 
     if (cube.getSideLeadingColor(DOWN) != WHITE)
@@ -160,7 +160,7 @@ bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
     return true;
 }
 
-bool BeginnersMethod::checkSecondLayerEdges(Cube &cube) {
+bool MethodSteps::checkSecondLayerEdges(Cube &cube) {
     if (!areFirstLayerCornersDone(cube)) {
         return false;
     }
@@ -175,7 +175,7 @@ bool BeginnersMethod::checkSecondLayerEdges(Cube &cube) {
     return true;
 }
 
-bool BeginnersMethod::checkYellowDot(Cube &cube) {
+bool MethodSteps::checkYellowDot(Cube &cube) {
     if (!areSecondLayerEdgesDone(cube)) {
         return false;
     }
@@ -185,7 +185,7 @@ bool BeginnersMethod::checkYellowDot(Cube &cube) {
     return side[1][1] == YELLOW;
 }
 
-bool BeginnersMethod::checkYellowLine(Cube &cube) {
+bool MethodSteps::checkYellowLine(Cube &cube) {
     if (!isYellowDotDone(cube)) {
         return false;
     }
@@ -195,7 +195,7 @@ bool BeginnersMethod::checkYellowLine(Cube &cube) {
     return (side[1][0] == side[1][2]) && (side[1][0] == YELLOW);
 }
 
-bool BeginnersMethod::checkYellowArc(Cube &cube) {
+bool MethodSteps::checkYellowArc(Cube &cube) {
     if (!isYellowDotDone(cube)) {
         return false;
     }
@@ -205,7 +205,7 @@ bool BeginnersMethod::checkYellowArc(Cube &cube) {
     return (side[1][2] == side[2][1]) && (side[1][2] == YELLOW);
 }
 
-bool BeginnersMethod::checkYellowCross(Cube &cube) {
+bool MethodSteps::checkYellowCross(Cube &cube) {
     if (!isYellowDotDone(cube)) {
         return false;
     }
@@ -216,7 +216,7 @@ bool BeginnersMethod::checkYellowCross(Cube &cube) {
             (side[0][1] == side[2][1]) && (side[0][1] == YELLOW);
 }
 
-bool BeginnersMethod::checkLastLayerCornersPosition(Cube& cube) {
+bool MethodSteps::checkLastLayerCornersPosition(Cube& cube) {
     if (!isYellowCrossDone(cube)) {
         return false;
     }
@@ -248,7 +248,7 @@ bool BeginnersMethod::checkLastLayerCornersPosition(Cube& cube) {
     return true;
 }
 
-bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
+bool MethodSteps::checkLastLayerCornersPermutation(Cube& cube) {
     if (!areLastLayerCornersPositioned(cube)) {
         return false;
     }
@@ -275,7 +275,7 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
     return true;
 }
 
-bool BeginnersMethod::checkSolved(Cube& cube) {
+bool MethodSteps::checkSolved(Cube& cube) {
     for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
         Side currentSide = static_cast<Side> (sideNum);
         if (!cube.isSideCompleted(currentSide)) {
@@ -286,7 +286,7 @@ bool BeginnersMethod::checkSolved(Cube& cube) {
     return true;
 }
 
-bool BeginnersMethod::colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> a2) {
+bool MethodSteps::colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> a2) {
     for (int i = 0; i < 3; ++i) {
         if (find(std::begin(a2), std::end(a2), a1[i]) == std::end(a2)) {
             return false;
@@ -296,14 +296,14 @@ bool BeginnersMethod::colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> 
     return true;
 }
 
-bool BeginnersMethod::hasRightColorUnderPetals(Cube &cube) {
+bool MethodSteps::hasRightColorUnderPetals(Cube &cube) {
     return (cube.cube[FRONT][0][1] == cube.cube[FRONT][1][1])&&
             (cube.cube[BACK][0][1] == cube.cube[BACK][1][1]) &&
             (cube.cube[RIGHT][0][1] == cube.cube[RIGHT][1][1]) &&
             (cube.cube[LEFT][0][1] == cube.cube[LEFT][1][1]);
 }
 
-bool BeginnersMethod::hasLowerT(Cube &cube, Side leadingSide) {
+bool MethodSteps::hasLowerT(Cube &cube, Side leadingSide) {
     Color correct = cube.getSideLeadingColor(leadingSide);
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
     if ((side[1][1] == side[2][0]) && (side[1][1] == side[2][1]) &&
@@ -314,7 +314,7 @@ bool BeginnersMethod::hasLowerT(Cube &cube, Side leadingSide) {
     return false;
 }
 
-bool BeginnersMethod::hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide) {
+bool MethodSteps::hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide) {
     Color correct = cube.getSideLeadingColor(leadingSide);
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
     if ((side[1][2] == side[1][0]) and (side[1][2] == correct)) {
@@ -324,7 +324,7 @@ bool BeginnersMethod::hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide
     return false;
 }
 
-bool BeginnersMethod::checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&) > condition) {
+bool MethodSteps::checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&) > condition) {
     bool conditionMatched = false;
     for (int i = 0; i < maxFlips; ++i) {
         if (condition(cube)) {
@@ -338,7 +338,7 @@ bool BeginnersMethod::checkConditionOnManyAngles(Cube &cube, Flip flip, int maxF
     return conditionMatched;
 }
 
-void BeginnersMethod::ensureColorOnTop(Cube &cube, Color color) {
+void MethodSteps::ensureColorOnTop(Cube &cube, Color color) {
     Side leadingSide = FRONT;
 
     for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {

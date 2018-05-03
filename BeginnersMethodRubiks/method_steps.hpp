@@ -17,9 +17,9 @@ enum State {
     SOLVED
 };
 
-class BeginnersMethod {
+class MethodSteps {
 public:
-    BeginnersMethod();
+    MethodSteps();
     bool isDasyDone(Cube &cube);
     bool isWhiteCrossDone(Cube &cube);
     bool areFirstLayerCornersDone(Cube &cube);

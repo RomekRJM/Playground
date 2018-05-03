@@ -65,7 +65,7 @@ V findInMap(K key, map<K, V> _map) {
 }
 
 class Cube {
-    friend class BeginnersMethod;
+    friend class MethodSteps;
     friend class Dasy;
     friend class WhiteCross;
     friend class CubeGenerator;
