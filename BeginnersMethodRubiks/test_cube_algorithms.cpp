@@ -310,19 +310,22 @@ BOOST_AUTO_TEST_CASE(test_permute_last_layer_corners) {
 
 BOOST_AUTO_TEST_CASE(test_position_last_layer_edges) {
     Cube FRONT_SIDE_SOLVED = CubeGenerator::fromString(
-            "OOOOOOOOO,YYYYYYYYY,RGRRRRRRR,WWWWWWWWW,BRBBBBBBB,GBGGGGGGG"
+            "OBORRRRRR,YYYYYYYYY,RRROOOOOO,WWWWWWWWW,BGBGGGGGG,GOGBBBBBB"
             );
     Cube NONE_SIDE_SOLVED = CubeGenerator::fromString(
-            "BGBOOOOOO,YYYYYYYYY,GBGRRRRRR,WWWWWWWWW,RORBBBBBB,OROGGGGGG"
+            "GOGOOOOOO,YYYYYYYYY,BRBRRRRRR,WWWWWWWWW,OGOBBBBBB,RBRGGGGGG"
             );
     
     vector<CubeTest> position_last_layer_edges_scenarios = {
         CubeTest(FRONT_SIDE_SOLVED, new PositionLastLayerEdges(),
-            "R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
-                "R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U"),
-//        CubeTest(NONE_SIDE_SOLVED, new PositionLastLayerEdges(),
-//            "R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
-//                "R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U")
+            "U,U,R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
+                "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U"),
+        CubeTest(NONE_SIDE_SOLVED, new PositionLastLayerEdges(),
+            "U,R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
+            "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,y,y,R,U,R',U',L',U',L,U,"
+            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
+            "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',L',U',L,U,"
+            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U")
     };
     
     for (CubeTest scenario : position_last_layer_edges_scenarios) {

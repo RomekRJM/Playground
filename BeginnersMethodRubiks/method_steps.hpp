@@ -47,7 +47,6 @@ private:
     bool checkLastLayerCornersPermutation(Cube &cube);
     bool checkSolved(Cube &cube);
     bool checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips, function<bool(Cube&)> condition);
-    bool isSideCompleted(Cube &cube, Side leadingSide);
     bool hasLowerT(Cube &cube, Side leadingSide);
     bool hasSecondLayerEdgesPositioned(Cube &cube, Side leadingSide);
     bool colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> a2);

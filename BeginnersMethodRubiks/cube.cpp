@@ -462,6 +462,21 @@ Color Cube::getSideLeadingColor(Side leadingSide) {
     return cube[leadingSide][Cube::SIZE - 2][Cube::SIZE - 2];
 }
 
+bool Cube::isSideCompleted(Side leadingSide) {
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube[leadingSide];
+    Color correct = side[Cube::SIZE - 1][Cube::SIZE - 1];
+
+    for (int i = 0; i < Cube::SIZE; ++i) {
+        for (int j = 0; j < Cube::SIZE; ++j) {
+            if (side[i][j] != correct) {
+                return false;
+            }
+        }
+    }
+
+    return true;
+}
+
 bool Cube::operator==(Cube & other) {
     return this->cube == other.cube;
 }

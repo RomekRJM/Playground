@@ -122,13 +122,14 @@ public:
     static const vector<string> LEFTY;
 
 private:
-    string getMovesAsString();
     static const map<string, Rotation> rotations;
     static const map<string, Flip> flips;
     stringstream ss;
     bool initialPositionSet = false;
 
 protected:
+    
+    string getMovesAsString();
 
     virtual void findPositionBeforeRotation(Cube &cube) {
     };
@@ -219,7 +220,8 @@ private:
 class PositionLastLayerEdges : public CubeAlgorithm {
     void rotate(Cube &cube) override;
 private:
-    int countSolvedUpperPieces(Cube cube);
+    int countSolvedUpperEdges(Cube cube);
+    int countSolvedUpperCorners(Cube cube);
     void findOptimalLastLayerRotation(Cube &cube);
 };
 

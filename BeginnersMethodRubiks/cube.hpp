@@ -113,6 +113,7 @@ public:
     string asShortString();
     string sideAsShortString(array<array<Color, SIZE>, SIZE> side);
     Color getSideLeadingColor(Side side);
+    bool isSideCompleted(Side side);
     bool operator==(Cube & other);
 
 private:

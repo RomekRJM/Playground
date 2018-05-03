@@ -148,7 +148,7 @@ bool BeginnersMethod::checkFirstLayerCorners(Cube &cube) {
     if (cube.getSideLeadingColor(DOWN) != WHITE)
         return false;
 
-    if (!isSideCompleted(cube, DOWN))
+    if (!cube.isSideCompleted(DOWN))
         return false;
 
     array<Side, 4> sides = {LEFT, FRONT, RIGHT, BACK};
@@ -259,7 +259,7 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
         return false;
     }
 
-    if (!isSideCompleted(cube, DOWN)) {
+    if (!cube.isSideCompleted(DOWN)) {
         return false;
     }
 
@@ -278,7 +278,7 @@ bool BeginnersMethod::checkLastLayerCornersPermutation(Cube& cube) {
 bool BeginnersMethod::checkSolved(Cube& cube) {
     for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
         Side currentSide = static_cast<Side> (sideNum);
-        if (!isSideCompleted(cube, currentSide)) {
+        if (!cube.isSideCompleted(currentSide)) {
             return false;
         }
     }
@@ -290,21 +290,6 @@ bool BeginnersMethod::colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> 
     for (int i = 0; i < 3; ++i) {
         if (find(std::begin(a2), std::end(a2), a1[i]) == std::end(a2)) {
             return false;
-        }
-    }
-
-    return true;
-}
-
-bool BeginnersMethod::isSideCompleted(Cube &cube, Side leadingSide) {
-    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[leadingSide];
-    Color correct = side[Cube::SIZE - 1][Cube::SIZE - 1];
-
-    for (int i = 0; i < Cube::SIZE; ++i) {
-        for (int j = 0; j < Cube::SIZE; ++j) {
-            if (side[i][j] != correct) {
-                return false;
-            }
         }
     }
 
