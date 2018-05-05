@@ -5,8 +5,8 @@
  * Created on 16 January 2018, 22:31
  */
 
-#ifndef BEGINNERS_METHOD_HPP
-#define BEGINNERS_METHOD_HPP
+#ifndef METHOD_STEPS_HPP
+#define METHOD_STEPS_HPP
 
 #include "cube.hpp"
 
@@ -14,7 +14,7 @@ enum State {
     DASY, WHITE_CROSS, FIRST_LAYER_CORNERS, SECOND_LAYER_EDGES, 
     YELLOW_DOT, YELLOW_LINE, YELLOW_ARC,
     YELLOW_CROSS, POSITION_LAST_LAYER_CORNERS, PERMUTE_LAST_LAYER_CORNERS,
-    SOLVED
+    POSITION_LAST_LAYER_EDGES
 };
 
 class MethodSteps {
@@ -53,4 +53,4 @@ private:
     bool hasRightColorUnderPetals(Cube &cube);
 };
 
-#endif /* BEGINNERS_METHOD_HPP */
+#endif /* METHOD_STEPS_HPP */

@@ -57,7 +57,7 @@ bool MethodSteps::areLastLayerCornersPermuted(Cube &cube) {
 };
 
 bool MethodSteps::isSolved(Cube &cube) {
-    return isStateDone(cube, State::SOLVED);
+    return isStateDone(cube, State::POSITION_LAST_LAYER_EDGES);
 };
 
 bool MethodSteps::isStateDone(Cube &cube, State state) {
@@ -108,7 +108,7 @@ bool MethodSteps::isStateDone(Cube &cube, State state) {
             ensureColorOnTop(cube, YELLOW);
             return checkLastLayerCornersPermutation(cube);
         }
-        case SOLVED:
+        case POSITION_LAST_LAYER_EDGES:
         {
             ensureColorOnTop(cube, WHITE);
             return checkSolved(cube);
