@@ -121,28 +121,28 @@ BOOST_AUTO_TEST_CASE(test_dasy) {
 }
 
 BOOST_AUTO_TEST_CASE(test_white_cross) {
-    Cube R = CubeGenerator::fromString(
+    Cube RR = CubeGenerator::fromString(
             "GGYRRYRRY,WWGWWRWWR,WBBWOOWOO,YYOYYOYYB,BBRBBRBBR,OOOGGGGGG"
             );
-    Cube RR = CubeGenerator::fromString(
-            "GGORRORRB,WWYWWYWWY,RBBROOGOO,YYWYYWYYW,BBBBBBRRR,OOOGGGGGG"
-            );
-    Cube FFF = CubeGenerator::fromString(
+    Cube FF = CubeGenerator::fromString(
             "RRGRRGRRG,OGGWWWWWW,BBBOOOOOO,BBRYYYYYY,WRRWBBWBB,OOYGGYGGY"
             );
-    Cube L = CubeGenerator::fromString(
+    Cube LL = CubeGenerator::fromString(
             "YGGYRRYRR,GWWRWWRWW,BBWOOWOOW,OYYOYYBYY,RRRBBBBBB,OGGOGGOGG"
             );
-    Cube B = CubeGenerator::fromString(
+    Cube BB = CubeGenerator::fromString(
             "GGGRRRRRR,GGOWWWWWW,BOOBOOBOO,YYYYYYBBR,RRWBBWBBW,YOOYGGYGG"
+            );
+    Cube RRUFF = CubeGenerator::fromString(
+            "GGORRORRB,WWYWWYWWY,RBBROOGOO,YYWYYWYYW,BBBBBBRRR,OOOGGGGGG"
             );
     
     vector<CubeTest> white_cross_scenarios = {
-        CubeTest(R, new WhiteCross(), "R"),
-        CubeTest(RR, new WhiteCross(), "R,R", 2),
-        CubeTest(FFF, new WhiteCross(), "F,F,F", 3),
-        CubeTest(L, new WhiteCross(), "L"),
-        CubeTest(B, new WhiteCross(), "B")
+        CubeTest(RR, new WhiteCross(), "R,R"),
+        CubeTest(FF, new WhiteCross(), "F,F"),
+        CubeTest(LL, new WhiteCross(), "L,L"),
+        CubeTest(BB, new WhiteCross(), "B,B"),
+        CubeTest(RRUFF, new WhiteCross(), "R,R,U,F,F", 2)
     };
 
     for (CubeTest scenario : white_cross_scenarios) {

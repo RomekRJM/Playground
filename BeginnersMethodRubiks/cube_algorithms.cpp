@@ -294,7 +294,7 @@ void WhiteCross::rotate(Cube &cube) {
             break;
     }
 
-    CubeAlgorithm::doMove(cube, rotation);
+    CubeAlgorithm::doMoves(cube, {rotation}, 2);
 }
 
 void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {

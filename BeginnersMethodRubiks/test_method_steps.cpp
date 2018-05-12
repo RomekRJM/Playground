@@ -17,13 +17,6 @@ BOOST_AUTO_TEST_CASE(test_is_dasy_done_incomplete_petals) {
     BOOST_CHECK(!MethodSteps().isDasyDone(cube));
 }
 
-BOOST_AUTO_TEST_CASE(test_is_dasy_done_incomplete_sides) {
-    Cube cube = CubeGenerator::fromString(
-            "RGOROORBO,YWWWYWYWW,OBRRROOGR,WYYYWYWYY,GOBGBBGRB,GRBBGGGOB"
-            );
-    BOOST_CHECK(!MethodSteps().isDasyDone(cube));
-}
-
 BOOST_AUTO_TEST_CASE(test_is_white_cross_done) {
     Cube cube = CubeGenerator::fromString(
             "RGOBGGRBO,WWYWWWWWY,OBRGBBOGR,YYWYYYYYW,BRGORRBOG,BOGOORBRG"
