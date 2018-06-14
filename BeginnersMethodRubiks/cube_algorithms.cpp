@@ -8,6 +8,7 @@
 #include "cube_algorithms.hpp"
 #include <algorithm>
 #include <iostream>
+#include "unistd.h"
 
 using namespace std;
 
@@ -274,7 +275,7 @@ Side WhiteCross::findMatchingSide(Cube cube) {
         Edge edge = it->second;
         
         cube.printCubeSide(cube.cube[side]);
-        cout << getSideName(side) << ", " << getColorName(cube.cube[side][0][1]) << " is not " << getColorName(cube.getSideLeadingColor(side)) << endl;
+        cout << getSideName(side) << ", " << getColorName(cube.cube[side][0][1]) << " is " << getColorName(cube.getSideLeadingColor(side)) << endl;
         if (cube.getColor(edge.getCubePosition(side)) == cube.getSideLeadingColor(side) 
                 && cube.getColor(edge.getCubePosition(Side::UP)) == Color::WHITE) {
             return side;
@@ -309,26 +310,49 @@ void WhiteCross::rotate(Cube &cube) {
 
 void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
     bool match = false;
-    int numberOfRotations = 0;
-
+    int timesRotated = 0;
+    cornerMoveType = CornerMoveType::PUT_SOLVABE_DOWN;
+    cout << "Looking for the best position" << endl;
     while (!match) {
+        usleep(100000);
+        cout << "next run " << (!isCandidateForSwap(UPPER_CORNERS[0], cube)) << "  " << (!LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube)) << endl;
+                
         if (LOWER_CORNERS[0].countFullyMatchedSides(cube) == 3) {
             // already solved, move to the next corner
+            cout << "No full match" << endl; 
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
         }
 
         if (!isCandidateForSwap(UPPER_CORNERS[0], cube)
-                && !isCandidateForSwap(LOWER_CORNERS[0], cube)) {
+                && !LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube)) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
+            
+            ++timesRotated;
+            if(timesRotated > 3) {
+                CubeAlgorithm::cancelLastMoves(cube, 4);
+                CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
+            }
         } else {
             match = true;
         }
     }
+    
+    if (isCandidateForSwap(UPPER_CORNERS[0], cube)) {
+        cornerMoveType = CornerMoveType::PUT_SOLVABE_DOWN;
+    } else if (LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube)) {
+        cornerMoveType = CornerMoveType::EXTRACT_UNSOLVABLE_UP;
+    }
 }
 
 void FirstLayerCorners::rotate(Cube &cube) {
-    while (LOWER_CORNERS[0].countFullyMatchedSides(cube) < 3) {
+    int maxAllowedMoves = cornerMoveType == CornerMoveType::EXTRACT_UNSOLVABLE_UP ? 1 : 6;
+    
+    while (maxAllowedMoves && LOWER_CORNERS[0].countFullyMatchedSides(cube) < 3) {
+        cube.printCube();
+        usleep(100000);
+        cout << "Fully matched: " << LOWER_CORNERS[0].countFullyMatchedSides(cube) << endl;
         CubeAlgorithm::doMoves(cube, RIGHTY);
+        --maxAllowedMoves;
     }
 }
 

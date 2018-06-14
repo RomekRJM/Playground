@@ -25,7 +25,8 @@ string BeginnersMethod::cubeAlgorithmSubroutine(State state,
     string s;
     
     while(!methodSteps.isStateDone(cube, state)) {
-        usleep(1000000);
+        usleep(100000);
+        cout << "Next try on state: " << state << endl;
         s = algorithm->perform(cube);
         cout << s << " done?: " << methodSteps.isStateDone(cube, state) << endl;
         cube.printCube();
