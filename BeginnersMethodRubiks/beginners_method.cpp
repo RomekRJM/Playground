@@ -1,5 +1,6 @@
 #include "beginners_method.hpp"
 #include "cube_generator.hpp"
+#include "unistd.h"
 
 string BeginnersMethod::solve(string s) {
     Cube cube = CubeGenerator::fromString(s);
@@ -24,7 +25,10 @@ string BeginnersMethod::cubeAlgorithmSubroutine(State state,
     string s;
     
     while(!methodSteps.isStateDone(cube, state)) {
+        usleep(1000000);
         s = algorithm->perform(cube);
+        cout << s << " done?: " << methodSteps.isStateDone(cube, state) << endl;
+        cube.printCube();
     }
     
     return s;

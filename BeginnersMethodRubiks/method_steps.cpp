@@ -66,7 +66,7 @@ bool MethodSteps::isStateDone(Cube &cube, State state) {
             ensureColorOnTop(cube, YELLOW);
             return checkDasy(cube);
         case WHITE_CROSS:
-            ensureColorOnTop(cube, WHITE);
+            ensureColorOnTop(cube, YELLOW);
             return checkWhiteCross(cube);
         case FIRST_LAYER_CORNERS:
             ensureColorOnTop(cube, YELLOW);
@@ -127,7 +127,7 @@ bool MethodSteps::checkDasy(Cube &cube) {
 }
 
 bool MethodSteps::checkWhiteCross(Cube &cube) {
-    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
+    array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
 
     if (!hasRightColorUnderPetals(cube)) {
         return false;
@@ -293,10 +293,10 @@ bool MethodSteps::colorsMatchInAnyOrder(array<Color, 3> a1, array<Color, 3> a2) 
 }
 
 bool MethodSteps::hasRightColorUnderPetals(Cube &cube) {
-    return (cube.cube[FRONT][0][1] == cube.cube[FRONT][1][1])&&
-            (cube.cube[BACK][0][1] == cube.cube[BACK][1][1]) &&
-            (cube.cube[RIGHT][0][1] == cube.cube[RIGHT][1][1]) &&
-            (cube.cube[LEFT][0][1] == cube.cube[LEFT][1][1]);
+    return (cube.cube[FRONT][2][1] == cube.cube[FRONT][1][1])&&
+            (cube.cube[BACK][2][1] == cube.cube[BACK][1][1]) &&
+            (cube.cube[RIGHT][2][1] == cube.cube[RIGHT][1][1]) &&
+            (cube.cube[LEFT][2][1] == cube.cube[LEFT][1][1]);
 }
 
 bool MethodSteps::hasLowerT(Cube &cube, Side leadingSide) {

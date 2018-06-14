@@ -3,8 +3,9 @@
 #include "beginners_method.hpp"
 
 BOOST_AUTO_TEST_CASE(test_full_run) {
+    // On solved ( GRW on FRU ): R, U, L, D', R, U
     string actual = BeginnersMethod().
-            solve("YRWYRGORG,BOORYGOGO,GYWOOWBBG,WBRYWBYWY,BOYWGWWOR,RYBRBGRBG");
+            solve("WRWWGYRRG,OBBGWWRYR,OOGWBYWOY,BBOYYWRGO,GOYBRBYRB,WRBOOGGGY");
     
     BOOST_CHECK(actual == "R,U,R',U'");
 }

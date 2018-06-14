@@ -76,14 +76,18 @@ public:
     };
 };
 
+const Edge THIRD_LAYER_FRONT_EDGE = Edge(CubePosition(FRONT, 0, 1), CubePosition(UP, 2, 1));
+const Edge THIRD_LAYER_RIGHT_EDGE = Edge(CubePosition(RIGHT, 0, 1), CubePosition(UP, 1, 2));
+const Edge THIRD_LAYER_BACK_EDGE = Edge(CubePosition(BACK, 0, 1), CubePosition(UP, 0, 1));
+const Edge THIRD_LAYER_LEFT_EDGE = Edge(CubePosition(LEFT, 0, 1), CubePosition(UP, 1, 0));
+
 const array<Edge, 4> UPPER_EDGES = {
-    Edge(CubePosition(FRONT, 0, 1), CubePosition(UP, 2, 1)),
-    Edge(CubePosition(RIGHT, 0, 1), CubePosition(UP, 1, 2)),
-    Edge(CubePosition(BACK, 0, 1), CubePosition(UP, 0, 1)),
-    Edge(CubePosition(LEFT, 0, 1), CubePosition(UP, 1, 0)),
+    THIRD_LAYER_FRONT_EDGE,
+    THIRD_LAYER_RIGHT_EDGE,
+    THIRD_LAYER_BACK_EDGE,
+    THIRD_LAYER_LEFT_EDGE,
 };
 
-const Edge THIRD_LAYER_FRONT_EDGE = Edge(CubePosition(FRONT, 0, 1), CubePosition(UP, 2, 1));
 const Edge SECOND_LAYER_LEFT_EDGE = Edge(CubePosition(LEFT, 1, 2), CubePosition(FRONT, 1, 0));
 const Edge SECOND_LAYER_RIGHT_EDGE = Edge(CubePosition(RIGHT, 1, 0), CubePosition(FRONT, 1, 2));
 

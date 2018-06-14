@@ -28,6 +28,7 @@ using namespace std;
 
 const map<State, CubeAlgorithm*> ALGORITHM = {
     {State::DASY, new Dasy()},
+    {State::WHITE_CROSS, new WhiteCross()},
     {State::FIRST_LAYER_CORNERS, new FirstLayerCorners()},
     {State::SECOND_LAYER_EDGES, new SecondLayerEdges()},
     {State::YELLOW_CROSS, nullptr},

@@ -262,11 +262,21 @@ void WhiteCross::findPositionBeforeRotation(Cube &cube) {
 }
 
 Side WhiteCross::findMatchingSide(Cube cube) {
-    array<Side, 4> topLayerSides = {FRONT, RIGHT, BACK, LEFT};
-
-    for (Side side : topLayerSides) {
-        if ((cube.cube[side][0][1] == cube.cube[side][1][1]) &&
-                (cube.cube[side][0][1] == cube.getSideLeadingColor(side))) {
+    map<Side, Edge> topLayerSides = { 
+        {FRONT, THIRD_LAYER_FRONT_EDGE},
+        {RIGHT, THIRD_LAYER_RIGHT_EDGE},
+        {BACK, THIRD_LAYER_BACK_EDGE},
+        {LEFT, THIRD_LAYER_LEFT_EDGE}
+    }; 
+            
+    for (map<Side, Edge> ::iterator it = topLayerSides.begin(); it != topLayerSides.end(); ++it) {
+        Side side = it->first;
+        Edge edge = it->second;
+        
+        cube.printCubeSide(cube.cube[side]);
+        cout << getSideName(side) << ", " << getColorName(cube.cube[side][0][1]) << " is not " << getColorName(cube.getSideLeadingColor(side)) << endl;
+        if (cube.getColor(edge.getCubePosition(side)) == cube.getSideLeadingColor(side) 
+                && cube.getColor(edge.getCubePosition(Side::UP)) == Color::WHITE) {
             return side;
         }
     }
