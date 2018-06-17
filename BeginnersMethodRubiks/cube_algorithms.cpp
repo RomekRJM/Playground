@@ -312,7 +312,7 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
     bool match = false;
     int timesRotated = 0;
     cornerMoveType = CornerMoveType::PUT_SOLVABE_DOWN;
-    cout << "Looking for the best position" << endl;
+    
     while (!match) {
         usleep(100000);
         cout << "next run " << (!isCandidateForSwap(UPPER_CORNERS[0], cube)) << "  " << (!LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube)) << endl;
@@ -368,12 +368,15 @@ void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
     while (currentSwap == Swap::NOTHING) {
 
         if (sideSolved(cube) || rotations >= 3) {
+            cout << "Nothing to do, side is already solved. Rotating 90 clockwise over y." << endl;
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
             rotations = 0;
             continue;
         }
 
         currentSwap = findSwap(cube);
+        
+        cout << "Current swap: " << currentSwap << endl;
 
         if (currentSwap == Swap::NOTHING) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
@@ -416,14 +419,20 @@ SecondLayerEdges::Swap SecondLayerEdges::findSwap(Cube cube) {
         }
     }
 
-    if (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) < 2 &&
-            !SECOND_LAYER_LEFT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
-        return Swap::LEFT_FRONT_EDGE;
+    if (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) < 2) {
+        if (!SECOND_LAYER_LEFT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
+            return Swap::LEFT_FRONT_EDGE;
+        }
+    } else {
+        return Swap::NOTHING;
     }
 
-    if (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) < 2 &&
-            !SECOND_LAYER_RIGHT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
-        return Swap::RIGHT_FRONT_EDGE;
+    if (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) < 2) {
+        if (!SECOND_LAYER_RIGHT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
+            return Swap::RIGHT_FRONT_EDGE;
+        }
+    } else {
+        return Swap::NOTHING;
     }
 
     if (SECOND_LAYER_LEFT_EDGE.countPartiallyMatchedSides(cube) == 2) {

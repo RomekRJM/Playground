@@ -141,16 +141,22 @@ bool MethodSteps::checkWhiteCross(Cube &cube) {
 bool MethodSteps::checkFirstLayerCorners(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
 
-    if (cube.getSideLeadingColor(DOWN) != WHITE)
+    if (cube.getSideLeadingColor(DOWN) != WHITE) {
+        cout << "Down not white!" << endl;
         return false;
-
-    if (!cube.isSideCompleted(DOWN))
+    }
+    
+    if (!cube.isSideCompleted(DOWN)) {
+        cout << "Down not completed!" << endl;
         return false;
+    }
 
     array<Side, 4> sides = {LEFT, FRONT, RIGHT, BACK};
     for (Side neighbour : sides) {
-        if (!hasLowerT(cube, neighbour))
+        if (!hasLowerT(cube, neighbour)) {
+            cout << "Side " << neighbour << " not done" << endl;
             return false;
+        }
     }
 
     return true;

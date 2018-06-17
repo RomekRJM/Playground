@@ -170,7 +170,11 @@ class FirstLayerCorners : public CubeAlgorithm {
     void findPositionBeforeRotation(Cube &cube) override;
     void rotate(Cube &cube) override;
 private:
+    enum CornerMoveType {
+        EXTRACT_UNSOLVABLE_UP, PUT_SOLVABE_DOWN
+    };
     bool isCandidateForSwap(Corner corner, Cube cube);
+    CornerMoveType cornerMoveType;
 };
 
 class SecondLayerEdges : public CubeAlgorithm {
