@@ -10,8 +10,8 @@ string BeginnersMethod::solve(string s) {
         State state = p.first;
         CubeAlgorithm* algorithm = p.second;
         
-        if(state == State::YELLOW_ARC) {
-            result += yellowArcSubroutine(cube);
+        if(state == State::YELLOW_CROSS) {
+            result += yellowCrossSubroutine(cube);
         } else {
             result += cubeAlgorithmSubroutine(state, algorithm, cube);
         }
@@ -35,15 +35,18 @@ string BeginnersMethod::cubeAlgorithmSubroutine(State state,
     return s;
 }
 
-string BeginnersMethod::yellowArcSubroutine(Cube& cube) {
+string BeginnersMethod::yellowCrossSubroutine(Cube& cube) {
     string s = "";
-    
+    cout << "Checking which yellow cross subroutine is appropriate." << endl;
     if(methodSteps.isYellowDotDone(cube)) {
         if(methodSteps.isYellowArcDone(cube)) {
+            cout << "Yellow arc is next" << endl;
             s += YellowArc().perform(cube);
         } else if(methodSteps.isYellowLineDone(cube)) {
+            cout << "Yellow Line is next" << endl;
             s += YellowLine().perform(cube);
         } else {
+            cout << "Yellow dot is next" << endl;
             s += YellowDot().perform(cube);
             s += YellowArc().perform(cube);
         }
