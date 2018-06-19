@@ -19,7 +19,7 @@ BOOST_AUTO_TEST_CASE(test_is_dasy_done_incomplete_petals) {
 
 BOOST_AUTO_TEST_CASE(test_is_white_cross_done) {
     Cube cube = CubeGenerator::fromString(
-            "RGOBGGRBO,WWYWWWWWY,OBRGBBOGR,YYWYYYYYW,BRGORRBOG,BOGOORBRG"
+            "OOWOORWOR,BYYYYYYBR,ROYRRGORG,GWBWWWYWB,GBBBBGWBW,ORGYGGRGO"
             );
     BOOST_CHECK(MethodSteps().isWhiteCrossDone(cube));
 }
@@ -43,13 +43,6 @@ BOOST_AUTO_TEST_CASE(test_are_first_layer_corners_done_misplaced_corner) {
             "YRWROYOOG,YYGYYOOYO,YGRORRRRR,WWOWWWWWW,BBROBGYBB,GBBBGGGGG"
             );
     BOOST_CHECK(!MethodSteps().areFirstLayerCornersDone(cube));
-}
-
-BOOST_AUTO_TEST_CASE(test_are_first_layer_corners_done_rotated_cube) {
-    Cube cube = CubeGenerator::fromString(
-            "YGBOBBGBB,BRRBRRBOR,GBYGGRGGG,ROOGOOORO,WWWWWWWWW,OYRYYYYYY"
-            );
-    BOOST_CHECK(MethodSteps().areFirstLayerCornersDone(cube));
 }
 
 BOOST_AUTO_TEST_CASE(test_are_second_layer_edges_done) {
