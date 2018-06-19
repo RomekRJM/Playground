@@ -207,7 +207,7 @@ BOOST_AUTO_TEST_CASE(test_second_layer_edges) {
         CubeTest(TO_THE_LEFT, new SecondLayerEdges(), 
                 "U',L',U',L,U,y',R,U,R',U'"),
         CubeTest(Y3_UP_TO_THE_LEFT, new SecondLayerEdges(), 
-                "y,y,U',L',U',L,U,y',R,U,R',U'"),
+                "y,y,y,U,U',L',U',L,U,y',R,U,R',U'"),
         CubeTest(RIGHT_IN_PLACE_BUT_TWISTED, new SecondLayerEdges(), 
                 "U,R,U,R',U',y,L',U',L,U")
     };
