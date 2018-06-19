@@ -63,23 +63,17 @@ bool MethodSteps::isSolved(Cube &cube) {
 bool MethodSteps::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
-            ensureColorOnTop(cube, YELLOW);
             return checkDasy(cube);
         case WHITE_CROSS:
-            ensureColorOnTop(cube, YELLOW);
             return checkWhiteCross(cube);
         case FIRST_LAYER_CORNERS:
-            ensureColorOnTop(cube, YELLOW);
             return checkFirstLayerCorners(cube);
         case SECOND_LAYER_EDGES:
-            ensureColorOnTop(cube, YELLOW);
             return checkSecondLayerEdges(cube);
         case YELLOW_DOT:
-            ensureColorOnTop(cube, YELLOW);
             return checkYellowDot(cube);
         case YELLOW_LINE:
         {
-            ensureColorOnTop(cube, YELLOW);
             function<bool(Cube&) > check = [&](Cube & _cube) {
                 return checkYellowLine(_cube);
             };
@@ -87,7 +81,6 @@ bool MethodSteps::isStateDone(Cube &cube, State state) {
         }
         case YELLOW_ARC:
         {
-            ensureColorOnTop(cube, YELLOW);
             function<bool(Cube&) > check = [&](Cube & _cube) {
                 return checkYellowArc(_cube);
             };
@@ -95,22 +88,18 @@ bool MethodSteps::isStateDone(Cube &cube, State state) {
         }
         case YELLOW_CROSS:
         {
-            ensureColorOnTop(cube, YELLOW);
             return checkYellowCross(cube);
         }
         case POSITION_LAST_LAYER_CORNERS:
         {
-            ensureColorOnTop(cube, YELLOW);
             return checkLastLayerCornersPosition(cube);
         }
         case PERMUTE_LAST_LAYER_CORNERS:
         {
-            ensureColorOnTop(cube, YELLOW);
             return checkLastLayerCornersPermutation(cube);
         }
         case POSITION_LAST_LAYER_EDGES:
         {
-            ensureColorOnTop(cube, WHITE);
             return checkSolved(cube);
         }
         default:
@@ -339,36 +328,3 @@ bool MethodSteps::checkConditionOnManyAngles(Cube &cube, Flip flip, int maxFlips
 
     return conditionMatched;
 }
-
-void MethodSteps::ensureColorOnTop(Cube &cube, Color color) {
-    Side leadingSide = FRONT;
-
-    for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
-        Side currentSide = static_cast<Side> (sideNum);
-        if (cube.getSideLeadingColor(currentSide) == color) {
-            leadingSide = currentSide;
-            break;
-        }
-    }
-
-    switch (leadingSide) {
-        case UP:
-            break;
-        case DOWN:
-            cube.flip(UPSIDE_DOWN);
-            break;
-        case FRONT:
-            cube.flip(X_CLOCKWISE_90);
-            break;
-        case BACK:
-            cube.flip(X_COUNTER_CLOCKWISE_90);
-            break;
-        case RIGHT:
-            cube.flip(Z_COUNTER_CLOCKWISE_90);
-            break;
-        case LEFT:
-            cube.flip(Z_CLOCKWISE_90);
-            break;
-    }
-}
-

@@ -94,7 +94,10 @@ const Edge SECOND_LAYER_RIGHT_EDGE = Edge(CubePosition(RIGHT, 1, 0), CubePositio
 class CubeAlgorithm {
 public:
 
-    CubeAlgorithm() {
+    CubeAlgorithm() : colorOnTop(Color::YELLOW) {
+    };
+    
+    CubeAlgorithm(Color c) : colorOnTop(c) {
     };
 
     string perform(Cube & cube);
@@ -130,6 +133,8 @@ private:
     static const map<string, Flip> flips;
     stringstream ss;
     bool initialPositionSet = false;
+    Color colorOnTop;
+    void ensureOnTop(Cube &cube, Color color);
 
 protected:
     
@@ -227,6 +232,8 @@ private:
 
 class PositionLastLayerEdges : public CubeAlgorithm {
     void rotate(Cube &cube) override;
+public:
+    PositionLastLayerEdges() : CubeAlgorithm(Color::WHITE) {};
 private:
     int countSolvedUpperEdges(Cube cube);
     int countSolvedUpperCorners(Cube cube);

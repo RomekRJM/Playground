@@ -32,7 +32,6 @@ public:
     bool areLastLayerCornersPermuted(Cube &cube);
     bool isSolved(Cube &cube);
     bool isStateDone(Cube &cube, State state);
-    void ensureColorOnTop(Cube &cube, Color color);
 
 private:
     bool checkDasy(Cube &cube);
