@@ -155,30 +155,30 @@ BOOST_AUTO_TEST_CASE(test_first_layer_corners) {
     Cube RIGHTY = CubeGenerator::fromString(
             "YORRRYWRG,OBGOYYRGG,YOBRORBOB,OWWWWWRWR,WBOGGYOGW,YYGGBBYBB"
             );
+    Cube RIGHTY_2 = CubeGenerator::fromString(
+            "YORGOBOOB,OYGOYRRGB,YRBBRBRRR,WWOWWWWWW,YGORBYWBB,YYGOGYGGG"
+            );
     Cube RIGHTY_3 = CubeGenerator::fromString(
             "RRORGGBGO,BYRYYRBYW,YGRBBYGBR,WWBWWWWWY,GGGOOOYOO,YBWORBGRO"
             );
     Cube RIGHTY_5 = CubeGenerator::fromString(
             "RRWYGWGGR,BYOGYBGBG,GOWYBYWBO,WWYWWGBWO,OOYOOGBRB,ROYRRBYRR"
             );
-    Cube YCLOCKWISE_UP_3_RIGHTY_5 = CubeGenerator::fromString(
+    Cube YCLOCKWISE_RIGHTY_UP_3_RIGHTY_5 = CubeGenerator::fromString(
             "YOWRRBWRR,GYYOYYRGG,BBORORBOB,OWWWWWRWR,OGOOGYGGW,YYGGBBYBB"
-            );
-    Cube RIGHTY_2 = CubeGenerator::fromString(
-            "YORGOBOOB,OYGOYRRGB,YRBBRBRRR,WWOWWWWWW,YGORBYWBB,YYGOGYGGG"
             );
     
     vector<CubeTest> first_layer_corner_scenarios = {
         CubeTest(RIGHTY, new FirstLayerCorners(), 
                 "R,U,R',U'"),
         CubeTest(RIGHTY_2, new FirstLayerCorners(), 
-                "R,U,R',U',R,U,R',U'"),
+                "R,U,R',U',R,U,R',U'", 2),
         CubeTest(RIGHTY_3, new FirstLayerCorners(), 
                 "R,U,R',U',R,U,R',U',R,U,R',U'"),
         CubeTest(RIGHTY_5, new FirstLayerCorners(), 
                 "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'"),
-        CubeTest(YCLOCKWISE_UP_3_RIGHTY_5, new FirstLayerCorners(), 
-                "y,U,U,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'")
+        CubeTest(YCLOCKWISE_RIGHTY_UP_3_RIGHTY_5, new FirstLayerCorners(), 
+                "y,R,U,R',U',U,U,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'", 2)
     };
 
     for (CubeTest scenario : first_layer_corner_scenarios) {
