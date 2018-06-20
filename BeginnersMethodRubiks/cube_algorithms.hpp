@@ -232,8 +232,6 @@ private:
 
 class PositionLastLayerEdges : public CubeAlgorithm {
     void rotate(Cube &cube) override;
-public:
-    PositionLastLayerEdges() : CubeAlgorithm(Color::WHITE) {};
 private:
     int countSolvedUpperEdges(Cube cube);
     int countSolvedUpperCorners(Cube cube);
