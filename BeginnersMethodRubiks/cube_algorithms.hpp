@@ -224,6 +224,8 @@ private:
 
 class PermuteLastLayerCorners : public CubeAlgorithm {
     void rotate(Cube &cube) override;
+public:
+    PermuteLastLayerCorners() : CubeAlgorithm(Color::WHITE) {};
 private:
     void orientLowerCubletsYellowDown(Cube &cube);
     void findOptimalFirstLayerRotation(Cube &cube);
