@@ -44,7 +44,7 @@ public:
     
 private:
     MethodSteps methodSteps;
-    string yellowCrossSubroutine(Cube& cube);
+    string yellowCrossSubroutine(State state, Cube& cube);
     string cubeAlgorithmSubroutine(State state, CubeAlgorithm* algorithm, Cube& cube);
 };
 
