@@ -281,13 +281,13 @@ BOOST_AUTO_TEST_CASE(test_position_last_layer_corners) {
     
     vector<CubeTest> position_last_layer_corner_scenarios = {
         CubeTest(FLIP_Y_THEN_ALG, new PositionLastLayerCorners(),
-            "y,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U"),
+            "y,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U"),
         CubeTest(ALG_TWICE, new PositionLastLayerCorners(),
             "R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',"
-                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U"),
+                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U"),
         CubeTest(UP_TRIPLE_THEN_ALG_TWICE, new PositionLastLayerCorners(),
             "U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',"
-                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,U,U,U")
+                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U")
     };
 
     for (CubeTest scenario : position_last_layer_corner_scenarios) {
@@ -308,28 +308,3 @@ BOOST_AUTO_TEST_CASE(test_permute_last_layer_corners) {
             "R,U,R',U',D'");
 }
 
-BOOST_AUTO_TEST_CASE(test_position_last_layer_edges) {
-    Cube FRONT_SIDE_SOLVED = CubeGenerator::fromString(
-            "OBORRRRRR,YYYYYYYYY,RRROOOOOO,WWWWWWWWW,BGBGGGGGG,GOGBBBBBB"
-            );
-    Cube NONE_SIDE_SOLVED = CubeGenerator::fromString(
-            "GOGOOOOOO,YYYYYYYYY,BRBRRRRRR,WWWWWWWWW,OGOBBBBBB,RBRGGGGGG"
-            );
-    
-    vector<CubeTest> position_last_layer_edges_scenarios = {
-        CubeTest(FRONT_SIDE_SOLVED, new PositionLastLayerEdges(),
-            "U,U,R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
-                "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U"),
-        CubeTest(NONE_SIDE_SOLVED, new PositionLastLayerEdges(),
-            "U,R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
-            "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,y,y,R,U,R',U',L',U',L,U,"
-            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
-            "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',L',U',L,U,"
-            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U")
-    };
-    
-    for (CubeTest scenario : position_last_layer_edges_scenarios) {
-        single_algorithm_test(scenario);
-        delete dynamic_cast<PositionLastLayerEdges*>(scenario.algorithm);
-    }
-}

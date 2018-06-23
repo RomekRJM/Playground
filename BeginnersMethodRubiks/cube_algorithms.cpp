@@ -12,6 +12,20 @@
 
 using namespace std;
 
+void replaceAllInStringStream(stringstream& ss, string toBeReplaced, string replacement) {
+    std::string s = ss.str();
+    size_t found;
+
+    do {
+        found = s.find(toBeReplaced);
+        if (found != std::string::npos) {
+            s.replace(s.find(toBeReplaced), toBeReplaced.length(), replacement);
+        }
+    } while (found != std::string::npos);
+
+    ss.str(s);
+}
+
 // rotation string representations
 const string CubeAlgorithm::ROTATE_FRONT_CLOCKWISE = "F";
 const string CubeAlgorithm::ROTATE_UP_CLOCKWISE = "U";
@@ -485,18 +499,7 @@ bool SecondLayerEdges::sideSolved(Cube cube) {
 }
 
 void SecondLayerEdges::shorten(stringstream &ss) {
-    std::string s = ss.str();
-    const string FAILED_SIDE = "U,U,U,y,U";
-    size_t found;
-
-    do {
-        found = s.find(FAILED_SIDE);
-        if (found != std::string::npos) {
-            s.replace(s.find(FAILED_SIDE), FAILED_SIDE.length(), "y");
-        }
-    } while (found != std::string::npos);
-
-    ss.str(s);
+    replaceAllInStringStream(ss, "U,U,U,y,U", "y");
 }
 
 void YellowDot::rotate(Cube & cube) {
@@ -621,6 +624,10 @@ array<int, 4> PositionLastLayerCorners::countUpperCornersInRightPlace(Cube cube)
     };
 
     return corners;
+}
+
+void PositionLastLayerCorners::shorten(stringstream &ss) {
+    replaceAllInStringStream(ss, "U,U,U,U,U", "U");
 }
 
 void PermuteLastLayerCorners::rotate(Cube &cube) {

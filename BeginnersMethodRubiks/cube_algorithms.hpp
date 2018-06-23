@@ -91,6 +91,8 @@ const array<Edge, 4> UPPER_EDGES = {
 const Edge SECOND_LAYER_LEFT_EDGE = Edge(CubePosition(LEFT, 1, 2), CubePosition(FRONT, 1, 0));
 const Edge SECOND_LAYER_RIGHT_EDGE = Edge(CubePosition(RIGHT, 1, 0), CubePosition(FRONT, 1, 2));
 
+void replaceAllInStringStream(stringstream& ss, string toBeReplaced, string replacement);
+
 class CubeAlgorithm {
 public:
 
@@ -216,6 +218,7 @@ private:
 class PositionLastLayerCorners : public CubeAlgorithm {
     void findInitialPosition(Cube &cube) override;
     void rotate(Cube &cube) override;
+    void shorten(stringstream &ss) override;
 private:
     array<int, 4> countUpperCornersInRightPlace(Cube cube);
     void findOptimalLastLayerRotation(Cube &cube);
