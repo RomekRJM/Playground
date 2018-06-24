@@ -477,6 +477,50 @@ bool Cube::isSideCompleted(Side leadingSide) {
     return true;
 }
 
+void Cube::ensureOnTop(Color color) {
+    Flip flip = whatFlipGivesColorOnTop(color);
+    
+    if (flip != Flip::NONE) {
+        this->flip(flip);
+    }
+}
+
+Flip Cube::whatFlipGivesColorOnTop(Color color) {
+    Side leadingSide = FRONT;
+
+    for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
+        Side currentSide = static_cast<Side> (sideNum);
+        if (getSideLeadingColor(currentSide) == color) {
+            leadingSide = currentSide;
+            break;
+        }
+    }
+    
+    Flip flip = Flip::NONE;
+
+    switch (leadingSide) {
+        case UP:
+            break;
+        case DOWN:
+            flip = Flip::UPSIDE_DOWN;
+            break;
+        case FRONT:
+            flip = Flip::X_CLOCKWISE_90;
+            break;
+        case BACK:
+            flip = Flip::X_COUNTER_CLOCKWISE_90;
+            break;
+        case RIGHT:
+            flip = Flip::Z_COUNTER_CLOCKWISE_90;
+            break;
+        case LEFT:
+            flip = Flip::Z_CLOCKWISE_90;
+            break;
+    }
+    
+    return flip;
+}
+
 bool Cube::operator==(Cube & other) {
     return this->cube == other.cube;
 }

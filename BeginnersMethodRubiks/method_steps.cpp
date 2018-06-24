@@ -63,17 +63,23 @@ bool MethodSteps::isSolved(Cube &cube) {
 bool MethodSteps::isStateDone(Cube &cube, State state) {
     switch (state) {
         case DASY:
+            cube.ensureOnTop(Color::YELLOW);
             return checkDasy(cube);
         case WHITE_CROSS:
+            cube.ensureOnTop(Color::YELLOW);
             return checkWhiteCross(cube);
         case FIRST_LAYER_CORNERS:
+            cube.ensureOnTop(Color::YELLOW);
             return checkFirstLayerCorners(cube);
         case SECOND_LAYER_EDGES:
+            cube.ensureOnTop(Color::YELLOW);
             return checkSecondLayerEdges(cube);
         case YELLOW_DOT:
+            cube.ensureOnTop(Color::YELLOW);
             return checkYellowDot(cube);
         case YELLOW_LINE:
         {
+            cube.ensureOnTop(Color::YELLOW);
             function<bool(Cube&) > check = [&](Cube & _cube) {
                 return checkYellowLine(_cube);
             };
@@ -81,6 +87,7 @@ bool MethodSteps::isStateDone(Cube &cube, State state) {
         }
         case YELLOW_ARC:
         {
+            cube.ensureOnTop(Color::YELLOW);
             function<bool(Cube&) > check = [&](Cube & _cube) {
                 return checkYellowArc(_cube);
             };
@@ -88,18 +95,22 @@ bool MethodSteps::isStateDone(Cube &cube, State state) {
         }
         case YELLOW_CROSS:
         {
+            cube.ensureOnTop(Color::YELLOW);
             return checkYellowCross(cube);
         }
         case POSITION_LAST_LAYER_CORNERS:
         {
+            cube.ensureOnTop(Color::YELLOW);
             return checkLastLayerCornersPosition(cube);
         }
         case PERMUTE_LAST_LAYER_CORNERS:
         {
+            cube.ensureOnTop(Color::WHITE);
             return checkLastLayerCornersPermutation(cube);
         }
         case POSITION_LAST_LAYER_EDGES:
         {
+            cube.ensureOnTop(Color::YELLOW);
             return checkSolved(cube);
         }
         default:

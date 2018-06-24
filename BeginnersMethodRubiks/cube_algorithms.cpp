@@ -240,34 +240,13 @@ void CubeAlgorithm::cancelLastMoves(Cube &cube, int moves) {
 }
 
 void CubeAlgorithm::ensureOnTop(Cube &cube, Color color) {
-    Side leadingSide = FRONT;
-
-    for (int sideNum = FRONT; sideNum <= LEFT; ++sideNum) {
-        Side currentSide = static_cast<Side> (sideNum);
-        if (cube.getSideLeadingColor(currentSide) == color) {
-            leadingSide = currentSide;
+    Flip flip = cube.whatFlipGivesColorOnTop(color);
+    
+    for(pair<string, Flip> p : flips) {
+        if(p.second == flip) {
+            doMove(cube, p.first);
             break;
         }
-    }
-
-    switch (leadingSide) {
-        case UP:
-            break;
-        case DOWN:
-            doMove(cube, FLIP_UPSIDE_DOWN);
-            break;
-        case FRONT:
-            doMove(cube, FLIP_X_CLOCKWISE_90);
-            break;
-        case BACK:
-            doMove(cube, FLIP_X_COUNTER_CLOCKWISE_90);
-            break;
-        case RIGHT:
-            doMove(cube, FLIP_Z_COUNTER_CLOCKWISE_90);
-            break;
-        case LEFT:
-            doMove(cube, FLIP_Z_CLOCKWISE_90);
-            break;
     }
 }
 

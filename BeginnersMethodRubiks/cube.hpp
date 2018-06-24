@@ -39,7 +39,7 @@ enum Flip {
     Y_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90,
     X_CLOCKWISE_90, X_COUNTER_CLOCKWISE_90,
     Z_CLOCKWISE_90, Z_COUNTER_CLOCKWISE_90,
-    UPSIDE_DOWN
+    UPSIDE_DOWN, NONE
 };
 
 struct CubePosition {
@@ -113,6 +113,8 @@ public:
     string asShortString();
     string sideAsShortString(array<array<Color, SIZE>, SIZE> side);
     Color getSideLeadingColor(Side side);
+    Flip whatFlipGivesColorOnTop(Color color);
+    void ensureOnTop(Color color);
     bool isSideCompleted(Side side);
     bool operator==(Cube & other);
 
