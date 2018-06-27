@@ -639,11 +639,11 @@ void PermuteLastLayerCorners::findOptimalFirstLayerRotation(Cube &cube) {
             optimalMatchOnTurn = i;
             break;
         }
-                
+        
         CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_DOWN_COUNTER_CLOCKWISE);
     }
-
-    cancelLastMoves(cube, 4 - optimalMatchOnTurn);
+    
+    cancelLastMoves(cube, 3 - optimalMatchOnTurn);
 }
 
 bool PermuteLastLayerCorners::hasLowerFrontRightCornerFacingYellowDown(Cube cube) {
