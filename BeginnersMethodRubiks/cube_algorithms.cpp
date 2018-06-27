@@ -168,11 +168,11 @@ CubePosition Cublet::getCubePosition(Side side) const {
 
 string CubeAlgorithm::perform(Cube &cube) {
     if (!initialPositionSet) {
-        ensureOnTop(cube, colorOnTop);
         findInitialPosition(cube);
         initialPositionSet = true;
     }
 
+    ensureOnTop(cube, colorOnTop);
     findPositionBeforeRotation(cube);
     rotate(cube);
     shorten(ss);
