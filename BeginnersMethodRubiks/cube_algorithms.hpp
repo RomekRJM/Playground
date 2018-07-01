@@ -136,7 +136,11 @@ private:
     stringstream ss;
     bool initialPositionSet = false;
     Color colorOnTop;
+    const int MAX_ALLOWED_INVOCATIONS = 100;
+    int invocations;
+    
     void ensureOnTop(Cube &cube, Color color);
+    bool isStalemate();
 
 protected:
     
@@ -249,4 +253,11 @@ class SideNotFoundException : public exception {
         return "Couldn't find matching side";
     }
 };
+
+class StalemateException : public exception {
+    virtual const char* what() const throw () {
+        return "Detected stalemate! Algorithm seems to be stuck in infinite loop.";
+    }
+};
+
 #endif /* CUBE_ALGORITHMS_HPP */

@@ -170,12 +170,14 @@ string CubeAlgorithm::perform(Cube &cube) {
     if (!initialPositionSet) {
         findInitialPosition(cube);
         initialPositionSet = true;
+        invocations = 0;
     }
 
     ensureOnTop(cube, colorOnTop);
     findPositionBeforeRotation(cube);
     rotate(cube);
     shorten(ss);
+    
     return getMovesAsString();
 }
 
@@ -200,6 +202,12 @@ void CubeAlgorithm::doMove(Cube &cube, string move, bool recordInString = true) 
         if (recordInString)
             ss << move << ",";
     }
+    
+    ++invocations;
+    
+    if(isStalemate()) {
+        throw StalemateException();
+    }
 }
 
 void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves, int repeat = 1,
@@ -209,6 +217,10 @@ void CubeAlgorithm::doMoves(Cube &cube, vector<string> moves, int repeat = 1,
             doMove(cube, move, recordInString);
         }
     }
+}
+
+bool CubeAlgorithm::isStalemate() {
+    return invocations > MAX_ALLOWED_INVOCATIONS;
 }
 
 void CubeAlgorithm::cancelLastMoves(Cube &cube, int moves) {
