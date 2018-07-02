@@ -17,7 +17,7 @@ string BeginnersMethod::solve(string s) {
         }
     }
     
-    return result;
+    return result.substr(0, result.size() - 1);
 }
 
 string BeginnersMethod::cubeAlgorithmSubroutine(State state, 
@@ -48,7 +48,6 @@ string BeginnersMethod::yellowCrossSubroutine(State state, Cube& cube) {
         } else {
             cout << "Yellow dot is next" << endl;
             s += YellowDot().perform(cube);
-            s += ",";
             s += YellowArc().perform(cube);
         }
     } 

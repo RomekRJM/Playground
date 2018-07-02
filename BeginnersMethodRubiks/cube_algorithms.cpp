@@ -182,8 +182,7 @@ string CubeAlgorithm::perform(Cube &cube) {
 }
 
 string CubeAlgorithm::getMovesAsString() {
-    string moves = ss.str();
-    return moves.size() > 1 ? moves.substr(0, moves.size() - 1) : moves;
+    return ss.str();
 }
 
 void CubeAlgorithm::doMove(Cube &cube, string move, bool recordInString = true) {
