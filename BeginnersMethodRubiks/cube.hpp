@@ -144,9 +144,9 @@ private:
         {
             {
                 { // FRONT
-                    {ORANGE, ORANGE, ORANGE},
-                    {ORANGE, ORANGE, ORANGE},
-                    {ORANGE, ORANGE, ORANGE}
+                    {GREEN, GREEN, GREEN},
+                    {GREEN, GREEN, GREEN},
+                    {GREEN, GREEN, GREEN}
                 }
             },
             {
@@ -158,9 +158,9 @@ private:
             },
             {
                 { // BACK
-                    {RED, RED, RED},
-                    {RED, RED, RED},
-                    {RED, RED, RED}
+                    {BLUE, BLUE, BLUE},
+                    {BLUE, BLUE, BLUE},
+                    {BLUE, BLUE, BLUE}
                 }
             },
             {
@@ -172,16 +172,16 @@ private:
             },
             {
                 { // RIGHT
-                    {BLUE, BLUE, BLUE},
-                    {BLUE, BLUE, BLUE},
-                    {BLUE, BLUE, BLUE}
+                    {RED, RED, RED},
+                    {RED, RED, RED},
+                    {RED, RED, RED}
                 }
             },
             {
                 { // LEFT
-                    {GREEN, GREEN, GREEN},
-                    {GREEN, GREEN, GREEN},
-                    {GREEN, GREEN, GREEN}
+                    {ORANGE, ORANGE, ORANGE},
+                    {ORANGE, ORANGE, ORANGE},
+                    {ORANGE, ORANGE, ORANGE}
                 }
             }
         }
