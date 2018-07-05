@@ -121,9 +121,10 @@ bool MethodSteps::isStateDone(Cube &cube, State state) {
 
 bool MethodSteps::checkDasy(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[UP];
-
-    return (side[1][1] == YELLOW) &&
-            (side[0][1] == side[1][0] == side[1][2] ==  side[2][1] == WHITE);
+    
+    return (side[1][1] == YELLOW) && (side[0][1] == WHITE) && 
+           (side[1][0] == WHITE) && (side[1][2] == WHITE) && 
+           (side[2][1] == WHITE);
 }
 
 bool MethodSteps::checkWhiteCross(Cube &cube) {
