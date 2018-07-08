@@ -152,7 +152,7 @@ BOOST_AUTO_TEST_CASE(test_white_cross) {
 }
 
 BOOST_AUTO_TEST_CASE(test_first_layer_corners) {
-    Cube RIGHTY = CubeGenerator::fromString(
+    Cube U_RIGHTY = CubeGenerator::fromString(
             "YORRRYWRG,OBGOYYRGG,YOBRORBOB,OWWWWWRWR,WBOGGYOGW,YYGGBBYBB"
             );
     Cube RIGHTY_2 = CubeGenerator::fromString(
@@ -169,8 +169,8 @@ BOOST_AUTO_TEST_CASE(test_first_layer_corners) {
             );
     
     vector<CubeTest> first_layer_corner_scenarios = {
-        CubeTest(RIGHTY, new FirstLayerCorners(), 
-                "R,U,R',U',"),
+        CubeTest(U_RIGHTY, new FirstLayerCorners(), 
+                "U,R,U,R',U',"),
         CubeTest(RIGHTY_2, new FirstLayerCorners(), 
                 "R,U,R',U',R,U,R',U',", 2),
         CubeTest(RIGHTY_3, new FirstLayerCorners(), 

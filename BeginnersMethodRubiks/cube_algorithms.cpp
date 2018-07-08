@@ -363,7 +363,15 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
         bool upperForSwap = isCandidateForSwap(UPPER_CORNERS[0], cube);
         bool lowerHasWhite = LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube);
 
-        if (!upperForSwap && !lowerHasWhite) {
+        /**
+         * Here is the reasoning behind it:
+         * upperForSwap | lowerHasWhite | rotate? |
+         * 0            | 0             | 1       |
+         * 1            | 0             | 0       |
+         * 0            | 1             | 0       | 
+         * 1            | 1             | 1       |
+         */
+        if (upperForSwap == lowerHasWhite) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
             
             ++timesRotated;
