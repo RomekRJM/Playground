@@ -359,9 +359,11 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
             cout << "No full match" << endl; 
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
         }
+        
+        bool upperForSwap = isCandidateForSwap(UPPER_CORNERS[0], cube);
+        bool lowerHasWhite = LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube);
 
-        if (!isCandidateForSwap(UPPER_CORNERS[0], cube)
-                && !LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube)) {
+        if (!upperForSwap && !lowerHasWhite) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
             
             ++timesRotated;
@@ -394,8 +396,9 @@ void FirstLayerCorners::rotate(Cube &cube) {
 }
 
 bool FirstLayerCorners::isCandidateForSwap(Corner corner, Cube cube) {
-    return corner.hasColorOnAnySide(Color::WHITE, cube) &&
-            (corner.countPartiallyMatchedSides(cube) >= 2);
+    return corner.hasColorOnAnySide(cube.getSideLeadingColor(FRONT), cube) &&
+           corner.hasColorOnAnySide(cube.getSideLeadingColor(RIGHT), cube) &&
+           corner.hasColorOnAnySide(cube.getSideLeadingColor(DOWN), cube);
 }
 
 void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
