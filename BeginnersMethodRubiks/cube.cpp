@@ -420,9 +420,9 @@ string getColorName(Color c) {
 }
 
 void Cube::printCube() {
-    cout << "        " << getColorName(cube[UP][0][0]) << " " << getColorName(cube[UP][0][1]) << " " << getColorName(cube[UP][0][0]) << endl;
-    cout << "        " << getColorName(cube[UP][1][0]) << " " << getColorName(cube[UP][1][1]) << " " << getColorName(cube[UP][1][0]) << endl;
-    cout << "        " << getColorName(cube[UP][2][0]) << " " << getColorName(cube[UP][2][1]) << " " << getColorName(cube[UP][2][0]) << endl;
+    cout << "        " << getColorName(cube[UP][0][0]) << " " << getColorName(cube[UP][0][1]) << " " << getColorName(cube[UP][0][2]) << endl;
+    cout << "        " << getColorName(cube[UP][1][0]) << " " << getColorName(cube[UP][1][1]) << " " << getColorName(cube[UP][1][2]) << endl;
+    cout << "        " << getColorName(cube[UP][2][0]) << " " << getColorName(cube[UP][2][1]) << " " << getColorName(cube[UP][2][2]) << endl;
     cout << "      ---------" << endl;
     cout << getColorName(cube[LEFT][0][0]) << " " << getColorName(cube[LEFT][0][1]) << " " << getColorName(cube[LEFT][0][2]) << " | " 
             << getColorName(cube[FRONT][0][0]) << " " << getColorName(cube[FRONT][0][1]) << " " << getColorName(cube[FRONT][0][2]) << " | "
@@ -437,9 +437,9 @@ void Cube::printCube() {
             << getColorName(cube[RIGHT][2][0]) << " " << getColorName(cube[RIGHT][2][1]) << " " << getColorName(cube[RIGHT][2][2]) << " | "
             << getColorName(cube[BACK][2][0]) << " " << getColorName(cube[BACK][2][1]) << " " << getColorName(cube[BACK][2][2]) << endl;
     cout << "      ---------" << endl;
-    cout << "        " << getColorName(cube[DOWN][0][0]) << " " << getColorName(cube[DOWN][0][1]) << " " << getColorName(cube[DOWN][0][0]) << endl;
-    cout << "        " << getColorName(cube[DOWN][1][0]) << " " << getColorName(cube[DOWN][1][1]) << " " << getColorName(cube[DOWN][1][0]) << endl;
-    cout << "        " << getColorName(cube[DOWN][2][0]) << " " << getColorName(cube[DOWN][2][1]) << " " << getColorName(cube[DOWN][2][0]) << endl;
+    cout << "        " << getColorName(cube[DOWN][0][0]) << " " << getColorName(cube[DOWN][0][1]) << " " << getColorName(cube[DOWN][0][2]) << endl;
+    cout << "        " << getColorName(cube[DOWN][1][0]) << " " << getColorName(cube[DOWN][1][1]) << " " << getColorName(cube[DOWN][1][2]) << endl;
+    cout << "        " << getColorName(cube[DOWN][2][0]) << " " << getColorName(cube[DOWN][2][1]) << " " << getColorName(cube[DOWN][2][2]) << endl;
 }
 
 void Cube::printCubeSide(array<array<Color, SIZE>, SIZE> side) {
