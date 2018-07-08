@@ -89,29 +89,29 @@ BOOST_AUTO_TEST_CASE(test_dasy) {
             );
     
     vector<CubeTest> dasy_scenarios = {
-        CubeTest(DOWN_EDGE_PIECE, new Dasy(), "F,F", 2),                // DOWN, 0, 1
-        CubeTest(FIRST_LAYER_EDGE_PIECE, new Dasy(), "F,U,L'", 2),      // FRONT, 2, 1
-        CubeTest(SECOND_LAYER_RIGHT_EDGE_PIECE, new Dasy(), "F", 1),    // LEFT, 1, 2
-        CubeTest(SECOND_LAYER_LEFT_EDGE_PIECE, new Dasy(), "F'", 1),    // RIGHT, 1, 0
-        CubeTest(THIRD_LAYER_LEFT_EDGE_PIECE, new Dasy(), "F,R", 2),    // FRONT, 0, 1
+        CubeTest(DOWN_EDGE_PIECE, new Dasy(), "F,F,", 2),                // DOWN, 0, 1
+        CubeTest(FIRST_LAYER_EDGE_PIECE, new Dasy(), "F,U,L',", 2),      // FRONT, 2, 1
+        CubeTest(SECOND_LAYER_RIGHT_EDGE_PIECE, new Dasy(), "F,", 1),    // LEFT, 1, 2
+        CubeTest(SECOND_LAYER_LEFT_EDGE_PIECE, new Dasy(), "F',", 1),    // RIGHT, 1, 0
+        CubeTest(THIRD_LAYER_LEFT_EDGE_PIECE, new Dasy(), "F,R,", 2),    // FRONT, 0, 1
         
-        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L',L'", 2),              // DOWN, 1, 0
-        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L,U,B'", 2),      // LEFT, 2, 1
-        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L", 1),    // BACK, 1, 2
-        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L'", 1),    // BACK, 1, 0
-        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L,F", 2),    // LEFT, 0, 1
+        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L',L',", 2),              // DOWN, 1, 0
+        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L,U,B',", 2),      // LEFT, 2, 1
+        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L,", 1),    // BACK, 1, 2
+        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L',", 1),    // BACK, 1, 0
+        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "L,F,", 2),    // LEFT, 0, 1
         
-        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,B", 2),                // DOWN, 2, 1
-        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,U,R'", 2),      // BACK, 2, 1
-        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B", 1),    // RIGHT, 1, 2
-        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B'", 1),    // LEFT, 1, 0
-        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,L", 2),    // BACK, 0, 1
+        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,B,", 2),                // DOWN, 2, 1
+        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,U,R',", 2),      // BACK, 2, 1
+        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,", 1),    // RIGHT, 1, 2
+        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B',", 1),    // LEFT, 1, 0
+        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "B,L,", 2),    // BACK, 0, 1
         
-        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,R", 2),                // DOWN, 1, 2
-        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,U,F'", 2),      // RIGHT, 2, 1
-        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R", 1),    // FRONT, 1, 2
-        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R'", 1),    // FRONT, 1, 0
-        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,B", 2),    // RIGHT, 0, 1
+        CubeTest(*DOWN_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,R,", 2),                // DOWN, 1, 2
+        CubeTest(*FIRST_LAYER_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,U,F',", 2),      // RIGHT, 2, 1
+        CubeTest(*SECOND_LAYER_RIGHT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,", 1),    // FRONT, 1, 2
+        CubeTest(*SECOND_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R',", 1),    // FRONT, 1, 0
+        CubeTest(*THIRD_LAYER_LEFT_EDGE_PIECE.flip(Flip::Y_CLOCKWISE_90), new Dasy(), "R,B,", 2),    // RIGHT, 0, 1
     };
 
     for (CubeTest scenario : dasy_scenarios) {
@@ -138,11 +138,11 @@ BOOST_AUTO_TEST_CASE(test_white_cross) {
             );
     
     vector<CubeTest> white_cross_scenarios = {
-        CubeTest(FF, new WhiteCross(), "F,F"),
-        CubeTest(BB, new WhiteCross(), "B,B"),
-        CubeTest(RR, new WhiteCross(), "R,R"),
-        CubeTest(LL, new WhiteCross(), "L,L"),
-        CubeTest(UULL, new WhiteCross(), "U,U,L,L")
+        CubeTest(FF, new WhiteCross(), "F,F,"),
+        CubeTest(BB, new WhiteCross(), "B,B,"),
+        CubeTest(RR, new WhiteCross(), "R,R,"),
+        CubeTest(LL, new WhiteCross(), "L,L,"),
+        CubeTest(UULL, new WhiteCross(), "U,U,L,L,")
     };
 
     for (CubeTest scenario : white_cross_scenarios) {
@@ -170,15 +170,15 @@ BOOST_AUTO_TEST_CASE(test_first_layer_corners) {
     
     vector<CubeTest> first_layer_corner_scenarios = {
         CubeTest(RIGHTY, new FirstLayerCorners(), 
-                "R,U,R',U'"),
+                "R,U,R',U',"),
         CubeTest(RIGHTY_2, new FirstLayerCorners(), 
-                "R,U,R',U',R,U,R',U'", 2),
+                "R,U,R',U',R,U,R',U',", 2),
         CubeTest(RIGHTY_3, new FirstLayerCorners(), 
-                "R,U,R',U',R,U,R',U',R,U,R',U'"),
+                "R,U,R',U',R,U,R',U',R,U,R',U',"),
         CubeTest(RIGHTY_5, new FirstLayerCorners(), 
-                "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'"),
+                "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"),
         CubeTest(YCLOCKWISE_RIGHTY_UP_3_RIGHTY_5, new FirstLayerCorners(), 
-                "y,R,U,R',U',U,U,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U'", 2)
+                "y,R,U,R',U',U,U,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',", 2)
     };
 
     for (CubeTest scenario : first_layer_corner_scenarios) {
@@ -203,13 +203,13 @@ BOOST_AUTO_TEST_CASE(test_second_layer_edges) {
     
     vector<CubeTest> second_layer_edges_scenarios = {
         CubeTest(TO_THE_RIGHT, new SecondLayerEdges(), 
-                "U,R,U,R',U',y,L',U',L,U"),
+                "U,R,U,R',U',y,L',U',L,U,"),
         CubeTest(TO_THE_LEFT, new SecondLayerEdges(), 
-                "U',L',U',L,U,y',R,U,R',U'"),
+                "U',L',U',L,U,y',R,U,R',U',"),
         CubeTest(Y3_UP_TO_THE_LEFT, new SecondLayerEdges(), 
-                "y,y,y,U,U',L',U',L,U,y',R,U,R',U'"),
+                "y,y,y,U,U',L',U',L,U,y',R,U,R',U',"),
         CubeTest(RIGHT_IN_PLACE_BUT_TWISTED, new SecondLayerEdges(), 
-                "U,R,U,R',U',y,L',U',L,U")
+                "U,R,U,R',U',y,L',U',L,U,")
     };
 
     for (CubeTest scenario : second_layer_edges_scenarios) {
@@ -225,7 +225,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_dot) {
             );
     YellowDot yellowDot = YellowDot();
     string s = yellowDot.perform(cube);
-    BOOST_CHECK(s == "F,R,U,R',U',F'");
+    BOOST_CHECK(s == "F,R,U,R',U',F',");
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_line) {
@@ -235,7 +235,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_line) {
             );
     YellowLine yellowLine = YellowLine();
     string s = yellowLine.perform(cube);
-    BOOST_CHECK(s == "F,R,U,R',U',F'");
+    BOOST_CHECK(s == "F,R,U,R',U',F',");
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_line_with_initial_move) {
@@ -245,7 +245,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_line_with_initial_move) {
             );
     YellowLine yellowLine = YellowLine();
     string s = yellowLine.perform(cube);
-    BOOST_CHECK(s == "U,F,R,U,R',U',F'");
+    BOOST_CHECK(s == "U,F,R,U,R',U',F',");
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_arc) {
@@ -255,7 +255,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_arc) {
             );
     YellowArc yellowArc = YellowArc();
     string s = yellowArc.perform(cube);
-    BOOST_CHECK(s == "z,B,R,U,R',U',B',z'");
+    BOOST_CHECK(s == "z,B,R,U,R',U',B',z',");
 }
 
 BOOST_AUTO_TEST_CASE(test_yellow_arc_with_initial_move) {
@@ -265,7 +265,7 @@ BOOST_AUTO_TEST_CASE(test_yellow_arc_with_initial_move) {
             );
     YellowArc yellowArc = YellowArc();
     string s = yellowArc.perform(cube);
-    BOOST_CHECK(s == "U,z,B,R,U,R',U',B',z'");
+    BOOST_CHECK(s == "U,z,B,R,U,R',U',B',z',");
 }
 
 BOOST_AUTO_TEST_CASE(test_position_last_layer_corners) {
@@ -281,13 +281,13 @@ BOOST_AUTO_TEST_CASE(test_position_last_layer_corners) {
     
     vector<CubeTest> position_last_layer_corner_scenarios = {
         CubeTest(FLIP_Y_THEN_ALG, new PositionLastLayerCorners(),
-            "y,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U"),
+            "y,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,"),
         CubeTest(ALG_TWICE, new PositionLastLayerCorners(),
             "R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',"
-                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U"),
+                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,"),
         CubeTest(UP_TRIPLE_THEN_ALG_TWICE, new PositionLastLayerCorners(),
             "U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',"
-                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U")
+                "R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,")
     };
 
     for (CubeTest scenario : position_last_layer_corner_scenarios) {
@@ -305,7 +305,7 @@ BOOST_AUTO_TEST_CASE(test_permute_last_layer_corners) {
     
     BOOST_CHECK(s == "R,U,R',U',R,U,R',U',D',R,U,R',U',R,U,R',U',R,U,R',U',"
             "R,U,R',U',D',R,U,R',U',R,U,R',U',D',R,U,R',U',R,U,R',U',R,U,R',U',"
-            "R,U,R',U',D'");
+            "R,U,R',U',D',");
 }
 
 BOOST_AUTO_TEST_CASE(test_position_last_layer_edges) {
@@ -319,13 +319,13 @@ BOOST_AUTO_TEST_CASE(test_position_last_layer_edges) {
     vector<CubeTest> position_last_layer_edges_scenarios = {
         CubeTest(FRONT_SIDE_SOLVED, new PositionLastLayerEdges(),
             "U,U,R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
-                "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U"),
+                "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,"),
         CubeTest(NONE_SIDE_SOLVED, new PositionLastLayerEdges(),
             "U,R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
             "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,y,y,R,U,R',U',L',U',L,U,"
             "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
             "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',L',U',L,U,"
-            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U")
+            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,")
     };
     
     for (CubeTest scenario : position_last_layer_edges_scenarios) {

@@ -5,7 +5,7 @@
 BOOST_AUTO_TEST_CASE(test_from_string) {
     Cube unscrambled = CubeGenerator::unscrambled();
     Cube cube = CubeGenerator::fromString(
-            "OOOOOOOOO,WWWWWWWWW,RRRRRRRRR,YYYYYYYYY,BBBBBBBBB,GGGGGGGG"
+            "GGGGGGGGG,WWWWWWWWW,BBBBBBBBB,YYYYYYYYY,RRRRRRRRR,OOOOOOOOO"
             );
     BOOST_CHECK(cube == unscrambled);
 }
@@ -16,9 +16,9 @@ BOOST_AUTO_TEST_CASE(test_from_array) {
         {
             {
                 { // FRONT
-                    {ORANGE, ORANGE, ORANGE},
-                    {ORANGE, ORANGE, ORANGE},
-                    {ORANGE, ORANGE, ORANGE}
+                    {GREEN, GREEN, GREEN},
+                    {GREEN, GREEN, GREEN},
+                    {GREEN, GREEN, GREEN}
                 }
             },
             {
@@ -30,9 +30,9 @@ BOOST_AUTO_TEST_CASE(test_from_array) {
             },
             {
                 { // BACK
-                    {RED, RED, RED},
-                    {RED, RED, RED},
-                    {RED, RED, RED}
+                    {BLUE, BLUE, BLUE},
+                    {BLUE, BLUE, BLUE},
+                    {BLUE, BLUE, BLUE}
                 }
             },
             {
@@ -44,16 +44,16 @@ BOOST_AUTO_TEST_CASE(test_from_array) {
             },
             {
                 { // RIGHT
-                    {BLUE, BLUE, BLUE},
-                    {BLUE, BLUE, BLUE},
-                    {BLUE, BLUE, BLUE}
+                    {RED, RED, RED},
+                    {RED, RED, RED},
+                    {RED, RED, RED}
                 }
             },
             {
                 { // LEFT
-                    {GREEN, GREEN, GREEN},
-                    {GREEN, GREEN, GREEN},
-                    {GREEN, GREEN, GREEN}
+                    {ORANGE, ORANGE, ORANGE},
+                    {ORANGE, ORANGE, ORANGE},
+                    {ORANGE, ORANGE, ORANGE}
                 }
             }
         }
