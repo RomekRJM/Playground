@@ -136,7 +136,7 @@ private:
     stringstream ss;
     bool initialPositionSet = false;
     Color colorOnTop;
-    const int MAX_ALLOWED_INVOCATIONS = 100;
+    const int MAX_ALLOWED_INVOCATIONS = 150;
     int invocations;
     
     void ensureOnTop(Cube &cube, Color color);

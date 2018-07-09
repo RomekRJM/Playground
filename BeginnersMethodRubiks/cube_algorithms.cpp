@@ -352,7 +352,6 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
     
     while (!match) {
         usleep(100000);
-        cout << "next run " << (!isCandidateForSwap(UPPER_CORNERS[0], cube)) << "  " << (!LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube)) << endl;
                 
         if (LOWER_CORNERS[0].countFullyMatchedSides(cube) == 3) {
             // already solved, move to the next corner
@@ -361,17 +360,19 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
         }
         
         bool upperForSwap = isCandidateForSwap(UPPER_CORNERS[0], cube);
+        bool upperHasWhite = UPPER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube);
         bool lowerHasWhite = LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube);
-
+        cout << "upperForSwap: " << upperForSwap << ", lowerHasWhite: " << lowerHasWhite << endl;
+        
         /**
          * Here is the reasoning behind it:
-         * upperForSwap | lowerHasWhite | rotate? |
-         * 0            | 0             | 1       |
-         * 1            | 0             | 0       |
-         * 0            | 1             | 0       | 
-         * 1            | 1             | 1       |
+         * upperForSwap | lowerHasWhite | rotate?             |
+         * 0            | 0             | 1                   |
+         * 1            | 0             | 0                   |
+         * 0            | 1             | upperHasWhite       | 
+         * 1            | 1             | 0                   |
          */
-        if (upperForSwap == lowerHasWhite) {
+        if (!upperForSwap && (!lowerHasWhite || (lowerHasWhite && upperHasWhite))) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
             
             ++timesRotated;
