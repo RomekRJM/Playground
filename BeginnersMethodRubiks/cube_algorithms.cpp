@@ -419,6 +419,7 @@ void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
         if (sideSolved(cube) || rotations >= 3) {
             cout << "Nothing to do, side is already solved. Rotating 90 clockwise over y." << endl;
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
+            cube.printCube();
             rotations = 0;
             continue;
         }
@@ -429,6 +430,8 @@ void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
 
         if (currentSwap == Swap::NOTHING) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
+            cout << "After U rotation: " << endl;
+            cube.printCube();
             ++rotations;
         }
 
@@ -469,7 +472,8 @@ SecondLayerEdges::Swap SecondLayerEdges::findSwap(Cube cube) {
     }
 
     if (SECOND_LAYER_LEFT_EDGE.countFullyMatchedSides(cube) < 2) {
-        if (!SECOND_LAYER_LEFT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
+        if (!SECOND_LAYER_LEFT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)
+            && THIRD_LAYER_FRONT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
             return Swap::LEFT_FRONT_EDGE;
         }
     } else {
@@ -477,7 +481,8 @@ SecondLayerEdges::Swap SecondLayerEdges::findSwap(Cube cube) {
     }
 
     if (SECOND_LAYER_RIGHT_EDGE.countFullyMatchedSides(cube) < 2) {
-        if (!SECOND_LAYER_RIGHT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
+        if (!SECOND_LAYER_RIGHT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)
+            && THIRD_LAYER_FRONT_EDGE.hasColorOnAnySide(Color::YELLOW, cube)) {
             return Swap::RIGHT_FRONT_EDGE;
         }
     } else {
