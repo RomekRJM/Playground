@@ -23,12 +23,13 @@ using namespace std;
 
 class BeginnersMethod {
 public:
-    BeginnersMethod();
+    BeginnersMethod() {};
     string solve(string cubeAsAString);
     
 private:
     MethodSteps methodSteps;
     map<State, CubeAlgorithm*> ALGORITHM;
+    void resetInternalState();
     string yellowCrossSubroutine(State state, Cube& cube);
     string cubeAlgorithmSubroutine(State state, CubeAlgorithm* algorithm, Cube& cube);
 };

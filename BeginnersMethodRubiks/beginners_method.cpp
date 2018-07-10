@@ -2,7 +2,7 @@
 #include "cube_generator.hpp"
 #include "unistd.h"
 
-BeginnersMethod::BeginnersMethod() {
+void BeginnersMethod::resetInternalState() {
     methodSteps = MethodSteps();
 
     //Order for ALGORITHM: 
@@ -29,6 +29,8 @@ BeginnersMethod::BeginnersMethod() {
 }
 
 string BeginnersMethod::solve(string s) {
+    resetInternalState();
+    
     Cube cube = CubeGenerator::fromString(s);
     string result = "";
     
