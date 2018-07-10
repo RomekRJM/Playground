@@ -2,6 +2,32 @@
 #include "cube_generator.hpp"
 #include "unistd.h"
 
+BeginnersMethod::BeginnersMethod() {
+    methodSteps = MethodSteps();
+
+    //Order for ALGORITHM: 
+    //DASY, WHITE_CROSS, FIRST_LAYER_CORNERS, SECOND_LAYER_EDGES, 
+    //YELLOW_DOT, YELLOW_LINE, YELLOW_ARC,
+    //YELLOW_CROSS, POSITION_LAST_LAYER_CORNERS, PERMUTE_LAST_LAYER_CORNERS,
+    //SOLVED
+    ALGORITHM.insert(pair<State, CubeAlgorithm*>
+        {State::DASY, new Dasy()});
+    ALGORITHM.insert(pair<State, CubeAlgorithm*>
+        {State::WHITE_CROSS, new WhiteCross()});
+    ALGORITHM.insert(pair<State, CubeAlgorithm*>
+        {State::FIRST_LAYER_CORNERS, new FirstLayerCorners()});
+    ALGORITHM.insert(pair<State, CubeAlgorithm*>
+        {State::SECOND_LAYER_EDGES, new SecondLayerEdges()});
+    ALGORITHM.insert(pair<State, CubeAlgorithm*>
+        {State::YELLOW_CROSS, nullptr});
+    ALGORITHM.insert(pair<State, CubeAlgorithm*>
+        {State::POSITION_LAST_LAYER_CORNERS, new PositionLastLayerCorners()});
+    ALGORITHM.insert(pair<State, CubeAlgorithm*>
+        {State::PERMUTE_LAST_LAYER_CORNERS, new PermuteLastLayerCorners()});
+    ALGORITHM.insert(pair<State, CubeAlgorithm*>
+        {State::POSITION_LAST_LAYER_EDGES, new PositionLastLayerEdges()});
+}
+
 string BeginnersMethod::solve(string s) {
     Cube cube = CubeGenerator::fromString(s);
     string result = "";

@@ -574,6 +574,9 @@ void PositionLastLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
                 [&](int c) {
                     currentMatch += c / 3; }
         );
+        
+        cout << "On best match i=" << i << ", currentMatch: " << currentMatch << endl;
+        cube.printCube();
 
         if (currentMatch > bestMatch) {
             bestMatch = currentMatch;
@@ -606,6 +609,9 @@ void PositionLastLayerCorners::findOptimalCubeFlip(Cube &cube) {
 
 void PositionLastLayerCorners::rotate(Cube &cube) {
     int repeat = 0;
+    
+    cout << "Before rotate on PositionLastLayerCorners: " << endl;
+    cube.printCube();
     
     if (UPPER_CORNERS[1].countPartiallyMatchedSides(cube) < 3) {
         repeat = 1;
