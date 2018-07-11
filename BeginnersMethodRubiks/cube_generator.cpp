@@ -1,3 +1,4 @@
+#include "cube_algorithms.hpp"
 #include "cube_generator.hpp"
 #include <stdlib.h>
 #include <iostream>
@@ -9,23 +10,28 @@ Cube CubeGenerator::unscrambled() {
     return Cube();
 }
 
-Cube CubeGenerator::fromArray(array<array<array<Color, SIZE>, SIZE>, SIDES> c) {
+Cube CubeGenerator::fromArray(array<array<array<Color, Cube::SIZE>, Cube::SIZE>, Cube::SIDES> c) {
     Cube cube = Cube();
     cube.cube = c;
     return cube;
 }
 
-Cube CubeGenerator::fromRandomScramble() {
+Cube CubeGenerator::fromRandomScramble(string &rotationsPerformed) {
     Cube cube = Cube();
     srand((int) time(0));
     int moves = (rand() % 10) + 20;
     int i = 0;
+    stringstream ss;
 
     while (i++ < moves) {
         int r = rand() % (Rotation::LEFT_COUNTER_CLOCKWISE + 1);
-        cube.rotate(static_cast<Rotation> (r));
+        Rotation rotation = static_cast<Rotation> (r);
+        
+        cube.rotate(rotation);
+        ss << toString(rotation) << (i == moves ? "" : ",");
     }
-
+    
+    rotationsPerformed = ss.str();
     return cube;
 }
 
@@ -69,10 +75,10 @@ Cube CubeGenerator::fromString(string s) {
             }
 
             ++column;
-            if (column >= SIZE) {
+            if (column >= Cube::SIZE) {
                 column = 0;
                 ++row;
-                if (row >= SIZE) {
+                if (row >= Cube::SIZE) {
                     row = 0;
                     ++side_counter;
                     side = static_cast<Side> (side_counter);

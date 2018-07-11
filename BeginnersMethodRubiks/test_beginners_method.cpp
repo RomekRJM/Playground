@@ -32,6 +32,7 @@ BOOST_AUTO_TEST_CASE(test_full_run) {
             "R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
             "R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U"
         },
+        // On solved ( GRW on FRU ): R'2 D'2 B'2 U B'2 L'2 D B'2 U'2 L R'2 B' L R'2 F'2 R' U'2 B' F R
         {
             "ORYOGGWWG,OOWGWWWYB,RBGBBBGYY,BRYYYGBBY,OOGRRWRWO,WOBROYRGR",
             "F,R,L,L,F,U,U,U,L,U,B',U,U,F,F,B,B,R,R,L,L,U,U,R,U,R',U',"

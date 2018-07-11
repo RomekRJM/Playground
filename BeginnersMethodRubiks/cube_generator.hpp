@@ -13,11 +13,11 @@
 
 using namespace std;
 
-class CubeGenerator : private Cube {
+class CubeGenerator {
 public:
     static Cube unscrambled();
-    static Cube fromArray(array<array<array<Color, SIZE>, SIZE>, SIDES> c);
-    static Cube fromRandomScramble();
+    static Cube fromArray(array<array<array<Color, Cube::SIZE>, Cube::SIZE>, Cube::SIDES> c);
+    static Cube fromRandomScramble(string &rotationsPerformed);
     static Cube fromString(string s);
 };
 

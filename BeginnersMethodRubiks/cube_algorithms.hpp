@@ -93,6 +93,56 @@ const Edge SECOND_LAYER_RIGHT_EDGE = Edge(CubePosition(RIGHT, 1, 0), CubePositio
 
 void replaceAllInStringStream(stringstream& ss, string toBeReplaced, string replacement);
 
+// rotation string representations
+const string ROTATE_FRONT_CLOCKWISE = "F";
+const string ROTATE_UP_CLOCKWISE = "U";
+const string ROTATE_BACK_CLOCKWISE = "B";
+const string ROTATE_DOWN_CLOCKWISE = "D";
+const string ROTATE_RIGHT_CLOCKWISE = "R";
+const string ROTATE_LEFT_CLOCKWISE = "L";
+const string ROTATE_FRONT_COUNTER_CLOCKWISE = "F'";
+const string ROTATE_UP_COUNTER_CLOCKWISE = "U'";
+const string ROTATE_BACK_COUNTER_CLOCKWISE = "B'";
+const string ROTATE_DOWN_COUNTER_CLOCKWISE = "D'";
+const string ROTATE_RIGHT_COUNTER_CLOCKWISE = "R'";
+const string ROTATE_LEFT_COUNTER_CLOCKWISE = "L'";
+
+// flip string representations
+const string FLIP_Y_CLOCKWISE_90 = "y";
+const string FLIP_Y_COUNTER_CLOCKWISE_90 = "y'";
+const string FLIP_X_CLOCKWISE_90 = "x";
+const string FLIP_X_COUNTER_CLOCKWISE_90 = "x'";
+const string FLIP_Z_CLOCKWISE_90 = "z";
+const string FLIP_Z_COUNTER_CLOCKWISE_90 = "z'";
+const string FLIP_UPSIDE_DOWN = "z2";
+
+const map<string, Rotation> rotations = {
+    {ROTATE_FRONT_CLOCKWISE, FRONT_CLOCKWISE},
+    {ROTATE_UP_CLOCKWISE, UP_CLOCKWISE},
+    {ROTATE_BACK_CLOCKWISE, BACK_CLOCKWISE},
+    {ROTATE_DOWN_CLOCKWISE, DOWN_CLOCKWISE},
+    {ROTATE_RIGHT_CLOCKWISE, RIGHT_CLOCKWISE},
+    {ROTATE_LEFT_CLOCKWISE, LEFT_CLOCKWISE},
+    {ROTATE_FRONT_COUNTER_CLOCKWISE, FRONT_COUNTER_CLOCKWISE},
+    {ROTATE_UP_COUNTER_CLOCKWISE, UP_COUNTER_CLOCKWISE},
+    {ROTATE_BACK_COUNTER_CLOCKWISE, BACK_COUNTER_CLOCKWISE},
+    {ROTATE_DOWN_COUNTER_CLOCKWISE, DOWN_COUNTER_CLOCKWISE},
+    {ROTATE_RIGHT_COUNTER_CLOCKWISE, RIGHT_COUNTER_CLOCKWISE},
+    {ROTATE_LEFT_COUNTER_CLOCKWISE, LEFT_COUNTER_CLOCKWISE}
+};
+
+const map<string, Flip> flips = {
+    {FLIP_Y_CLOCKWISE_90, Y_CLOCKWISE_90},
+    {FLIP_Y_COUNTER_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90},
+    {FLIP_X_CLOCKWISE_90, X_CLOCKWISE_90},
+    {FLIP_X_COUNTER_CLOCKWISE_90, X_COUNTER_CLOCKWISE_90},
+    {FLIP_Z_CLOCKWISE_90, Z_CLOCKWISE_90},
+    {FLIP_Z_COUNTER_CLOCKWISE_90, Z_COUNTER_CLOCKWISE_90},
+    {FLIP_UPSIDE_DOWN, UPSIDE_DOWN}
+};
+
+string toString(Rotation);
+
 class CubeAlgorithm {
 public:
 
@@ -104,35 +154,10 @@ public:
 
     string perform(Cube & cube);
 
-    // rotation string representations
-    static const string ROTATE_FRONT_CLOCKWISE;
-    static const string ROTATE_UP_CLOCKWISE;
-    static const string ROTATE_BACK_CLOCKWISE;
-    static const string ROTATE_DOWN_CLOCKWISE;
-    static const string ROTATE_RIGHT_CLOCKWISE;
-    static const string ROTATE_LEFT_CLOCKWISE;
-    static const string ROTATE_FRONT_COUNTER_CLOCKWISE;
-    static const string ROTATE_UP_COUNTER_CLOCKWISE;
-    static const string ROTATE_BACK_COUNTER_CLOCKWISE;
-    static const string ROTATE_DOWN_COUNTER_CLOCKWISE;
-    static const string ROTATE_RIGHT_COUNTER_CLOCKWISE;
-    static const string ROTATE_LEFT_COUNTER_CLOCKWISE;
-
-    // flip string representations
-    static const string FLIP_Y_CLOCKWISE_90;
-    static const string FLIP_Y_COUNTER_CLOCKWISE_90;
-    static const string FLIP_X_CLOCKWISE_90;
-    static const string FLIP_X_COUNTER_CLOCKWISE_90;
-    static const string FLIP_Z_CLOCKWISE_90;
-    static const string FLIP_Z_COUNTER_CLOCKWISE_90;
-    static const string FLIP_UPSIDE_DOWN;
-
     static const vector<string> RIGHTY;
     static const vector<string> LEFTY;
 
 private:
-    static const map<string, Rotation> rotations;
-    static const map<string, Flip> flips;
     stringstream ss;
     bool initialPositionSet = false;
     Color colorOnTop;

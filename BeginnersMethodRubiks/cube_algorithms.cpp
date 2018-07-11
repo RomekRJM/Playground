@@ -26,53 +26,15 @@ void replaceAllInStringStream(stringstream& ss, string toBeReplaced, string repl
     ss.str(s);
 }
 
-// rotation string representations
-const string CubeAlgorithm::ROTATE_FRONT_CLOCKWISE = "F";
-const string CubeAlgorithm::ROTATE_UP_CLOCKWISE = "U";
-const string CubeAlgorithm::ROTATE_BACK_CLOCKWISE = "B";
-const string CubeAlgorithm::ROTATE_DOWN_CLOCKWISE = "D";
-const string CubeAlgorithm::ROTATE_RIGHT_CLOCKWISE = "R";
-const string CubeAlgorithm::ROTATE_LEFT_CLOCKWISE = "L";
-const string CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE = "F'";
-const string CubeAlgorithm::ROTATE_UP_COUNTER_CLOCKWISE = "U'";
-const string CubeAlgorithm::ROTATE_BACK_COUNTER_CLOCKWISE = "B'";
-const string CubeAlgorithm::ROTATE_DOWN_COUNTER_CLOCKWISE = "D'";
-const string CubeAlgorithm::ROTATE_RIGHT_COUNTER_CLOCKWISE = "R'";
-const string CubeAlgorithm::ROTATE_LEFT_COUNTER_CLOCKWISE = "L'";
-
-// flip string representations
-const string CubeAlgorithm::FLIP_Y_CLOCKWISE_90 = "y";
-const string CubeAlgorithm::FLIP_Y_COUNTER_CLOCKWISE_90 = "y'";
-const string CubeAlgorithm::FLIP_X_CLOCKWISE_90 = "x";
-const string CubeAlgorithm::FLIP_X_COUNTER_CLOCKWISE_90 = "x'";
-const string CubeAlgorithm::FLIP_Z_CLOCKWISE_90 = "z";
-const string CubeAlgorithm::FLIP_Z_COUNTER_CLOCKWISE_90 = "z'";
-const string CubeAlgorithm::FLIP_UPSIDE_DOWN = "z2";
-
-const map<string, Rotation> CubeAlgorithm::rotations = {
-    {CubeAlgorithm::ROTATE_FRONT_CLOCKWISE, FRONT_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_UP_CLOCKWISE, UP_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_BACK_CLOCKWISE, BACK_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_DOWN_CLOCKWISE, DOWN_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_RIGHT_CLOCKWISE, RIGHT_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_LEFT_CLOCKWISE, LEFT_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE, FRONT_COUNTER_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_UP_COUNTER_CLOCKWISE, UP_COUNTER_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_BACK_COUNTER_CLOCKWISE, BACK_COUNTER_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_DOWN_COUNTER_CLOCKWISE, DOWN_COUNTER_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_RIGHT_COUNTER_CLOCKWISE, RIGHT_COUNTER_CLOCKWISE},
-    {CubeAlgorithm::ROTATE_LEFT_COUNTER_CLOCKWISE, LEFT_COUNTER_CLOCKWISE}
-};
-
-const map<string, Flip> CubeAlgorithm::flips = {
-    {CubeAlgorithm::FLIP_Y_CLOCKWISE_90, Y_CLOCKWISE_90},
-    {CubeAlgorithm::FLIP_Y_COUNTER_CLOCKWISE_90, Y_COUNTER_CLOCKWISE_90},
-    {CubeAlgorithm::FLIP_X_CLOCKWISE_90, X_CLOCKWISE_90},
-    {CubeAlgorithm::FLIP_X_COUNTER_CLOCKWISE_90, X_COUNTER_CLOCKWISE_90},
-    {CubeAlgorithm::FLIP_Z_CLOCKWISE_90, Z_CLOCKWISE_90},
-    {CubeAlgorithm::FLIP_Z_COUNTER_CLOCKWISE_90, Z_COUNTER_CLOCKWISE_90},
-    {CubeAlgorithm::FLIP_UPSIDE_DOWN, UPSIDE_DOWN}
-};
+string toString(Rotation rotation) {
+    for(pair<string, Rotation> p : rotations) {
+        if(p.second == rotation) {
+            return p.first;
+        }
+    }
+    
+    return "";
+}
 
 const vector<string> CubeAlgorithm::RIGHTY = {
     ROTATE_RIGHT_CLOCKWISE, ROTATE_UP_CLOCKWISE,
@@ -234,8 +196,8 @@ void CubeAlgorithm::cancelLastMoves(Cube &cube, int moves) {
         string newMove;
         getline(tokenizer, move, ',');
 
-        if (move == CubeAlgorithm::FLIP_UPSIDE_DOWN) {
-            newMove = CubeAlgorithm::FLIP_UPSIDE_DOWN;
+        if (move == FLIP_UPSIDE_DOWN) {
+            newMove = FLIP_UPSIDE_DOWN;
         } else if (move.length() == 2) {
             // change counterclockwise to clockwise, like U' => U
             newMove = move.substr(0, 1);
@@ -270,7 +232,7 @@ void Dasy::rotate(Cube &cube) {
 
     for (int i = 0; i < 3; ++i) {
         if (cube.getColor(solution->cantBeWhite) == WHITE) {
-            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+            CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
         }
     }
 
@@ -294,7 +256,7 @@ void WhiteCross::findPositionBeforeRotation(Cube &cube) {
             break;
         } catch (SideNotFoundException exc) {
             cout << "Another rotation - side was not found" << endl;
-            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+            CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
         }
     }
 }
@@ -327,16 +289,16 @@ void WhiteCross::rotate(Cube &cube) {
 
     switch (matchingSide) {
         case FRONT:
-            rotation = CubeAlgorithm::ROTATE_FRONT_CLOCKWISE;
+            rotation = ROTATE_FRONT_CLOCKWISE;
             break;
         case LEFT:
-            rotation = CubeAlgorithm::ROTATE_LEFT_CLOCKWISE;
+            rotation = ROTATE_LEFT_CLOCKWISE;
             break;
         case RIGHT:
-            rotation = CubeAlgorithm::ROTATE_RIGHT_CLOCKWISE;
+            rotation = ROTATE_RIGHT_CLOCKWISE;
             break;
         case BACK:
-            rotation = CubeAlgorithm::ROTATE_BACK_CLOCKWISE;
+            rotation = ROTATE_BACK_CLOCKWISE;
             break;
         default:
             break;
@@ -510,15 +472,15 @@ void SecondLayerEdges::shorten(stringstream &ss) {
 }
 
 void YellowDot::rotate(Cube & cube) {
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_CLOCKWISE);
+    CubeAlgorithm::doMove(cube, ROTATE_FRONT_CLOCKWISE);
     CubeAlgorithm::doMoves(cube, RIGHTY);
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE);
+    CubeAlgorithm::doMove(cube, ROTATE_FRONT_COUNTER_CLOCKWISE);
 }
 
 void YellowLine::findInitialPosition(Cube & cube) {
     for (int i = 0; i < 2; ++i) {
         if (!isYellowLine(cube)) {
-            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+            CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
         }
     }
 }
@@ -530,15 +492,15 @@ bool YellowLine::isYellowLine(Cube cube) {
 }
 
 void YellowLine::rotate(Cube & cube) {
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_CLOCKWISE);
+    CubeAlgorithm::doMove(cube, ROTATE_FRONT_CLOCKWISE);
     CubeAlgorithm::doMoves(cube, RIGHTY);
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_FRONT_COUNTER_CLOCKWISE);
+    CubeAlgorithm::doMove(cube, ROTATE_FRONT_COUNTER_CLOCKWISE);
 }
 
 void YellowArc::findInitialPosition(Cube & cube) {
     for (int i = 0; i < 3; ++i) {
         if (!isYellowArc(cube)) {
-            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+            CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
         }
     }
 }
@@ -550,11 +512,11 @@ bool YellowArc::isYellowArc(Cube cube) {
 }
 
 void YellowArc::rotate(Cube & cube) {
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Z_CLOCKWISE_90);
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_BACK_CLOCKWISE);
+    CubeAlgorithm::doMove(cube, FLIP_Z_CLOCKWISE_90);
+    CubeAlgorithm::doMove(cube, ROTATE_BACK_CLOCKWISE);
     CubeAlgorithm::doMoves(cube, RIGHTY);
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_BACK_COUNTER_CLOCKWISE);
-    CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Z_COUNTER_CLOCKWISE_90);
+    CubeAlgorithm::doMove(cube, ROTATE_BACK_COUNTER_CLOCKWISE);
+    CubeAlgorithm::doMove(cube, FLIP_Z_COUNTER_CLOCKWISE_90);
 }
 
 void PositionLastLayerCorners::findInitialPosition(Cube &cube) {
@@ -584,7 +546,7 @@ void PositionLastLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
         }
         
         currentMatch = 0;
-        CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+        CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
     }
 
     cancelLastMoves(cube, 4 - bestMatchOnTurn);
@@ -593,13 +555,13 @@ void PositionLastLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
 void PositionLastLayerCorners::findOptimalCubeFlip(Cube &cube) {
     while (true) {
         if (UPPER_CORNERS[0].countPartiallyMatchedSides(cube) == 3) {
-            CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
+            CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
             continue;
         }
         
         if (UPPER_CORNERS[1].countPartiallyMatchedSides(cube) == 3 && 
                 UPPER_CORNERS[2].countPartiallyMatchedSides(cube) == 3) {
-            CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
+            CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
             continue;
         }
         
@@ -621,7 +583,7 @@ void PositionLastLayerCorners::rotate(Cube &cube) {
     
     for(int i=0; i < repeat; ++i) {
         CubeAlgorithm::doMoves(cube, CubeAlgorithm::RIGHTY, 3);
-        CubeAlgorithm::doMove(cube, CubeAlgorithm::FLIP_Y_CLOCKWISE_90);
+        CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
         CubeAlgorithm::doMoves(cube, CubeAlgorithm::LEFTY, 3);
     }
     
@@ -654,7 +616,7 @@ void PermuteLastLayerCorners::orientLowerCubletsYellowDown(Cube &cube) {
             CubeAlgorithm::doMoves(cube, CubeAlgorithm::RIGHTY);
         }
         if (i != 3) {
-            CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_DOWN_COUNTER_CLOCKWISE);
+            CubeAlgorithm::doMove(cube, ROTATE_DOWN_COUNTER_CLOCKWISE);
         }
     }
 }
@@ -674,7 +636,7 @@ void PermuteLastLayerCorners::findOptimalFirstLayerRotation(Cube &cube) {
             break;
         }
         
-        CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_DOWN_COUNTER_CLOCKWISE);
+        CubeAlgorithm::doMove(cube, ROTATE_DOWN_COUNTER_CLOCKWISE);
     }
     
     cancelLastMoves(cube, 3 - optimalMatchOnTurn);
@@ -704,7 +666,7 @@ void PositionLastLayerEdges::findOptimalLastLayerRotation(Cube &cube) {
             break;
         }
                 
-        CubeAlgorithm::doMove(cube, CubeAlgorithm::ROTATE_UP_CLOCKWISE);
+        CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
     }
     
     array<Side, 4> sides = {FRONT, RIGHT, BACK, LEFT};
@@ -719,7 +681,7 @@ void PositionLastLayerEdges::findOptimalLastLayerRotation(Cube &cube) {
     }
     
     CubeAlgorithm::doMoves(cube, 
-            vector<string>{CubeAlgorithm::FLIP_Y_CLOCKWISE_90}, flipToSolvedSide);
+            vector<string>{FLIP_Y_CLOCKWISE_90}, flipToSolvedSide);
 }
 
 

@@ -7,15 +7,18 @@
 #include "cube_generator.hpp"
 
 struct CubeSolution {
-    CubeSolution(string i, bool s) : initialCubeRepresentation(i), wasSolved(s) {};
+    CubeSolution(string i, bool s, string is) : 
+        initialCubeRepresentation(i), wasSolved(s), initialScramble(is) {};
     string initialCubeRepresentation;
+    string initialScramble;
     bool wasSolved;
 };
 
 void tryToSolveRandom(promise<CubeSolution> cubePromise) {
-    Cube cube = CubeGenerator::fromRandomScramble();
+    string initialScramble;
+    Cube cube = CubeGenerator::fromRandomScramble(initialScramble);
     string cubeString = cube.asShortString();
-    CubeSolution cubeSolution = CubeSolution(cubeString, false);
+    CubeSolution cubeSolution = CubeSolution(cubeString, false, initialScramble);
     
     try {
         BeginnersMethod().solve(cubeString);
@@ -35,5 +38,10 @@ BOOST_AUTO_TEST_CASE(test_random_1) {
     th.detach();
     cube_task.wait();
     
-    BOOST_CHECK(cube_task.get().wasSolved);
+    CubeSolution solution = cube_task.get();
+    
+    cout << "Scramble: " << solution.initialCubeRepresentation
+            << " from scramble: " << solution.initialScramble
+            << " was solved: " << solution.wasSolved << endl;
+    BOOST_CHECK(solution.wasSolved);
 }
