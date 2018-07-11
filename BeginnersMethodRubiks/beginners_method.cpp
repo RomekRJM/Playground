@@ -66,7 +66,10 @@ string BeginnersMethod::cubeAlgorithmSubroutine(State state,
 string BeginnersMethod::yellowCrossSubroutine(State state, Cube& cube) {
     string s = "";
     cout << "Checking which yellow cross subroutine is appropriate." << endl;
-    if(methodSteps.isYellowDotDone(cube)) {
+    
+    if(methodSteps.isYellowCrossDone(cube)) {
+        cout << "Nothing to do as yellow cross already done." << endl;
+    } else if(methodSteps.isYellowDotDone(cube)) {
         if(methodSteps.isYellowArcDone(cube)) {
             cout << "Yellow arc is next" << endl;
             s += YellowArc().perform(cube);

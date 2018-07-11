@@ -31,6 +31,20 @@ BOOST_AUTO_TEST_CASE(test_full_run) {
             "R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,"
             "R,U,R',U',L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
             "R,U,R',U',L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U"
+        },
+        {
+            "ORYOGGWWG,OOWGWWWYB,RBGBBBGYY,BRYYYGBBY,OOGRRWRWO,WOBROYRGR",
+            "F,R,L,L,F,U,U,U,L,U,B',U,U,F,F,B,B,R,R,L,L,U,U,R,U,R',U',"
+            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',y,U,y,R,U,R',U',R,U,R',U',"
+            "y,U,R,U,R',U',R,U,R',U',R,U,R',U',y,y,y,U,U,y,y,y,y,U',L',U',L,U,"
+            "y',R,U,R',U',U,U,U,R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,"
+            "L',U',L,U,L',U',L,U,z2,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
+            "D',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',D',D',R,U,R',U',"
+            "R,U,R',U',R,U,R',U',R,U,R',U'z2,D',D',D',D',D',y,R,U,R',U',"
+            "L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
+            "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',"
+            "L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
+            "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U"
         }
     };
     
