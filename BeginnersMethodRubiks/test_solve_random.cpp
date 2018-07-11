@@ -31,17 +31,31 @@ void tryToSolveRandom(promise<CubeSolution> cubePromise) {
 
 }
 
-BOOST_AUTO_TEST_CASE(test_random_1) {
-    promise<CubeSolution> cubePromise;
-    future<CubeSolution> cube_task = cubePromise.get_future();
-    thread th = thread(tryToSolveRandom, move(cubePromise));
-    th.detach();
-    cube_task.wait();
+BOOST_AUTO_TEST_CASE(test_solve_many_random_in_parallel) {
+    const int NUM_TASKS = 3;
+    array<promise<CubeSolution>, NUM_TASKS> cubePromises;
+    array<future<CubeSolution>, NUM_TASKS> cube_tasks;
+    array<thread, NUM_TASKS> threads;
     
-    CubeSolution solution = cube_task.get();
+    for(int i=0; i<NUM_TASKS; ++i) {
+        cube_tasks[i] = cubePromises[i].get_future();
+        threads[i] = thread(tryToSolveRandom, move(cubePromises[i]));
+        threads[i].detach();
+    }
     
-    cout << "Scramble: " << solution.initialCubeRepresentation
-            << " from scramble: " << solution.initialScramble
-            << " was solved: " << solution.wasSolved << endl;
-    BOOST_CHECK(solution.wasSolved);
+    int solved = 0;
+    
+    for(int i=0; i<NUM_TASKS; ++i) {
+        cube_tasks[i].wait();    
+        CubeSolution solution = cube_tasks[i].get();
+    
+        cout << "Scramble: " << solution.initialCubeRepresentation
+                << " from scramble: " << solution.initialScramble
+                << " was solved: " << solution.wasSolved << endl;
+        
+        solved += solution.wasSolved;
+    }
+    
+    cout << "Solved: " << solved << " out of " << NUM_TASKS << "." << endl;
+    BOOST_CHECK(solved == NUM_TASKS);
 }
