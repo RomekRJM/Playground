@@ -46,6 +46,21 @@ BOOST_AUTO_TEST_CASE(test_full_run) {
             "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,R,U,R',U',"
             "L',U',L,U,R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',"
             "L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U,L',U',L,U"
+        },
+        // On solved ( GRW on FRU ): R,U,U',D,L,D',R2,D,B',B,R',R2,U,D',U,D,F,L,R',D',R',R2
+        {
+            "OWBWGGBWG,RWBYWBYOR,WGGBBGBYG,OBRGYYWOY,WOORRRWRR,YBGOOROYY",
+            "F,L',R,F,U,L',U,U,U,B,B,U,L,L,U,F,F,R,R,U,B,B,y,U,U,U,R,U,R',U',"
+            "R,U,R',U',R,U,R',U',y,R,U,R',U',U,R,U,R',U',y,R,U,R',U',U,"
+            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',y,U,U,R,U,R',U',"
+            "U,U',L',U',L,U,y',R,U,R',U',',,U',z,B,R,U,R',U',B',z',U,y,y,"
+            "R,U,R',U',R,U,R',U',R,U,R',U',y,L',U',L,U,L',U',L,U,L',U',L,U,z2,"
+            "D',R,U,R',U',R,U,R',U',D',D',R,U,R',U',R,U,R',U',R,U,R',U',"
+            "R,U,R',U'z2,D',D',D',D',D',R,U,R',U',L',U',L,U,R,U,R',U',"
+            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',L',U',L,U,L',U',L,U,"
+            "L',U',L,U,L',U',L,U,L',U',L,U,y,y,y,R,U,R',U',L',U',L,U,R,U,R',U',"
+            "R,U,R',U',R,U,R',U',R,U,R',U',R,U,R',U',L',U',L,U,L',U',L,U,"
+            "L',U',L,U,L',U',L,U,L',U',L,U"
         }
     };
     

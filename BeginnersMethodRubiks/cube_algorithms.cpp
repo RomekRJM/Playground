@@ -335,12 +335,21 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
          * 1            | 1             | 0                   |
          */
         if (!upperForSwap && (!lowerHasWhite || (lowerHasWhite && upperHasWhite))) {
+            cout << "Rotate up clockwise." << endl;
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
+            cube.printCube();
             
             ++timesRotated;
             if(timesRotated > 3) {
+                cout << "Canceling last moves:" << endl;
                 CubeAlgorithm::cancelLastMoves(cube, 4);
+                cube.printCube();
+                
+                cout << "Flipping cube clockwise y 90 degrees:" << endl;
                 CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
+                cube.printCube();
+                
+                timesRotated = 0;
             }
         } else {
             match = true;
