@@ -335,9 +335,9 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
          * 1            | 1             | 0                   |
          */
         if (!upperForSwap && (!lowerHasWhite || (lowerHasWhite && upperHasWhite))) {
-            cout << "Rotate up clockwise." << endl;
+            //cout << "Rotate up clockwise." << endl;
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
-            cube.printCube();
+            //cube.printCube();
             
             ++timesRotated;
             if(timesRotated > 3) {
@@ -546,12 +546,16 @@ void PositionLastLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
                     currentMatch += c / 3; }
         );
         
-        cout << "On best match i=" << i << ", currentMatch: " << currentMatch << endl;
-        cube.printCube();
+//        cout << "On best match i=" << i << ", currentMatch: " << currentMatch << endl;
+//        cube.printCube();
 
         if (currentMatch > bestMatch) {
             bestMatch = currentMatch;
             bestMatchOnTurn = i;
+        }
+        
+        if (bestMatch == 4) {
+            alreadySolved = true;
         }
         
         currentMatch = 0;
@@ -562,7 +566,7 @@ void PositionLastLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
 }
 
 void PositionLastLayerCorners::findOptimalCubeFlip(Cube &cube) {
-    while (true) {
+    while (!alreadySolved) {
         if (UPPER_CORNERS[0].countPartiallyMatchedSides(cube) == 3) {
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
             continue;
@@ -579,11 +583,16 @@ void PositionLastLayerCorners::findOptimalCubeFlip(Cube &cube) {
 }
 
 void PositionLastLayerCorners::rotate(Cube &cube) {
+//    cout << "Before rotate on PositionLastLayerCorners: " << endl;
+//    cube.printCube();
+    
+    if (alreadySolved) {
+        cout << "Looks like cube already has last layer corners in position" << endl;
+        return;
+    }
+    
     int repeat = 0;
-    
-    cout << "Before rotate on PositionLastLayerCorners: " << endl;
-    cube.printCube();
-    
+        
     if (UPPER_CORNERS[1].countPartiallyMatchedSides(cube) < 3) {
         repeat = 1;
     } else if (UPPER_CORNERS[2].countPartiallyMatchedSides(cube) < 3) {

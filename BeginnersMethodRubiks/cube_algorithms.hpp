@@ -146,10 +146,10 @@ string toString(Rotation);
 class CubeAlgorithm {
 public:
 
-    CubeAlgorithm() : colorOnTop(Color::YELLOW) {
+    CubeAlgorithm() : colorOnTop(Color::YELLOW), invocations(0) {
     };
     
-    CubeAlgorithm(Color c) : colorOnTop(c) {
+    CubeAlgorithm(Color c) : colorOnTop(c), invocations(0) {
     };
 
     string perform(Cube & cube);
@@ -248,10 +248,13 @@ class PositionLastLayerCorners : public CubeAlgorithm {
     void findInitialPosition(Cube &cube) override;
     void rotate(Cube &cube) override;
     void shorten(stringstream &ss) override;
+public:
+    PositionLastLayerCorners() : CubeAlgorithm(), alreadySolved(false) {};
 private:
     array<int, 4> countUpperCornersInRightPlace(Cube cube);
     void findOptimalLastLayerRotation(Cube &cube);
     void findOptimalCubeFlip(Cube &cube);
+    bool alreadySolved;
 };
 
 class PermuteLastLayerCorners : public CubeAlgorithm {

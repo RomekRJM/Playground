@@ -32,7 +32,7 @@ void tryToSolveRandom(promise<CubeSolution> cubePromise) {
 }
 
 BOOST_AUTO_TEST_CASE(test_solve_many_random_in_parallel) {
-    const int NUM_TASKS = 3;
+    const int NUM_TASKS = 100;
     array<promise<CubeSolution>, NUM_TASKS> cubePromises;
     array<future<CubeSolution>, NUM_TASKS> cube_tasks;
     array<thread, NUM_TASKS> threads;
