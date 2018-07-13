@@ -32,30 +32,34 @@ void tryToSolveRandom(promise<CubeSolution> cubePromise) {
 }
 
 BOOST_AUTO_TEST_CASE(test_solve_many_random_in_parallel) {
-    const int NUM_TASKS = 100;
-    array<promise<CubeSolution>, NUM_TASKS> cubePromises;
-    array<future<CubeSolution>, NUM_TASKS> cube_tasks;
-    array<thread, NUM_TASKS> threads;
-    
-    for(int i=0; i<NUM_TASKS; ++i) {
-        cube_tasks[i] = cubePromises[i].get_future();
-        threads[i] = thread(tryToSolveRandom, move(cubePromises[i]));
-        threads[i].detach();
-    }
-    
+    const int NUM_ROUNDS = 500;
+    const int NUM_THREADS = 20;
+    const int ALL_TASKS = NUM_ROUNDS * NUM_THREADS;
+    stringstream ss;
     int solved = 0;
     
-    for(int i=0; i<NUM_TASKS; ++i) {
-        cube_tasks[i].wait();    
-        CubeSolution solution = cube_tasks[i].get();
+    for(int r=0; r<NUM_ROUNDS; ++r) {
+        array<promise<CubeSolution>, NUM_THREADS> cubePromises;
+        array<future<CubeSolution>, NUM_THREADS> cube_tasks;
+        array<thread, NUM_THREADS> threads;
     
-        cout << "Scramble: " << solution.initialCubeRepresentation
+        for(int i=0; i<NUM_THREADS; ++i) {
+            cube_tasks[i] = cubePromises[i].get_future();
+            threads[i] = thread(tryToSolveRandom, move(cubePromises[i]));
+            threads[i].detach();
+        }
+
+        for(int i=0; i<NUM_THREADS; ++i) {
+            cube_tasks[i].wait();    
+            CubeSolution solution = cube_tasks[i].get();
+            solved += solution.wasSolved;
+            ss << "Scramble: " << solution.initialCubeRepresentation
                 << " from scramble: " << solution.initialScramble
                 << " was solved: " << solution.wasSolved << endl;
-        
-        solved += solution.wasSolved;
+        }
     }
     
-    cout << "Solved: " << solved << " out of " << NUM_TASKS << "." << endl;
-    BOOST_CHECK(solved == NUM_TASKS);
+    cout << ss.str() << endl;
+    cout << "Solved: " << solved << " out of " << ALL_TASKS << "." << endl;
+    BOOST_CHECK(solved == ALL_TASKS);
 }
