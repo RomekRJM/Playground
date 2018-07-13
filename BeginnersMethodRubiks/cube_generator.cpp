@@ -19,7 +19,7 @@ Cube CubeGenerator::fromArray(array<array<array<Color, Cube::SIZE>, Cube::SIZE>,
 Cube CubeGenerator::fromRandomScramble(string &rotationsPerformed) {
     Cube cube = Cube();
     srand((int) time(0));
-    int moves = (rand() % 10) + 20;
+    int moves = (rand() % 20) + 21;
     int i = 0;
     stringstream ss;
 
