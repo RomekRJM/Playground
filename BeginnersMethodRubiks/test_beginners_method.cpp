@@ -77,8 +77,8 @@ BOOST_AUTO_TEST_CASE(test_full_run) {
         string solution = BeginnersMethod().solve(p.first);
         
         if(solution != p.second) {
-            cout << "Wrong result for " << p.first << " , expected: \n" << p.second
-                 << "\nbut got\n" << solution << endl;
+            cout << "Wrong result for " << p.first << " , expected: \n" 
+                 << p.second << "\nbut got\n" << endl;
         } else {
             ++solved;
         }

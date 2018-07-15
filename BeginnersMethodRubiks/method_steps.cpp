@@ -7,14 +7,11 @@
 
 #include "method_steps.hpp"
 #include "cube_algorithms.hpp"
+#include "cube_logging.hpp"
 #include <iostream>
 #include <functional>
 
 using namespace std;
-
-MethodSteps::MethodSteps() {
-
-}
 
 bool MethodSteps::isDasyDone(Cube &cube) {
     return isStateDone(cube, State::DASY);
@@ -143,19 +140,19 @@ bool MethodSteps::checkFirstLayerCorners(Cube &cube) {
     array <array<Color, Cube::SIZE>, Cube::SIZE> side = cube.cube[DOWN];
 
     if (cube.getSideLeadingColor(DOWN) != WHITE) {
-        cout << "Down not white!" << endl;
+        debug << "Down not white!";
         return false;
     }
     
     if (!cube.isSideCompleted(DOWN)) {
-        cout << "Down not completed!" << endl;
+        debug << "Down not completed!";
         return false;
     }
 
     array<Side, 4> sides = {LEFT, FRONT, RIGHT, BACK};
     for (Side neighbour : sides) {
         if (!hasLowerT(cube, neighbour)) {
-            cout << "Side " << neighbour << " not done" << endl;
+            debug << "Side " << neighbour << " not done";
             return false;
         }
     }

@@ -6,6 +6,7 @@
  */
 
 #include "cube_algorithms.hpp"
+#include "cube_logging.hpp"
 #include <algorithm>
 #include <iostream>
 #include "unistd.h"
@@ -255,7 +256,7 @@ void WhiteCross::findPositionBeforeRotation(Cube &cube) {
             matchingSide = findMatchingSide(cube);
             break;
         } catch (SideNotFoundException exc) {
-            cout << "Another rotation - side was not found" << endl;
+            debug << "Another rotation - side was not found";
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
         }
     }
@@ -273,8 +274,8 @@ Side WhiteCross::findMatchingSide(Cube cube) {
         Side side = it->first;
         Edge edge = it->second;
         
-        cube.printCubeSide(cube.cube[side]);
-        cout << getSideName(side) << ", " << getColorName(cube.cube[side][0][1]) << " is " << getColorName(cube.getSideLeadingColor(side)) << endl;
+        debug << cube.asString();
+        debug << getSideName(side) << ", " << getColorName(cube.cube[side][0][1]) << " is " << getColorName(cube.getSideLeadingColor(side));
         if (cube.getColor(edge.getCubePosition(side)) == cube.getSideLeadingColor(side) 
                 && cube.getColor(edge.getCubePosition(Side::UP)) == Color::WHITE) {
             return side;
@@ -317,14 +318,14 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
                 
         if (LOWER_CORNERS[0].countFullyMatchedSides(cube) == 3) {
             // already solved, move to the next corner
-            cout << "No full match" << endl; 
+            debug << "No full match"; 
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
         }
         
         bool upperForSwap = isCandidateForSwap(UPPER_CORNERS[0], cube);
         bool upperHasWhite = UPPER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube);
         bool lowerHasWhite = LOWER_CORNERS[0].hasColorOnAnySide(Color::WHITE, cube);
-        cout << "upperForSwap: " << upperForSwap << ", lowerHasWhite: " << lowerHasWhite << endl;
+        debug << "upperForSwap: " << upperForSwap << ", lowerHasWhite: " << lowerHasWhite;
         
         /**
          * Here is the reasoning behind it:
@@ -335,19 +336,19 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
          * 1            | 1             | 0                   |
          */
         if (!upperForSwap && (!lowerHasWhite || (lowerHasWhite && upperHasWhite))) {
-            //cout << "Rotate up clockwise." << endl;
+            //debug << "Rotate up clockwise.";
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
-            //cube.printCube();
+            //debug << cube.asString();
             
             ++timesRotated;
             if(timesRotated > 3) {
-                cout << "Canceling last moves:" << endl;
+                debug << "Canceling last moves:";
                 CubeAlgorithm::cancelLastMoves(cube, 4);
-                cube.printCube();
+                debug << cube.asString();
                 
-                cout << "Flipping cube clockwise y 90 degrees:" << endl;
+                debug << "Flipping cube clockwise y 90 degrees:";
                 CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
-                cube.printCube();
+                debug << cube.asString();
                 
                 timesRotated = 0;
             }
@@ -367,9 +368,9 @@ void FirstLayerCorners::rotate(Cube &cube) {
     int maxAllowedMoves = cornerMoveType == CornerMoveType::EXTRACT_UNSOLVABLE_UP ? 1 : 6;
     
     while (maxAllowedMoves && LOWER_CORNERS[0].countFullyMatchedSides(cube) < 3) {
-        cube.printCube();
+        debug << cube.asString();
         usleep(100000);
-        cout << "Fully matched: " << LOWER_CORNERS[0].countFullyMatchedSides(cube) << endl;
+        debug << "Fully matched: " << LOWER_CORNERS[0].countFullyMatchedSides(cube);
         CubeAlgorithm::doMoves(cube, RIGHTY);
         --maxAllowedMoves;
     }
@@ -388,21 +389,21 @@ void SecondLayerEdges::findPositionBeforeRotation(Cube &cube) {
     while (currentSwap == Swap::NOTHING) {
 
         if (sideSolved(cube) || rotations >= 3) {
-            cout << "Nothing to do, side is already solved. Rotating 90 clockwise over y." << endl;
+            debug << "Nothing to do, side is already solved. Rotating 90 clockwise over y.";
             CubeAlgorithm::doMove(cube, FLIP_Y_CLOCKWISE_90);
-            cube.printCube();
+            debug << cube.asString();
             rotations = 0;
             continue;
         }
 
         currentSwap = findSwap(cube);
         
-        cout << "Current swap: " << currentSwap << endl;
+        debug << "Current swap: " << currentSwap;
 
         if (currentSwap == Swap::NOTHING) {
             CubeAlgorithm::doMove(cube, ROTATE_UP_CLOCKWISE);
-            cout << "After U rotation: " << endl;
-            cube.printCube();
+            debug << "After U rotation: ";
+            debug << cube.asString();
             ++rotations;
         }
 
@@ -546,7 +547,7 @@ void PositionLastLayerCorners::findOptimalLastLayerRotation(Cube &cube) {
                     currentMatch += c / 3; }
         );
         
-//        cout << "On best match i=" << i << ", currentMatch: " << currentMatch << endl;
+//        debug << "On best match i=" << i << ", currentMatch: " << currentMatch;
 //        cube.printCube();
 
         if (currentMatch > bestMatch) {
@@ -583,11 +584,11 @@ void PositionLastLayerCorners::findOptimalCubeFlip(Cube &cube) {
 }
 
 void PositionLastLayerCorners::rotate(Cube &cube) {
-//    cout << "Before rotate on PositionLastLayerCorners: " << endl;
+//    debug << "Before rotate on PositionLastLayerCorners: ";
 //    cube.printCube();
     
     if (alreadySolved) {
-        cout << "Looks like cube already has last layer corners in position" << endl;
+        debug << "Looks like cube already has last layer corners in position";
         return;
     }
     

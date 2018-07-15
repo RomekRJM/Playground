@@ -108,8 +108,7 @@ public:
         return cube[cp.side][cp.row][cp.column];
     };
 
-    void printCube();
-    void printCubeSide(array<array<Color, SIZE>, SIZE> side);
+    string asString();
     string asShortString();
     string sideAsShortString(array<array<Color, SIZE>, SIZE> side);
     Color getSideLeadingColor(Side side);

@@ -1,5 +1,6 @@
 #include "beginners_method.hpp"
 #include "cube_generator.hpp"
+#include "cube_logging.hpp"
 #include "unistd.h"
 
 void BeginnersMethod::resetInternalState() {
@@ -54,10 +55,10 @@ string BeginnersMethod::cubeAlgorithmSubroutine(State state,
     
     while(!methodSteps.isStateDone(cube, state)) {
         usleep(100000);
-        cout << "Next try on state: " << state << endl;
+        debug << "Next try on state: " << state;
         s = algorithm->perform(cube);
-        cout << s << " done?: " << methodSteps.isStateDone(cube, state) << endl;
-        cube.printCube();
+        debug << s << " done?: " << methodSteps.isStateDone(cube, state);
+        debug << cube.asString();
     }
     
     return s;
@@ -65,26 +66,26 @@ string BeginnersMethod::cubeAlgorithmSubroutine(State state,
 
 string BeginnersMethod::yellowCrossSubroutine(State state, Cube& cube) {
     string s = "";
-    cout << "Checking which yellow cross subroutine is appropriate." << endl;
+    debug << "Checking which yellow cross subroutine is appropriate.";
     
     if(methodSteps.isYellowCrossDone(cube)) {
-        cout << "Nothing to do as yellow cross already done." << endl;
+        debug << "Nothing to do as yellow cross already done.";
     } else if(methodSteps.isYellowDotDone(cube)) {
         if(methodSteps.isYellowArcDone(cube)) {
-            cout << "Yellow arc is next" << endl;
+            debug << "Yellow arc is next";
             s += YellowArc().perform(cube);
         } else if(methodSteps.isYellowLineDone(cube)) {
-            cout << "Yellow Line is next" << endl;
+            debug << "Yellow Line is next";
             s += YellowLine().perform(cube);
         } else {
-            cout << "Yellow dot is next" << endl;
+            debug << "Yellow dot is next";
             s += YellowDot().perform(cube);
             s += YellowArc().perform(cube);
         }
     } 
     
-    cout << s << " done?: " << methodSteps.isStateDone(cube, state) << endl;
-    cube.printCube();
+    debug << s << " done?: " << methodSteps.isStateDone(cube, state);
+    debug << cube.asString();
     
     return s;
 }

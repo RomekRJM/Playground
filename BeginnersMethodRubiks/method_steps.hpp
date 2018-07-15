@@ -9,6 +9,7 @@
 #define METHOD_STEPS_HPP
 
 #include "cube.hpp"
+#include "cube_logging.hpp"
 
 enum State {
     DASY, WHITE_CROSS, FIRST_LAYER_CORNERS, SECOND_LAYER_EDGES, 
@@ -19,7 +20,7 @@ enum State {
 
 class MethodSteps {
 public:
-    MethodSteps();
+    MethodSteps() : debug(Logger(DEBUG)) {};
     bool isDasyDone(Cube &cube);
     bool isWhiteCrossDone(Cube &cube);
     bool areFirstLayerCornersDone(Cube &cube);
@@ -32,6 +33,9 @@ public:
     bool areLastLayerCornersPermuted(Cube &cube);
     bool isSolved(Cube &cube);
     bool isStateDone(Cube &cube, State state);
+    
+protected:
+    Logger debug;
 
 private:
     bool checkDasy(Cube &cube);
