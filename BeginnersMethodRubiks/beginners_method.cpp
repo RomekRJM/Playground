@@ -1,7 +1,6 @@
 #include "beginners_method.hpp"
 #include "cube_generator.hpp"
 #include "cube_logging.hpp"
-#include "unistd.h"
 
 void BeginnersMethod::resetInternalState() {
     methodSteps = MethodSteps();
@@ -54,7 +53,6 @@ string BeginnersMethod::cubeAlgorithmSubroutine(State state,
     string s;
     
     while(!methodSteps.isStateDone(cube, state)) {
-        usleep(100000);
         debug << "Next try on state: " << state;
         s = algorithm->perform(cube);
         debug << s << " done?: " << methodSteps.isStateDone(cube, state);

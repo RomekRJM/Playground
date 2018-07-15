@@ -2,6 +2,7 @@
 #include <boost/test/unit_test.hpp>
 #include "beginners_method.hpp"
 #include "cube_generator.hpp"
+#include "cube_logging.hpp"
 
 BOOST_AUTO_TEST_CASE(test_full_run) {
     map<string, string> cubeSolution = {
@@ -77,8 +78,8 @@ BOOST_AUTO_TEST_CASE(test_full_run) {
         string solution = BeginnersMethod().solve(p.first);
         
         if(solution != p.second) {
-            cout << "Wrong result for " << p.first << " , expected: \n" 
-                 << p.second << "\nbut got\n" << endl;
+            info << "Wrong result for " << p.first << " , expected: \n" 
+                 << p.second << "\nbut got\n" << solution;
         } else {
             ++solved;
         }

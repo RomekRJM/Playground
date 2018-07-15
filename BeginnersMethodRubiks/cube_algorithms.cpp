@@ -9,7 +9,6 @@
 #include "cube_logging.hpp"
 #include <algorithm>
 #include <iostream>
-#include "unistd.h"
 
 using namespace std;
 
@@ -314,7 +313,6 @@ void FirstLayerCorners::findPositionBeforeRotation(Cube &cube) {
     cornerMoveType = CornerMoveType::PUT_SOLVABE_DOWN;
     
     while (!match) {
-        usleep(100000);
                 
         if (LOWER_CORNERS[0].countFullyMatchedSides(cube) == 3) {
             // already solved, move to the next corner
@@ -369,7 +367,6 @@ void FirstLayerCorners::rotate(Cube &cube) {
     
     while (maxAllowedMoves && LOWER_CORNERS[0].countFullyMatchedSides(cube) < 3) {
         debug << cube.asString();
-        usleep(100000);
         debug << "Fully matched: " << LOWER_CORNERS[0].countFullyMatchedSides(cube);
         CubeAlgorithm::doMoves(cube, RIGHTY);
         --maxAllowedMoves;

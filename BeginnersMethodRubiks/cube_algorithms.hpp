@@ -147,10 +147,10 @@ string toString(Rotation);
 class CubeAlgorithm {
 public:
 
-    CubeAlgorithm() : colorOnTop(Color::YELLOW), invocations(0), debug(Logger(DEBUG)) {
+    CubeAlgorithm() : colorOnTop(Color::YELLOW), invocations(0) {
     };
     
-    CubeAlgorithm(Color c) : colorOnTop(c), invocations(0), debug(Logger(DEBUG)) {
+    CubeAlgorithm(Color c) : colorOnTop(c), invocations(0) {
     };
 
     string perform(Cube & cube);
@@ -169,8 +169,6 @@ private:
     bool isStalemate();
 
 protected:
-    
-    Logger debug;
     
     string getMovesAsString();
 

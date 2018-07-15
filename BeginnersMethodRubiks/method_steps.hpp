@@ -20,7 +20,7 @@ enum State {
 
 class MethodSteps {
 public:
-    MethodSteps() : debug(Logger(DEBUG)) {};
+    MethodSteps() {};
     bool isDasyDone(Cube &cube);
     bool isWhiteCrossDone(Cube &cube);
     bool areFirstLayerCornersDone(Cube &cube);
@@ -33,9 +33,6 @@ public:
     bool areLastLayerCornersPermuted(Cube &cube);
     bool isSolved(Cube &cube);
     bool isStateDone(Cube &cube, State state);
-    
-protected:
-    Logger debug;
 
 private:
     bool checkDasy(Cube &cube);

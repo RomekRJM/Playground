@@ -24,11 +24,9 @@ using namespace std;
 
 class BeginnersMethod {
 public:
-    BeginnersMethod() : debug(Logger(DEBUG)) {};
+    BeginnersMethod() {};
     string solve(string cubeAsAString);
     
-protected:
-    Logger debug;
 private:
     MethodSteps methodSteps;
     map<State, CubeAlgorithm*> ALGORITHM;

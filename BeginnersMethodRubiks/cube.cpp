@@ -8,8 +8,6 @@
 #include "cube.hpp"
 #include <stdlib.h>
 #include <iostream>
-#include <cstdlib>
-#include <ctime>
 #include <boost/algorithm/string.hpp>
 
 using namespace std;
