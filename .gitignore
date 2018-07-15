@@ -41,3 +41,5 @@ nbproject/
 *.gcov
 app.info
 
+#misc
+/BeginnersMethodRubiks/test_rcs.cpp

@@ -32,8 +32,8 @@ void tryToSolveRandom(promise<CubeSolution> cubePromise) {
 }
 
 BOOST_AUTO_TEST_CASE(test_solve_many_random_in_parallel) {
-    const int NUM_ROUNDS = 1;
-    const int NUM_THREADS = 1;
+    const int NUM_ROUNDS = 1000;
+    const int NUM_THREADS = 10;
     const int ALL_TASKS = NUM_ROUNDS * NUM_THREADS;
     stringstream ss;
     int solved = 0;
@@ -53,9 +53,12 @@ BOOST_AUTO_TEST_CASE(test_solve_many_random_in_parallel) {
             cube_tasks[i].wait();    
             CubeSolution solution = cube_tasks[i].get();
             solved += solution.wasSolved;
-            ss << "Scramble: " << solution.initialCubeRepresentation
-                << " from scramble: " << solution.initialScramble
-                << " was solved: " << solution.wasSolved << endl;
+            
+            if(!solution.wasSolved) {
+                ss << "Scramble: " << solution.initialCubeRepresentation
+                    << " from scramble: " << solution.initialScramble
+                    << " wasn't solved!" << endl;
+            }
         }
     }
     

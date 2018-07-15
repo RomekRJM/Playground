@@ -3,4 +3,4 @@
 #include <boost/test/unit_test.hpp>
 #include "cube_logging.hpp"
 
-int loggingLevel = DEBUG;
+int loggingLevel = INFO;
