@@ -10,11 +10,12 @@
 #
 # 1. Define shopping class.
 # 2. Compute average amount of money, that our clients spent.
-# 3. Filter out those clients, which spent more than average.
-# 4. Write your findings to a file, having format:
+# 3. Filter out these clients, which spent more, than average.
+# 4. Compute 10% discount for each client, that spent more, than average.
+# 5. Write your findings to a file, having format:
 #
-#   Client1: x.xx
-#   Client2: x.xx
+#   client_name1: discount1
+#   client_name2: discount2
 
 
 class Shopping():
