@@ -25,15 +25,19 @@ height = 90.6805
 
 [node name="Player" type="Area2D"]
 script = ExtResource( 1 )
-__meta__ = {
-"_edit_group_": true
-}
 
 [node name="AnimatedSprite" type="AnimatedSprite" parent="."]
 scale = Vector2( 0.5, 0.5 )
 frames = SubResource( 1 )
 animation = "right"
+__meta__ = {
+"_edit_group_": true
+}
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="."]
 scale = Vector2( 0.942245, 0.451011 )
 shape = SubResource( 2 )
+__meta__ = {
+"_edit_group_": true
+}
+[connection signal="body_entered" from="." to="." method="_on_Player_body_entered"]
