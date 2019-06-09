@@ -6,10 +6,12 @@ var score
 func _ready():
 	randomize()
 	
+	
 func game_over():
 	$ScoreTimer.stop()
 	$MobTimer.stop()
 	$HUD.show_game_over()
+
 
 func new_game():
 	score = 0
@@ -17,6 +19,7 @@ func new_game():
 	$StartTimer.start()
 	$HUD.update_score(score)
 	$HUD.show_message("Get Ready")
+
 
 func _on_MobTimer_timeout():
     # Choose a random location on Path2D.
@@ -34,11 +37,14 @@ func _on_MobTimer_timeout():
     # Set the velocity (speed & direction).
 	mob.linear_velocity = Vector2(rand_range(mob.min_speed, mob.max_speed), 0)
 	mob.linear_velocity = mob.linear_velocity.rotated(direction)
+	
+	$HUD.connect("start_game", mob, "_on_start_game")
 
 
 func _on_StartTimer_timeout():
 	$MobTimer.start()
 	$ScoreTimer.start()
+
 
 func _on_ScoreTimer_timeout():
 	score += 1
