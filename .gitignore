@@ -13,6 +13,9 @@
 *.dylib
 *.dll
 
+# asm
+*.dbgfile
+
 # Fortran module files
 *.mod
 
@@ -36,6 +39,9 @@ nbproject/
 .DS_Store
 /BeginnersMethodRubiks/build/
 /BeginnersMethodRubiks/dist/
+
+#linux
+*.kate-swp
 
 #code coverage
 *.gcov
