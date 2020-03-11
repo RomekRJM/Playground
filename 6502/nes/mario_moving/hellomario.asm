@@ -12,6 +12,10 @@
 .segment "ZEROPAGE" ; LSB 0 - FF
 .segment "STARTUP"
 
+
+.define frame $0000
+
+
 Reset:
     SEI ; Disables all interrupts
     CLD ; disable decimal mode
@@ -73,17 +77,10 @@ LoadPalettes:
     STA $2007 ; $3F00, $3F01, $3F02 => $3F1F
     INX
     CPX #$20
-    BNE LoadPalettes    
+    BNE LoadPalettes
     
-
-    LDX #$00
-LoadSprites:
-    LDA SpriteData, X
-    STA $0200, X
-    INX
-    CPX #$20
-    BNE LoadSprites    
-
+    JSR InitLoadSprites
+    
 ; Enable interrupts
     CLI
 
@@ -95,6 +92,7 @@ LoadSprites:
     STA $2001
 
 Loop:
+    JSR InitLoadSprites
     JMP Loop
 
 NMI:
@@ -102,6 +100,27 @@ NMI:
     STA $4014
     INC frame
     RTI
+    
+shiftY:
+    ADC frame
+    LDY #$00
+    JMP ContinueLoad
+    
+InitLoadSprites:
+    LDX #$00
+    LDY #$00
+LoadSprites:
+    LDA SpriteData, X
+    INY
+    CPY #$04
+    BEQ shiftY
+ContinueLoad:
+    STA $0200, X
+    INX
+    CPX #$20
+    BNE LoadSprites
+    
+    RTS
 
 PaletteData:
   .byte $22,$29,$1A,$0F,$22,$36,$17,$0f,$22,$30,$21,$0f,$22,$27,$17,$0F  ;background palette data
