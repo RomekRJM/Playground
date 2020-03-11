@@ -100,21 +100,33 @@ NMI:
     STA $4014
     INC frame
     RTI
-    
-shiftY:
+
+ShiftX:
     ADC frame
-    LDY #$00
     JMP ContinueLoad
+    
+ShiftY:
+    ADC frame
+    JMP ContinueLoad
+
+ClearY:
+    LDY #$00
+    JMP SendSpriteToPPU
     
 InitLoadSprites:
     LDX #$00
     LDY #$00
 LoadSprites:
     LDA SpriteData, X
+    CPY #$00
+    BEQ ShiftX
+    CPY #$03
+    BEQ ShiftY
+ContinueLoad:
     INY
     CPY #$04
-    BEQ shiftY
-ContinueLoad:
+    BEQ ClearY
+SendSpriteToPPU:
     STA $0200, X
     INX
     CPX #$20
