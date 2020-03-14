@@ -1,3 +1,6 @@
+;
+; iNES header
+;
 .segment "HEADER"
 .byte "NES"
 .byte $1a
@@ -143,24 +146,23 @@ GetControllerInputLoop:
     
 
 ShiftX:
+	STA playerSpriteX
     LDA buttons
-    AND BUTTON_LEFT
-    BEQ GoLeft
-    AND BUTTON_RIGHT
-    BEQ GoRight
+    BIT BUTTON_LEFT
+    BNE GoLeft
+    BIT BUTTON_RIGHT
+    BNE GoRight
     JMP FinishedShiftX
 GoLeft:
-    LDA #$0f
+    LDA #$0e
     STA playerX
     JMP FinishedShiftX
 GoRight:
-    LDA #$af
+	LDA #$9f
     STA playerX
-    ;INC playerX
 FinishedShiftX:
-    LDA playerSpriteX
     CLC
-    ADC playerX
+    ADC playerSpriteX
     JMP ContinueLoad
 
 ShiftY:
@@ -175,7 +177,6 @@ RenderGraphics:
     LDY #$00
 LoadSprites:
     LDA SpriteData, X
-    STA playerSpriteX
     CPY #$03
     BEQ ShiftX
     CPY #$00
@@ -198,13 +199,13 @@ PaletteData:
 
 SpriteData:
   .byte $08, $00, $00, $08
-  .byte $08, $01, $00, $10
-  .byte $10, $02, $00, $08
-  .byte $10, $03, $00, $10
-  .byte $18, $04, $00, $08
-  .byte $18, $05, $00, $10
-  .byte $20, $06, $00, $08
-  .byte $20, $07, $00, $10
+  ;.byte $08, $01, $00, $10
+  ;.byte $10, $02, $00, $08
+  ;.byte $10, $03, $00, $10
+  ;.byte $18, $04, $00, $08
+  ;.byte $18, $05, $00, $10
+  ;.byte $20, $06, $00, $08
+  ;.byte $20, $07, $00, $10
 
 .segment "VECTORS"
     .word NMI
