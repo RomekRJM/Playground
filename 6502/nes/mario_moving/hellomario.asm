@@ -1,3 +1,6 @@
+;
+; iNES header
+;
 .segment "HEADER"
 .byte "NES"
 .byte $1a
@@ -10,10 +13,30 @@
 .byte $00
 .byte $00, $00, $00, $00, $00 ; filler bytes
 .segment "ZEROPAGE" ; LSB 0 - FF
+
+.define buttons $a1
+.define frame   $a2
+.define playerX $a3
+.define playerY $a4
+.define playerSpriteX $a5
+.define playerSpriteY $a6
+.define moveFrame     $a7
+
 .segment "STARTUP"
 
+JOYPAD1 = $4016
+JOYPAD2 = $4017
 
-.define frame $0000
+BUTTON_A      = 1 << 7
+BUTTON_B      = 1 << 6
+BUTTON_SELECT = 1 << 5
+BUTTON_START  = 1 << 4
+BUTTON_UP     = 1 << 3
+BUTTON_DOWN   = 1 << 2
+BUTTON_LEFT   = 1 << 1
+BUTTON_RIGHT  = 1 << 0
+
+MOVE_INTERVAL = #$10
 
 
 Reset:
@@ -79,7 +102,7 @@ LoadPalettes:
     CPX #$20
     BNE LoadPalettes
     
-    JSR InitLoadSprites
+    JSR RenderGraphics
     
 ; Enable interrupts
     CLI
@@ -92,41 +115,107 @@ LoadPalettes:
     STA $2001
 
 Loop:
-    JSR InitLoadSprites
+    JSR GetControllerInput
+	JSR ReactOnInput
+    JSR RenderGraphics
     JMP Loop
 
 NMI:
     LDA #$02 ; copy sprite data from $0200 => PPU memory for display
     STA $4014
-    INC frame
+	INC frame
     RTI
+; end NMI
+
+; At the same time that we strobe bit 0, we initialize the ring counter
+; so we're hitting two birds with one stone here
+GetControllerInput:
+    LDA #$01
+    ; While the strobe bit is set, buttons will be continuously reloaded.
+    ; This means that reading from JOYPAD1 will only return the state of the
+    ; first button: button A.
+    STA JOYPAD1
+    STA buttons
+    LSR A        ; now A is 0
+    ; By storing 0 into JOYPAD1, the strobe bit is cleared and the reloading stops.
+    ; This allows all 8 buttons (newly reloaded) to be read from JOYPAD1.
+    STA JOYPAD1
+GetControllerInputLoop:
+    LDA JOYPAD1
+    LSR A	       ; bit 0 -> Carry
+    ROL buttons  ; Carry -> bit 0; bit 7 -> Carry
+    BCC GetControllerInputLoop
+    RTS
+
+
+ReactOnInput:
+	; we don't want to move caracter every frame - it's to fast
+	; instead we will get input every MOVE_INTERVAL frames to slow it down
+	INC moveFrame
+	LDA moveFrame
+	CMP MOVE_INTERVAL
+	BNE :+
+		LDA #$00
+		STA moveFrame
+	:
+	BEQ :+
+		RTS
+	:
+	
+	LDA buttons
+    AND #BUTTON_LEFT
+    BEQ :+
+		DEC playerX
+	:
+	
+	LDA buttons
+    AND #BUTTON_RIGHT
+    BEQ :+
+		INC playerX
+	:
+	
+	LDA buttons
+    AND #BUTTON_UP
+    BEQ :+
+		DEC playerY
+	:
+	
+	LDA buttons
+    AND #BUTTON_DOWN
+    BEQ :+
+		INC playerY
+	:
+	
+	RTS
 
 ShiftX:
-    ADC frame
+    CLC
+    ADC playerX
     JMP ContinueLoad
-    
+
 ShiftY:
-    ADC frame
+    CLC
+    ADC playerY
     JMP ContinueLoad
 
 ClearY:
     LDY #$00
-    JMP SendSpriteToPPU
+    JMP PrepareSpriteForPPU
     
-InitLoadSprites:
+RenderGraphics:
     LDX #$00
     LDY #$00
 LoadSprites:
     LDA SpriteData, X
-    CPY #$00
-    BEQ ShiftX
     CPY #$03
+    BEQ ShiftX
+    CPY #$00
     BEQ ShiftY
 ContinueLoad:
     INY
     CPY #$04
     BEQ ClearY
-SendSpriteToPPU:
+PrepareSpriteForPPU:
     STA $0200, X
     INX
     CPX #$20
