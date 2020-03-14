@@ -20,7 +20,7 @@
 .define playerY $a4
 .define playerSpriteX $a5
 .define playerSpriteY $a6
-.define tmp     $a7
+.define moveFrame     $a7
 
 .segment "STARTUP"
 
@@ -35,6 +35,8 @@ BUTTON_UP     = 1 << 3
 BUTTON_DOWN   = 1 << 2
 BUTTON_LEFT   = 1 << 1
 BUTTON_RIGHT  = 1 << 0
+
+MOVE_INTERVAL = #$10
 
 
 Reset:
@@ -114,58 +116,86 @@ LoadPalettes:
 
 Loop:
     JSR GetControllerInput
+	JSR ReactOnInput
     JSR RenderGraphics
     JMP Loop
 
 NMI:
     LDA #$02 ; copy sprite data from $0200 => PPU memory for display
     STA $4014
-    INC frame
+	INC frame
     RTI
 ; end NMI
 
 ; At the same time that we strobe bit 0, we initialize the ring counter
 ; so we're hitting two birds with one stone here
 GetControllerInput:
-    lda #$01
+    LDA #$01
     ; While the strobe bit is set, buttons will be continuously reloaded.
     ; This means that reading from JOYPAD1 will only return the state of the
     ; first button: button A.
-    sta JOYPAD1
-    sta buttons
-    lsr a        ; now A is 0
+    STA JOYPAD1
+    STA buttons
+    LSR A        ; now A is 0
     ; By storing 0 into JOYPAD1, the strobe bit is cleared and the reloading stops.
     ; This allows all 8 buttons (newly reloaded) to be read from JOYPAD1.
-    sta JOYPAD1
+    STA JOYPAD1
 GetControllerInputLoop:
-    lda JOYPAD1
-    lsr a	       ; bit 0 -> Carry
-    rol buttons  ; Carry -> bit 0; bit 7 -> Carry
-    bcc GetControllerInputLoop
-    rts
-    
+    LDA JOYPAD1
+    LSR A	       ; bit 0 -> Carry
+    ROL buttons  ; Carry -> bit 0; bit 7 -> Carry
+    BCC GetControllerInputLoop
+    RTS
+
+
+ReactOnInput:
+	; we don't want to move caracter every frame - it's to fast
+	; instead we will get input every MOVE_INTERVAL frames to slow it down
+	INC moveFrame
+	LDA moveFrame
+	CMP MOVE_INTERVAL
+	BNE :+
+		LDA #$00
+		STA moveFrame
+	:
+	BEQ :+
+		RTS
+	:
+	
+	LDA buttons
+    AND #BUTTON_LEFT
+    BEQ :+
+		DEC playerX
+	:
+	
+	LDA buttons
+    AND #BUTTON_RIGHT
+    BEQ :+
+		INC playerX
+	:
+	
+	LDA buttons
+    AND #BUTTON_UP
+    BEQ :+
+		DEC playerY
+	:
+	
+	LDA buttons
+    AND #BUTTON_DOWN
+    BEQ :+
+		INC playerY
+	:
+	
+	RTS
 
 ShiftX:
-	STA playerSpriteX
-    LDA buttons
-    BIT BUTTON_LEFT
-    BNE GoLeft
-    BIT BUTTON_RIGHT
-    BNE GoRight
-    JMP FinishedShiftX
-GoLeft:
-    LDA #$0e
-    STA playerX
-    JMP FinishedShiftX
-GoRight:
-	LDA #$9f
-    STA playerX
-FinishedShiftX:
     CLC
-    ADC playerSpriteX
+    ADC playerX
     JMP ContinueLoad
 
 ShiftY:
+    CLC
+    ADC playerY
     JMP ContinueLoad
 
 ClearY:
@@ -199,13 +229,13 @@ PaletteData:
 
 SpriteData:
   .byte $08, $00, $00, $08
-  ;.byte $08, $01, $00, $10
-  ;.byte $10, $02, $00, $08
-  ;.byte $10, $03, $00, $10
-  ;.byte $18, $04, $00, $08
-  ;.byte $18, $05, $00, $10
-  ;.byte $20, $06, $00, $08
-  ;.byte $20, $07, $00, $10
+  .byte $08, $01, $00, $10
+  .byte $10, $02, $00, $08
+  .byte $10, $03, $00, $10
+  .byte $18, $04, $00, $08
+  .byte $18, $05, $00, $10
+  .byte $20, $06, $00, $08
+  .byte $20, $07, $00, $10
 
 .segment "VECTORS"
     .word NMI
