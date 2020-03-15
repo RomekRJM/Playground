@@ -26,6 +26,11 @@
 .define pillY $aa
 .define pillTimer $ab
 .define pillLifeTime $ac
+.define pointIndex0 $b0
+.define pointIndex1 $b1
+.define pointIndex2 $b2
+.define currentPointIndex $b3
+.define pointIndexOffset $b4
 
 .define dbg1 $f0
 .define dbg2 $f1
@@ -205,6 +210,7 @@ RenderGraphics:
 	
 	JSR RenderPlayer
 	JSR RenderPill
+	JSR RenderPoints
 
 	RTS
 
@@ -260,7 +266,91 @@ LoadPillSprites:
 	INY
     CPY #$04
     BNE LoadPillSprites
+	STX spriteCounter
     RTS
+
+
+RenderPoints:
+	LDA $08
+	STA pointIndexOffset
+	LDA #$00
+	STA pointIndex0
+	STA currentPointIndex
+	JSR RenderPoint
+	
+	LDA #$09
+	STA pointIndexOffset
+	LDA #$03
+	STA pointIndex1
+	STA currentPointIndex
+	JSR RenderPoint
+	
+	LDA #$12
+	STA pointIndexOffset
+	LDA #$09
+	STA pointIndex1
+	STA currentPointIndex
+	JSR RenderPoint
+	
+	RTS
+
+RenderPoint:
+	LDX spriteCounter
+	LDY #$00
+LoadPointSprites:
+	LDA currentPointIndex
+	CMP #$00
+	BNE :+
+		LDA Zero, Y
+	:
+	CMP #$01
+	BNE :+
+		LDA One, Y
+	:
+	CMP #$02
+	BNE :+
+		LDA Two, Y
+	:
+	CMP #$03
+	BNE :+
+		LDA Three, Y
+	:
+	CMP #$04
+	BNE :+
+		LDA Four, Y
+	:
+	CMP #$05
+	BNE :+
+		LDA Five, Y
+	:
+	CMP #$06
+	BNE :+
+		LDA Six, Y
+	:
+	CMP #$07
+	BNE :+
+		LDA Seven, Y
+	:
+	CMP #$08
+	BNE :+
+		LDA Eight, Y
+	:
+	CMP #$09
+	BNE :+
+		LDA Nine, Y
+	:
+	CPY #$03
+    BNE :+
+		SEC
+		SBC pointIndexOffset
+	:
+    STA $0200, X
+    INX
+	INY
+    CPY #$04
+    BNE LoadPointSprites
+	STX spriteCounter
+    RTS	
 
 
 ComputeLogic:
@@ -314,7 +404,37 @@ SpriteData:
   .byte $20, $07, $00, $10
 
 PillData:
-  .byte $00, $75, $00, $00
+  .byte $08, $75, $00, $08
+
+Zero:
+  .byte $10, $60, $00, $f0
+
+One:
+  .byte $10, $61, $00, $f0
+
+Two:
+  .byte $10, $62, $00, $f0
+
+Three:
+  .byte $10, $63, $00, $f0
+  
+Four:
+  .byte $10, $64, $00, $f0
+
+Five:
+  .byte $10, $65, $00, $f0
+  
+Six:
+  .byte $10, $66, $00, $f0
+  
+Seven:
+  .byte $10, $67, $00, $f0
+
+Eight:
+  .byte $10, $68, $00, $f0
+
+Nine:
+  .byte $10, $69, $00, $f0
 
 .segment "VECTORS"
     .word NMI
