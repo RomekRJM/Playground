@@ -5,7 +5,7 @@ a4 playerY
 a5 playerSpriteX
 a6 playerSpriteY
 a7 moveFrame
-| |
+a8 spriteCounter
 | |
 | |
 | |

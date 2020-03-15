@@ -21,6 +21,7 @@
 .define playerSpriteX $a5
 .define playerSpriteY $a6
 .define moveFrame     $a7
+.define spriteCounter $a8
 
 .segment "STARTUP"
 
@@ -36,7 +37,7 @@ BUTTON_DOWN   = 1 << 2
 BUTTON_LEFT   = 1 << 1
 BUTTON_RIGHT  = 1 << 0
 
-MOVE_INTERVAL = #$10
+MOVE_INTERVAL = $10
 
 
 Reset:
@@ -153,7 +154,7 @@ ReactOnInput:
 	; instead we will get input every MOVE_INTERVAL frames to slow it down
 	INC moveFrame
 	LDA moveFrame
-	CMP MOVE_INTERVAL
+	CMP #MOVE_INTERVAL
 	BNE :+
 		LDA #$00
 		STA moveFrame
@@ -187,35 +188,61 @@ ReactOnInput:
 	:
 	
 	RTS
-    
+	
+
 RenderGraphics:
-    LDX #$00
+	LDA #$00
+	STA spriteCounter
+	
+	JMP RenderPlayer
+	JMP RenderPill
+	; JMP RenderEnemies
+	RTS
+
+    
+RenderPlayer:
+    LDX spriteCounter
     LDY #$00
-LoadSprites:
+LoadPlayerSprites:
     LDA SpriteData, X
     CPY #$03
-    BNQ :+
+    BNE :+
 		CLC
 		ADC playerX
 	:
     CPY #$00
-    BNQ :+
+    BNE :+
 		CLC
 		ADC playerY
 	:
-ContinueLoad:
     INY
     CPY #$04
     BNE :+
 		LDY #$00
 	:
-PrepareSpriteForPPU:
+	
     STA $0200, X
     INX
     CPX #$20
-    BNE LoadSprites
+    BNE LoadPlayerSprites
+	STX spriteCounter
     
     RTS
+
+
+RenderPill:
+	LDX spriteCounter
+	LDY #$00
+LoadPillSprites:
+    LDA PillData, Y
+    STA $0200, X
+    INX
+	INY
+    CPY #$04
+    BNE LoadPillSprites
+    
+    RTS
+	
 
 PaletteData:
   .byte $22,$29,$1A,$0F,$22,$36,$17,$0f,$22,$30,$21,$0f,$22,$27,$17,$0F  ;background palette data
@@ -231,9 +258,13 @@ SpriteData:
   .byte $20, $06, $00, $08
   .byte $20, $07, $00, $10
 
+PillData:
+  .byte $08, $08, $00, $08
+
 .segment "VECTORS"
     .word NMI
     .word Reset
     ; 
+	
 .segment "CHARS"
     .incbin "hellomario.chr"
