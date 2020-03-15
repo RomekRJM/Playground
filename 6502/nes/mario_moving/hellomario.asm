@@ -18,10 +18,13 @@
 .define frame   $a2
 .define playerX $a3
 .define playerY $a4
-.define playerSpriteX $a5
+.define randomByte $a5
 .define playerSpriteY $a6
 .define moveFrame     $a7
 .define spriteCounter $a8
+.define pillX $a9
+.define pillY $aa
+.define pillTimer $ab
 
 .define dbg1 $f0
 .define dbg2 $f1
@@ -43,6 +46,7 @@ BUTTON_LEFT   = 1 << 1
 BUTTON_RIGHT  = 1 << 0
 
 MOVE_INTERVAL = $10
+PILL_LIFE_TIME = $ff
 
 
 Reset:
@@ -121,6 +125,7 @@ LoadPalettes:
 Loop:
     JSR GetControllerInput
 	JSR ReactOnInput
+	JSR ComputeLogic
     JSR RenderGraphics
     JMP Loop
 
@@ -238,13 +243,58 @@ RenderPill:
 	LDY #$00
 LoadPillSprites:
     LDA PillData, Y
+	CPY #$03
+    BNE :+
+		CLC
+		ADC pillX
+	:
+    CPY #$00
+    BNE :+
+		CLC
+		ADC pillY
+	:
+	
     STA $0200, X
     INX
 	INY
     CPY #$04
     BNE LoadPillSprites
     RTS
+
+
+ComputeLogic:
+	JSR SpawnPill
 	
+	RTS
+
+SpawnPill:
+	
+	LDA pillTimer
+	BNE :+
+		LDA #PILL_LIFE_TIME
+		STA pillTimer
+	:
+	
+	DEC pillTimer
+	BNE :+
+		LDA randomByte
+		JSR NextRandomByte
+		STA pillX
+		JSR NextRandomByte
+		STA pillY
+	:
+	
+	RTS
+
+
+NextRandomByte:
+	STA randomByte
+	ROL
+	ROL
+	ADC randomByte
+	ADC #$17
+	STA randomByte
+	RTS
 
 PaletteData:
   .byte $22,$29,$1A,$0F,$22,$36,$17,$0f,$22,$30,$21,$0f,$22,$27,$17,$0F  ;background palette data
@@ -261,7 +311,7 @@ SpriteData:
   .byte $20, $07, $00, $10
 
 PillData:
-  .byte $38, $75, $00, $58
+  .byte $00, $75, $00, $00
 
 .segment "VECTORS"
     .word NMI
