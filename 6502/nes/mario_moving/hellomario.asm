@@ -25,6 +25,7 @@
 .define pillX $a9
 .define pillY $aa
 .define pillTimer $ab
+.define pillLifeTime $ac
 
 .define dbg1 $f0
 .define dbg2 $f1
@@ -46,7 +47,7 @@ BUTTON_LEFT   = 1 << 1
 BUTTON_RIGHT  = 1 << 0
 
 MOVE_INTERVAL = $10
-PILL_LIFE_TIME = $ff
+PILL_LIFE_TIME = $0a
 
 
 Reset:
@@ -268,22 +269,24 @@ ComputeLogic:
 	RTS
 
 SpawnPill:
-	
-	LDA pillTimer
+	LDA pillLifeTime
 	BNE :+
 		LDA #PILL_LIFE_TIME
-		STA pillTimer
+		STA pillLifeTime
 	:
 	
-	DEC pillTimer
+	INC pillTimer
+	
 	BNE :+
-		LDA randomByte
-		JSR NextRandomByte
-		STA pillX
-		JSR NextRandomByte
-		STA pillY
+		DEC pillLifeTime
+		BNE :+
+			LDA frame
+			JSR NextRandomByte
+			STA pillX
+			JSR NextRandomByte
+			STA pillY
+			RTS
 	:
-	
 	RTS
 
 

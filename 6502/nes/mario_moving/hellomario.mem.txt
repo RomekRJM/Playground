@@ -9,11 +9,11 @@ a8 spriteCounter
 a9 pillX
 aa pillY
 ab pillTimer
+ac pillLifeTime
 f0 dbg1
 f1 dbg2
 f2 dbg3
 f3 dbg4
-| |
 | |
 | |
 | |
