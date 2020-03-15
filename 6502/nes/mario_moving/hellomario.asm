@@ -187,20 +187,6 @@ ReactOnInput:
 	:
 	
 	RTS
-
-ShiftX:
-    CLC
-    ADC playerX
-    JMP ContinueLoad
-
-ShiftY:
-    CLC
-    ADC playerY
-    JMP ContinueLoad
-
-ClearY:
-    LDY #$00
-    JMP PrepareSpriteForPPU
     
 RenderGraphics:
     LDX #$00
@@ -208,13 +194,21 @@ RenderGraphics:
 LoadSprites:
     LDA SpriteData, X
     CPY #$03
-    BEQ ShiftX
+    BNQ :+
+		CLC
+		ADC playerX
+	:
     CPY #$00
-    BEQ ShiftY
+    BNQ :+
+		CLC
+		ADC playerY
+	:
 ContinueLoad:
     INY
     CPY #$04
-    BEQ ClearY
+    BNE :+
+		LDY #$00
+	:
 PrepareSpriteForPPU:
     STA $0200, X
     INX
