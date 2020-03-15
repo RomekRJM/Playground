@@ -6,10 +6,10 @@ a5 playerSpriteX
 a6 playerSpriteY
 a7 moveFrame
 a8 spriteCounter
-| |
-| |
-| |
-| |
+f0 dbg1
+f1 dbg2
+f2 dbg3
+f3 dbg4
 | |
 | |
 | |

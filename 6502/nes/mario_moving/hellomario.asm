@@ -23,6 +23,11 @@
 .define moveFrame     $a7
 .define spriteCounter $a8
 
+.define dbg1 $f0
+.define dbg2 $f1
+.define dbg3 $f2
+.define dbg4 $f3
+
 .segment "STARTUP"
 
 JOYPAD1 = $4016
@@ -102,8 +107,6 @@ LoadPalettes:
     INX
     CPX #$20
     BNE LoadPalettes
-    
-    JSR RenderGraphics
     
 ; Enable interrupts
     CLI
@@ -194,9 +197,9 @@ RenderGraphics:
 	LDA #$00
 	STA spriteCounter
 	
-	JMP RenderPlayer
-	JMP RenderPill
-	; JMP RenderEnemies
+	JSR RenderPlayer
+	JSR RenderPill
+
 	RTS
 
     
@@ -240,7 +243,6 @@ LoadPillSprites:
 	INY
     CPY #$04
     BNE LoadPillSprites
-    
     RTS
 	
 
@@ -259,7 +261,7 @@ SpriteData:
   .byte $20, $07, $00, $10
 
 PillData:
-  .byte $08, $08, $00, $08
+  .byte $38, $75, $00, $58
 
 .segment "VECTORS"
     .word NMI
