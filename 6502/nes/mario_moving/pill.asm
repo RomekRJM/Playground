@@ -5,7 +5,7 @@ SpawnPill:
 		STA pillLifeTime
 	:
 
-	INC pillTimer
+  INC pillTimer
 
 	BNE :+
 		DEC pillLifeTime
@@ -15,6 +15,11 @@ SpawnPill:
 			STA pillX
 			JSR NextRandomByte
 			STA pillY
+
+			; Test code
+			INC points
+			JSR PointsToDecimal
+
 			RTS
 	:
 	RTS

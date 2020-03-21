@@ -26,8 +26,9 @@
 .define pointIndex0 $b0
 .define pointIndex1 $b1
 .define pointIndex2 $b2
-.define currentPointIndex $b3
-.define pointIndexOffset $b4
+.define points $b3
+.define currentPointIndex $b4
+.define pointIndexOffset $b5
 
 .define dbg1 $f0
 .define dbg2 $f1
@@ -110,15 +111,17 @@ CLEARMEM:
 
 .include "pallete.asm"
 
+  JSR InitPoints
+
 MainGameLoop:
   JSR GetControllerInput
-	JSR ReactOnInput
-	JSR ComputeLogic
+  JSR ReactOnInput
+  JSR ComputeLogic
   JSR RenderGraphics
   JMP MainGameLoop
 
 ComputeLogic:
-	JSR SpawnPill
+  JSR SpawnPill
   RTS
 
 NMI:
@@ -126,19 +129,18 @@ NMI:
   STA $4014
   INC frame
   RTI
-  ; end NMI
 
 .include "gamepad.asm"
 
 RenderGraphics:
-	LDA #$00
-	STA spriteCounter
+  LDA #$00
+  STA spriteCounter
 
-	JSR RenderPlayer
-	JSR RenderPill
-	JSR RenderPoints
+  JSR RenderPlayer
+  JSR RenderPill
+  JSR RenderPoints
 
-	RTS
+  RTS
 
 .include "player.asm"
 
