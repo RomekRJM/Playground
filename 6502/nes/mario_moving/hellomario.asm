@@ -11,24 +11,32 @@
 .byte $00, $00, $00, $00, $00 ; filler bytes
 .segment "ZEROPAGE" ; LSB 0 - FF
 
-.define buttons $a1
-.define frame   $a2
-.define playerX $a3
-.define playerY $a4
-.define randomByte $a5
-.define playerSpriteY $a6
+.define buttons $a0
+.define frame   $a1
+.define playerLeft $a2
+.define playerTop $a3
+.define playerRight $a4
+.define playerBottom $a5
+.define randomByte $a6
 .define moveFrame     $a7
 .define spriteCounter $a8
-.define pillX $a9
-.define pillY $aa
-.define pillTimer $ab
-.define pillLifeTime $ac
-.define pointIndex0 $b0
-.define pointIndex1 $b1
-.define pointIndex2 $b2
-.define points $b3
-.define currentPointIndex $b4
-.define pointIndexOffset $b5
+.define pillLeft $a9
+.define pillTop $aa
+.define pillRight $ab
+.define pillBottom $ac
+.define pillTimer $ad
+.define pillLifeTime $ae
+.define pointIndex0 $af
+.define pointIndex1 $b0
+.define pointIndex2 $b1
+.define points $b2
+.define currentPointIndex $b3
+.define pointIndexOffset $b4
+.define dim1Player $b5
+.define dim2Player $b6
+.define dim1Object $b7
+.define dim2Object $b8
+.define result $b9
 
 .define dbg1 $f0
 .define dbg2 $f1
@@ -51,6 +59,14 @@ BUTTON_RIGHT  = 1 << 0
 
 MOVE_INTERVAL = $10
 PILL_LIFE_TIME = $0a
+
+PLAYER_WIDTH = $10
+PLAYER_HEIGHT = $20
+
+PILL_WIDTH = $08
+PILL_HEIGHT = $08
+
+COLLISSION = $01
 
 
 Reset:
@@ -122,6 +138,17 @@ MainGameLoop:
 
 ComputeLogic:
   JSR SpawnPill
+  JSR CheckCollisions
+  RTS
+
+CheckCollisions:
+  JSR CheckCollision
+  LDA result
+  CMP #COLLISSION
+  BNE :+
+    INC points
+    JSR PointsToDecimal
+  :
   RTS
 
 NMI:

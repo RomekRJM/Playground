@@ -1,13 +1,13 @@
 a1 buttons
 a2 frame
-a3 playerX
-a4 playerY
+a3 playerLeft
+a4 playerTop
 a5 randomByte
 a6 playerSpriteY
 a7 moveFrame
 a8 spriteCounter
-a9 pillX
-aa pillY
+a9 pillLeft
+aa pillTop
 ab pillTimer
 ac pillLifeTime
 b0 pointIndex0
