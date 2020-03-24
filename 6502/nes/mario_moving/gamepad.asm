@@ -34,27 +34,43 @@ ReactOnInput:
 	:
 
 	LDA buttons
-    AND #BUTTON_LEFT
-    BEQ :+
-		DEC playerX
+  AND #BUTTON_LEFT
+  BEQ :+
+		DEC playerLeft
+    LDA #PLAYER_WIDTH
+    CLC
+    ADC playerLeft
+    STA playerRight
 	:
 
 	LDA buttons
-    AND #BUTTON_RIGHT
-    BEQ :+
-		INC playerX
+  AND #BUTTON_RIGHT
+  BEQ :+
+		INC playerLeft
+    LDA #PLAYER_WIDTH
+    CLC
+    ADC playerLeft
+    STA playerRight
 	:
 
 	LDA buttons
-    AND #BUTTON_UP
-    BEQ :+
-		DEC playerY
-	:
+  AND #BUTTON_UP
+  BEQ :+
+	  DEC playerTop
+    LDA #PLAYER_HEIGHT
+    CLC
+    ADC playerTop
+    STA playerBottom
+  :
 
 	LDA buttons
-    AND #BUTTON_DOWN
-    BEQ :+
-		INC playerY
-	:
+  AND #BUTTON_DOWN
+  BEQ :+
+	  INC playerTop
+    LDA #PLAYER_HEIGHT
+    CLC
+    ADC playerTop
+    STA playerBottom
+  :
 
 	RTS

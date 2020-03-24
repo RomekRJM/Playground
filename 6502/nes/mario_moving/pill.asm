@@ -12,17 +12,25 @@ SpawnPill:
 		BNE :+
 			LDA frame
 			JSR NextRandomByte
-			STA pillX
+			STA pillLeft
+      CLC
+      ADC #PILL_WIDTH
+      STA pillRight
 			JSR NextRandomByte
-			STA pillY
-
-			; Test code
-			INC points
-			JSR PointsToDecimal
-
+			STA pillTop
+      CLC
+      ADC #PILL_HEIGHT
+      STA pillBottom
 			RTS
 	:
 	RTS
+
+ForcePillRespawn:
+  LDA #$ff
+  STA pillTimer
+  LDA #$01
+  STA pillLifeTime
+  RTS
 
 RenderPill:
 	LDX spriteCounter
@@ -32,13 +40,13 @@ LoadPillSprites:
 	CPY #$03
   BNE :+
 		CLC
-		ADC pillX
-:
+		ADC pillLeft
+  :
   CPY #$00
   BNE :+
-	CLC
-	ADC pillY
-:
+	 CLC
+	 ADC pillTop
+  :
 
   STA $0200, X
   INX
