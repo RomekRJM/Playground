@@ -1,4 +1,15 @@
 SpawnPill:
+  ; force spawn new pill if Player has already stepped on this one
+  LDA playerCollidesWithCoin
+  CMP COLLISSION
+  BNE :+
+    LDA #$ff
+    STA pillTimer
+    LDA #$01
+    STA pillLifeTime
+    ;DEC playerCollidesWithCoin
+  :
+
 	LDA pillLifeTime
 	BNE :+
 		LDA #PILL_LIFE_TIME

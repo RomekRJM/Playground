@@ -30,7 +30,7 @@ LoadPlayerSprites:
 
 CheckCollision:
   LDA #COLLISSION
-  STA result
+  STA playerCollidesWithCoin
   LDA playerLeft
   STA dim1Player
   LDA playerRight
@@ -78,10 +78,10 @@ Check4:
 
 NoCollision:
   LDA #$00
-  STA result
+  STA playerCollidesWithCoin
 
 Collision:
-  LDA result
+  LDA playerCollidesWithCoin
   AND #$01
 
 EndCollisionCheck:

@@ -32,11 +32,11 @@
 .define points $b2
 .define currentPointIndex $b3
 .define pointIndexOffset $b4
-.define dim1Player $b5
-.define dim2Player $b6
-.define dim1Object $b7
-.define dim2Object $b8
-.define result $b9
+.define playerCollidesWithCoin $b5
+.define dim1Player $b6
+.define dim2Player $b7
+.define dim1Object $b8
+.define dim2Object $b9
 
 .define dbg1 $f0
 .define dbg2 $f1
@@ -137,13 +137,13 @@ MainGameLoop:
   JMP MainGameLoop
 
 ComputeLogic:
-  JSR SpawnPill
   JSR CheckCollisions
+  JSR SpawnPill
   RTS
 
 CheckCollisions:
   JSR CheckCollision
-  LDA result
+  LDA playerCollidesWithCoin
   CMP #COLLISSION
   BNE :+
     INC points
