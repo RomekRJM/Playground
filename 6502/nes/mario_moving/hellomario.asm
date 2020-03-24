@@ -67,6 +67,7 @@ PILL_WIDTH = $08
 PILL_HEIGHT = $08
 
 COLLISSION = $01
+NO_COLLISSION = $00
 
 
 Reset:
@@ -137,8 +138,8 @@ MainGameLoop:
   JMP MainGameLoop
 
 ComputeLogic:
-  JSR CheckCollisions
   JSR SpawnPill
+  JSR CheckCollisions
   RTS
 
 CheckCollisions:
@@ -148,6 +149,9 @@ CheckCollisions:
   BNE :+
     INC points
     JSR PointsToDecimal
+    JSR ForcePillRespawn
+    LDA #NO_COLLISSION
+    STA playerCollidesWithCoin
   :
   RTS
 
