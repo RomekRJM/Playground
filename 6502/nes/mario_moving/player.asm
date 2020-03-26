@@ -54,24 +54,24 @@ CheckCollision:
   RTS
 
 DetectCollision:
-  LDA dim1Player
-  CMP dim1Object
+  LDA dim1Object
+  CMP dim1Player
   BCS Check2
   JMP Check3
 
 Check2:
-  CMP dim2Object
+  CMP dim2Player
   BCC Collision
   BEQ Collision
 
 Check3:
-  LDA dim2Player
-  CMP dim1Object
+  LDA dim2Object
+  CMP dim1Player
   BCS Check4
   JMP NoCollision
 
 Check4:
-  CMP dim2Object
+  CMP dim2Player
   BCC Collision
   BEQ Collision
   JMP NoCollision
