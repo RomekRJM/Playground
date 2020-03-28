@@ -95,6 +95,15 @@ Tens:
   LDX #$00
   STX pointIndex0
   INC pointIndex1
+  LDX pointIndex1
+  CPX #$0a
+  BEQ Hundreds
+  RTS
+
+Hundreds:
+  LDX #$00
+  STX pointIndex1
+  INC pointIndex2
 
 End:
   RTS
