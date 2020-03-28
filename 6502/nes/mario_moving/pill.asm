@@ -12,13 +12,13 @@ SpawnPill:
 		BNE :+
 			LDA frame
 			JSR NextRandomByte
-      AND #$cf
+      ADC #$d0
 			STA pillLeft
       CLC
       ADC #PILL_WIDTH
       STA pillRight
 			JSR NextRandomByte
-      AND #$cf
+      AND #$d0
 			STA pillTop
       CLC
       ADC #PILL_HEIGHT
