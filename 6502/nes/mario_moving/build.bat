@@ -1,5 +1,5 @@
 @echo on
-C:\cc65\bin\ca65 -g hellomario.asm
-C:\cc65\bin\ld65 hellomario.o -o hellomario.nes -t nes --dbgfile hellomario.nes.dbg
+C:\cc65\bin\ca65 -g nesdemia.asm
+C:\cc65\bin\ld65 nesdemia.o -o nesdemia.nes -t nes --dbgfile nesdemia.nes.dbg
 D:\ProgramFilesX\Python38\python mem_map.py
-C:\fceux\fceux.exe hellomario.nes
+C:\fceux\fceux.exe nesdemia.nes
