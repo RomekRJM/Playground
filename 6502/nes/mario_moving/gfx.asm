@@ -15,7 +15,7 @@ SpriteData:
 PillData:
   .byte $08, $75, $00, $08
 
-EnemyData:
+VirusData:
   .byte $08, $e0, $00, $08
 
 Zero:

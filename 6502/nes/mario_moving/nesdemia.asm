@@ -43,6 +43,7 @@
 .define virusBottom $bd
 .define virusXSpeed $be
 .define virusYSpeed $bf
+.define virusMoveFrame $c0
 
 .define dbg1 $f0
 .define dbg2 $f1
@@ -64,6 +65,7 @@ BUTTON_LEFT   = 1 << 1
 BUTTON_RIGHT  = 1 << 0
 
 MOVE_INTERVAL = $05
+VIRUS_MOVE_INTERVAL = $15
 PILL_LIFE_TIME = $1a
 
 PLAYER_WIDTH = $10
@@ -146,6 +148,7 @@ MainGameLoop:
 ComputeLogic:
   JSR SpawnPill
   JSR CheckCollisions
+  JSR MoveVirus
   RTS
 
 CheckCollisions:
@@ -174,8 +177,8 @@ RenderGraphics:
   STA spriteCounter
 
   JSR RenderPlayer
-  JSR RenderVirus
   JSR RenderPill
+  JSR RenderVirus
   JSR RenderPoints
 
   RTS
