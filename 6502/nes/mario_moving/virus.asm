@@ -38,7 +38,19 @@ LoadVirusSprites:
 	 CLC
 	 ADC virusTop
   :
+  CPY #$01
+  BNE SetVirusFrame
+  LDA virusAnimationFrame
+  CMP #VIRUS_FRAME_0
+  BEQ :+
+    LDA #VIRUS_FRAME_0
+    STA virusAnimationFrame
+    JMP SetVirusFrame
+  :
+  LDA #VIRUS_FRAME_1
+  STA virusAnimationFrame
 
+SetVirusFrame:
   STA $0200, X
   INX
   INY

@@ -44,6 +44,7 @@
 .define virusXSpeed $be
 .define virusYSpeed $bf
 .define virusMoveFrame $c0
+.define virusAnimationFrame $c1
 
 .define dbg1 $f0
 .define dbg2 $f1
@@ -65,7 +66,11 @@ BUTTON_LEFT   = 1 << 1
 BUTTON_RIGHT  = 1 << 0
 
 MOVE_INTERVAL = $05
+
 VIRUS_MOVE_INTERVAL = $15
+VIRUS_FRAME_0 = $e0
+VIRUS_FRAME_1 = $e1
+
 PILL_LIFE_TIME = $1a
 
 PLAYER_WIDTH = $10

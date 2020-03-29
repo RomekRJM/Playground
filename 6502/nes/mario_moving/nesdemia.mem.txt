@@ -1,4 +1,3 @@
-ad pillTimer
 ae pillLifeTime
 af pointIndex0
 b0 pointIndex1
@@ -18,6 +17,7 @@ bd virusBottom
 be virusXSpeed
 bf virusYSpeed
 c0 virusMoveFrame
+c1 virusAnimationFrame
 f0 dbg1
 f1 dbg2
 f2 dbg3
