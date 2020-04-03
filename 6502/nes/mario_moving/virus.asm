@@ -11,14 +11,40 @@ MoveVirus:
   :
 
   LDA #$01
+  STA virusXDirection
+  LDA #$01
+  STA virusYDirection
+  LDA #$01
   STA virusXSpeed
-  CLC
-  ADC virusLeft
-  STA virusLeft
   LDA #$02
   STA virusYSpeed
-  CLC
-  ADC virusTop
+
+MoveVirusOnX:
+  LDA virusXDirection
+  BNE :+
+    LDA virusLeft
+    CLC
+    ADC virusXSpeed
+    STA virusLeft
+    JMP MoveVirusOnY
+  :
+  LDA virusLeft
+  SEC
+  SBC virusXSpeed
+  STA virusLeft
+
+MoveVirusOnY:
+  LDA virusYDirection
+  BNE :+
+    LDA virusTop
+    CLC
+    ADC virusYSpeed
+    STA virusTop
+    RTS
+  :
+  LDA virusTop
+  SEC
+  SBC virusYSpeed
   STA virusTop
   RTS
 

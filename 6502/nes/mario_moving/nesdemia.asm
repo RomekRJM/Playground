@@ -43,8 +43,10 @@
 .define virusBottom $bd
 .define virusXSpeed $be
 .define virusYSpeed $bf
-.define virusMoveFrame $c0
-.define virusAnimationFrame $c1
+.define virusXDirection $c0
+.define virusYDirection $c1
+.define virusMoveFrame $c2
+.define virusAnimationFrame $c3
 
 .define dbg1 $f0
 .define dbg2 $f1
