@@ -11,6 +11,10 @@
 .byte $00, $00, $00, $00, $00 ; filler bytes
 .segment "ZEROPAGE" ; LSB 0 - FF
 
+; 0x70 - 0x78 - virus1
+; 0x79 - 0x80 - virus2
+; 0x81 - 0x89 - virus3
+; 0x8a - 0x92 - virus4
 .define buttons $a0
 .define frame   $a1
 .define playerLeft $a2
@@ -45,10 +49,11 @@
 .define virusYSpeed $bf
 .define virusXDirection $c0
 .define virusYDirection $c1
-.define virusMoveFrame $c2
-.define virusAnimationFrame $c3
-.define virusAlive $c4
+.define virusAlive $c2
+.define virusMoveFrame $c3
+.define virusAnimationFrame $c4
 .define virusCntr $c5
+.define virusPointer $c6
 
 .segment "STARTUP"
 
@@ -80,6 +85,8 @@ PILL_HEIGHT = $08
 
 COLLISSION = $01
 NO_COLLISSION = $00
+
+NO_VIRUSES = $04
 
 
 Reset:
@@ -152,7 +159,7 @@ MainGameLoop:
 ComputeLogic:
   JSR SpawnPill
   JSR CheckCollisions
-  JSR MoveVirus
+  JSR MoveViruses
   RTS
 
 CheckCollisions:
@@ -182,7 +189,7 @@ RenderGraphics:
 
   JSR RenderPlayer
   JSR RenderPill
-  JSR RenderVirus
+  JSR RenderViruses
   JSR RenderPoints
 
   RTS

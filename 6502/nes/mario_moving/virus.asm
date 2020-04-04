@@ -1,4 +1,73 @@
-MoveVirus:
+
+LoadVirus:
+  LDY virusPointer
+  LDA $70 ,Y
+  STA virusLeft
+  INY
+  LDA $70 ,Y
+  STA virusTop
+  INY
+  LDA $70 ,Y
+  STA virusRight
+  INY
+  LDA $70 ,Y
+  STA virusBottom
+  INY
+  LDA $70 ,Y
+  STA virusXSpeed
+  INY
+  LDA $70 ,Y
+  STA virusYSpeed
+  INY
+  LDA $70 ,Y
+  STA virusXDirection
+  INY
+  LDA $70 ,Y
+  STA virusYDirection
+  INY
+  LDA $70 ,Y
+  STA virusAlive
+  INY
+  STY virusPointer
+  RTS
+
+StoreVirus:
+  LDA virusPointer
+  SEC
+  SBC #$09
+  TAY
+  LDA virusLeft
+  STA $70 ,Y
+  INY
+  LDA virusTop
+  STA $70 ,Y
+  INY
+  LDA virusRight
+  STA $70 ,Y
+  INY
+  LDA virusBottom
+  STA $70 ,Y
+  INY
+  LDA virusXSpeed
+  STA $70 ,Y
+  INY
+  LDA virusYSpeed
+  STA $70 ,Y
+  INY
+  LDA virusXDirection
+  STA $70 ,Y
+  INY
+  LDA virusYDirection
+  STA $70 ,Y
+  INY
+  LDA virusAlive
+  STA $70 ,Y
+  INY
+  STY virusPointer
+  RTS
+
+
+MoveViruses:
   INC virusMoveFrame
   LDA virusMoveFrame
   CMP #VIRUS_MOVE_INTERVAL
@@ -9,7 +78,22 @@ MoveVirus:
   BEQ :+
     RTS
   :
+  LDA #NO_VIRUSES
+  STA virusCntr
+  LDA #$00
+  STA virusPointer
 
+MoveNextVirus:
+  JSR LoadVirus
+  JSR MoveVirus
+  JSR StoreVirus
+  DEC virusCntr
+  LDA virusCntr
+  BNE MoveNextVirus
+  RTS
+
+
+MoveVirus:
   LDA virusAlive
   BNE :+
     JSR SpawnNewVirus
@@ -65,20 +149,37 @@ KillVirus:
   STA virusAlive
   RTS
 
+
+RenderViruses:
+  LDA #NO_VIRUSES
+  STA virusCntr
+  LDA #$00
+  STA virusPointer
+
+RenderNextVirus:
+  JSR LoadVirus
+  JSR RenderVirus
+  JSR StoreVirus
+  DEC virusCntr
+  LDA virusCntr
+  BNE RenderNextVirus
+  RTS
+
+
 RenderVirus:
-	LDX spriteCounter
-	LDY #$00
+  LDX spriteCounter
+  LDY #$00
 LoadVirusSprites:
   LDA VirusData, Y
-	CPY #$03
+  CPY #$03
   BNE :+
-		CLC
-		ADC virusLeft
+    CLC
+    ADC virusLeft
   :
   CPY #$00
   BNE :+
-	 CLC
-	 ADC virusTop
+    CLC
+    ADC virusTop
   :
   CPY #$01
   BNE SetVirusFrame
@@ -112,5 +213,4 @@ SpawnNewVirus:
   STA virusYSpeed
 
   INC virusAlive
-  INC virusCntr
   RTS

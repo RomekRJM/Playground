@@ -35,19 +35,19 @@ ForcePillRespawn:
   RTS
 
 RenderPill:
-	LDX spriteCounter
-	LDY #$00
+  LDX spriteCounter
+  LDY #$00
 LoadPillSprites:
   LDA PillData, Y
-	CPY #$03
+  CPY #$03
   BNE :+
-		CLC
-		ADC pillLeft
+    CLC
+    ADC pillLeft
   :
   CPY #$00
   BNE :+
-	 CLC
-	 ADC pillTop
+   CLC
+  ADC pillTop
   :
 
   STA $0200, X
