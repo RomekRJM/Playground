@@ -1,3 +1,5 @@
+ae pillLifeTime
+af pointIndex0
 b0 pointIndex1
 b1 pointIndex2
 b2 points
@@ -18,7 +20,5 @@ c0 virusXDirection
 c1 virusYDirection
 c2 virusMoveFrame
 c3 virusAnimationFrame
-f0 dbg1
-f1 dbg2
-f2 dbg3
-f3 dbg4
+c4 virusAlive
+c5 virusCntr

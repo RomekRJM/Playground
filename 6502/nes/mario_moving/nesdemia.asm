@@ -47,11 +47,8 @@
 .define virusYDirection $c1
 .define virusMoveFrame $c2
 .define virusAnimationFrame $c3
-
-.define dbg1 $f0
-.define dbg2 $f1
-.define dbg3 $f2
-.define dbg4 $f3
+.define virusAlive $c4
+.define virusCntr $c5
 
 .segment "STARTUP"
 

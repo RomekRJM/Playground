@@ -10,14 +10,11 @@ MoveVirus:
     RTS
   :
 
-  LDA #$01
-  STA virusXDirection
-  LDA #$01
-  STA virusYDirection
-  LDA #$01
-  STA virusXSpeed
-  LDA #$02
-  STA virusYSpeed
+  LDA virusAlive
+  BNE :+
+    JSR SpawnNewVirus
+    RTS
+  :
 
 MoveVirusOnX:
   LDA virusXDirection
@@ -26,12 +23,19 @@ MoveVirusOnX:
     CLC
     ADC virusXSpeed
     STA virusLeft
-    JMP MoveVirusOnY
+    CMP #$fd
+    BCC MoveVirusOnY
+    JSR KillVirus
+    RTS
   :
   LDA virusLeft
   SEC
   SBC virusXSpeed
   STA virusLeft
+  CMP #$02
+  BCS MoveVirusOnY
+  JSR KillVirus
+  RTS
 
 MoveVirusOnY:
   LDA virusYDirection
@@ -40,12 +44,26 @@ MoveVirusOnY:
     CLC
     ADC virusYSpeed
     STA virusTop
+    CMP #$fd
+    BCC FinishMoveVirus
+    JSR KillVirus
     RTS
   :
   LDA virusTop
   SEC
   SBC virusYSpeed
   STA virusTop
+  CMP #$02
+  BCS FinishMoveVirus
+  JSR KillVirus
+
+FinishMoveVirus:
+  RTS
+
+
+KillVirus:
+  LDA #$00
+  STA virusAlive
   RTS
 
 
@@ -83,4 +101,19 @@ SetVirusFrame:
   CPY #$04
   BNE LoadVirusSprites
   STX spriteCounter
+  RTS
+
+
+SpawnNewVirus:
+  JSR NextRandomBool
+  STA virusXDirection
+  JSR NextRandomBool
+  STA virusYDirection
+  JSR NextRandom1or2
+  STA virusXSpeed
+  JSR NextRandom1or2
+  STA virusYSpeed
+
+  INC virusAlive
+  INC virusCntr
   RTS
