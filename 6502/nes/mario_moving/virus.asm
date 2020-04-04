@@ -78,6 +78,7 @@ MoveViruses:
   BEQ :+
     RTS
   :
+
   LDA #NO_VIRUSES
   STA virusCntr
   LDA #$00
@@ -151,6 +152,25 @@ KillVirus:
 
 
 RenderViruses:
+  INC virusAnimationChangeFrame
+  LDA virusAnimationChangeFrame
+  CMP #VIRUS_CHANGE_FRAME_INTERVAL
+  BNE InitVirusesRendering
+
+  LDA #$00
+  STA virusAnimationChangeFrame
+
+  LDA virusAnimationFrame
+  CMP #VIRUS_FRAME_0
+  BEQ :+
+    LDA #VIRUS_FRAME_0
+    STA virusAnimationFrame
+    JMP InitVirusesRendering
+  :
+  LDA #VIRUS_FRAME_1
+  STA virusAnimationFrame
+
+InitVirusesRendering:
   LDA #NO_VIRUSES
   STA virusCntr
   LDA #$00
@@ -184,14 +204,6 @@ LoadVirusSprites:
   CPY #$01
   BNE SetVirusFrame
   LDA virusAnimationFrame
-  CMP #VIRUS_FRAME_0
-  BEQ :+
-    LDA #VIRUS_FRAME_0
-    STA virusAnimationFrame
-    JMP SetVirusFrame
-  :
-  LDA #VIRUS_FRAME_1
-  STA virusAnimationFrame
 
 SetVirusFrame:
   STA $0200, X

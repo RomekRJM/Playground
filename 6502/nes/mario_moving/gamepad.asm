@@ -20,18 +20,18 @@ GetControllerInputLoop:
 
 
 ReactOnInput:
-	; we don't want to move caracter every frame - it's to fast
-	; instead we will get input every MOVE_INTERVAL frames to slow it down
-	INC moveFrame
-	LDA moveFrame
-	CMP #MOVE_INTERVAL
-	BNE :+
-		LDA #$00
-		STA moveFrame
-	:
-	BEQ :+
-		RTS
-	:
+  ; we don't want to move caracter every frame - it's to fast
+  ; instead we will get input every MOVE_INTERVAL frames to slow it down
+  INC moveFrame
+  LDA moveFrame
+  CMP #MOVE_INTERVAL
+  BNE :+
+    LDA #$00
+    STA moveFrame
+  :
+  BEQ :+
+    RTS
+  :
 
 	LDA buttons
   AND #BUTTON_LEFT

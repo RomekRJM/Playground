@@ -52,8 +52,9 @@
 .define virusAlive $c2
 .define virusMoveFrame $c3
 .define virusAnimationFrame $c4
-.define virusCntr $c5
-.define virusPointer $c6
+.define virusAnimationChangeFrame $c5
+.define virusCntr $c6
+.define virusPointer $c7
 
 .segment "STARTUP"
 
@@ -72,6 +73,7 @@ BUTTON_RIGHT  = 1 << 0
 MOVE_INTERVAL = $05
 
 VIRUS_MOVE_INTERVAL = $15
+VIRUS_CHANGE_FRAME_INTERVAL = $3f
 VIRUS_FRAME_0 = $e0
 VIRUS_FRAME_1 = $e1
 
