@@ -13,7 +13,6 @@ MoveVirus:
   LDA virusAlive
   BNE :+
     JSR SpawnNewVirus
-    RTS
   :
 
 MoveVirusOnX:
@@ -66,7 +65,6 @@ KillVirus:
   STA virusAlive
   RTS
 
-
 RenderVirus:
 	LDX spriteCounter
 	LDY #$00
@@ -102,7 +100,6 @@ SetVirusFrame:
   BNE LoadVirusSprites
   STX spriteCounter
   RTS
-
 
 SpawnNewVirus:
   JSR NextRandomBool

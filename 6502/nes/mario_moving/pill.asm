@@ -1,31 +1,31 @@
 SpawnPill:
-	LDA pillLifeTime
-	BNE :+
-		LDA #PILL_LIFE_TIME
-		STA pillLifeTime
-	:
+  LDA pillLifeTime
+  BNE :+
+    LDA #PILL_LIFE_TIME
+    STA pillLifeTime
+  :
 
   INC pillTimer
 
-	BNE :+
-		DEC pillLifeTime
-		BNE :+
-			LDA frame
-			JSR NextRandomByte
+  BNE :+
+    DEC pillLifeTime
+    BNE :+
+      LDA frame
+      JSR NextRandomByte
       ADC #$d0
-			STA pillLeft
+      STA pillLeft
       CLC
       ADC #PILL_WIDTH
       STA pillRight
-			JSR NextRandomByte
+      JSR NextRandomByte
       AND #$d0
-			STA pillTop
+      STA pillTop
       CLC
       ADC #PILL_HEIGHT
       STA pillBottom
-			RTS
-	:
-	RTS
+      RTS
+  :
+  RTS
 
 ForcePillRespawn:
   LDA #$ff
