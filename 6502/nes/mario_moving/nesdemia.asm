@@ -55,6 +55,8 @@
 .define virusAnimationChangeFrame $c5
 .define virusCntr $c6
 .define virusPointer $c7
+.define dbg1 $c8
+.define dbg2 $c9
 
 .segment "STARTUP"
 

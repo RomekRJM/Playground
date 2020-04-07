@@ -7,9 +7,14 @@ NextRandomByte:
   STA randomByte
   RTS
 
+NextRandom7Bits:
+  JSR NextRandomByte
+  AND #%01111111
+  RTS
+
 NextRandomBool:
   JSR NextRandomByte
-  AND #$01
+  AND #%00000001
   RTS
 
 NextRandom1or2:

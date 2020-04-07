@@ -1,5 +1,3 @@
-b0 pointIndex1
-b1 pointIndex2
 b2 points
 b3 currentPointIndex
 b4 pointIndexOffset
@@ -22,3 +20,5 @@ c4 virusAnimationFrame
 c5 virusAnimationChangeFrame
 c6 virusCntr
 c7 virusPointer
+c8 dbg1
+c9 dbg2

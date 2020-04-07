@@ -215,14 +215,32 @@ SetVirusFrame:
   RTS
 
 SpawnNewVirus:
-  JSR NextRandomBool
-  STA virusXDirection
-  JSR NextRandomBool
-  STA virusYDirection
   JSR NextRandom1or2
   STA virusXSpeed
   JSR NextRandom1or2
   STA virusYSpeed
+
+  JSR NextRandomBool
+  STA virusXDirection
+  TAX
+  JSR NextRandom7Bits
+  CPX #$00
+  BEQ :+
+    CLC
+    ADC #$7F
+  :
+  STA virusLeft
+
+  JSR NextRandomBool
+  STA virusYDirection
+  TAX
+  JSR NextRandom7Bits
+  CPX #$00
+  BEQ :+
+    CLC
+    ADC #$7F
+  :
+  STA virusTop
 
   INC virusAlive
   RTS
