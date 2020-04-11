@@ -11,52 +11,52 @@
 .byte $00, $00, $00, $00, $00 ; filler bytes
 .segment "ZEROPAGE" ; LSB 0 - FF
 
-.define nmiTimer $00
-.define buttons $01
-.define frame   $02
-.define playerLeft $03
-.define playerTop $04
-.define playerRight $05
-.define playerBottom $06
-.define randomByte $07
-.define spriteCounter $08
-.define pillLeft $09
-.define pillTop $0a
-.define pillRight $0b
-.define pillBottom $0c
-.define pillTimer $0d
-.define pillLifeTime $0e
-.define pointIndex0 $0f
-.define pointIndex1 $10
-.define pointIndex2 $11
-.define points $12
-.define currentPointIndex $13
-.define pointIndexOffset $14
-.define playerCollidesWithCoin $15
-.define dim1Player $16
-.define dim2Player $17
-.define dim1Object $18
-.define dim2Object $19
-.define virusLeft $1a
-.define virusTop $1b
-.define virusRight $1c
-.define virusBottom $1d
-.define virusXSpeed $1e
-.define virusYSpeed $1f
-.define virusXDirection $20
-.define virusYDirection $21
-.define virusAlive $22
-.define virusMoveFrame $23
-.define virusAnimationFrame $24
-.define virusAnimationChangeFrame $25
-.define virusCntr $26
-.define virusPointer $27
-.define dbg1 $28
-.define dbg2 $29
 ; 0x70 - 0x78 - virus1
 ; 0x79 - 0x80 - virus2
 ; 0x81 - 0x89 - virus3
 ; 0x8a - 0x92 - virus4
+.define nmiTimer $a0
+.define buttons $a1
+.define frame   $a2
+.define playerLeft $a3
+.define playerTop $a4
+.define playerRight $a5
+.define playerBottom $a6
+.define randomByte $a7
+.define spriteCounter $a8
+.define pillLeft $a9
+.define pillTop $aa
+.define pillRight $ab
+.define pillBottom $ac
+.define pillTimer $ad
+.define pillLifeTime $ae
+.define pointIndex0 $af
+.define pointIndex1 $b0
+.define pointIndex2 $b1
+.define points $b2
+.define currentPointIndex $b3
+.define pointIndexOffset $b4
+.define playerCollidesWithCoin $b5
+.define dim1Player $b6
+.define dim2Player $b7
+.define dim1Object $b8
+.define dim2Object $b9
+.define virusLeft $ba
+.define virusTop $bb
+.define virusRight $bc
+.define virusBottom $bd
+.define virusXSpeed $be
+.define virusYSpeed $bf
+.define virusXDirection $c0
+.define virusYDirection $c1
+.define virusAlive $c2
+.define virusMoveFrame $c3
+.define virusAnimationFrame $c4
+.define virusAnimationChangeFrame $c5
+.define virusCntr $c6
+.define virusPointer $c7
+.define dbg1 $c8
+.define dbg2 $c9
 
 .segment "STARTUP"
 
