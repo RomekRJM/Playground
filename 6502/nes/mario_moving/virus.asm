@@ -1,4 +1,3 @@
-
 LoadVirus:
   LDY virusPointer
   LDA $70 ,Y
@@ -187,6 +186,11 @@ RenderNextVirus:
 
 
 RenderVirus:
+  LDA virusAlive
+  BNE :+
+    RTS
+  :
+
   LDX spriteCounter
   LDY #$00
 LoadVirusSprites:
@@ -242,5 +246,6 @@ SpawnNewVirus:
   :
   STA virusTop
 
-  INC virusAlive
+  LDA #$01
+  STA virusAlive
   RTS

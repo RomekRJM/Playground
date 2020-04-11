@@ -11,6 +11,7 @@
 .byte $00, $00, $00, $00, $00 ; filler bytes
 .segment "ZEROPAGE" ; LSB 0 - FF
 
+.define nmiTimer $00
 ; 0x70 - 0x78 - virus1
 ; 0x79 - 0x80 - virus2
 ; 0x81 - 0x89 - virus3
@@ -22,7 +23,7 @@
 .define playerRight $a4
 .define playerBottom $a5
 .define randomByte $a6
-.define moveFrame     $a7
+; $a7
 .define spriteCounter $a8
 .define pillLeft $a9
 .define pillTop $aa
@@ -72,10 +73,8 @@ BUTTON_DOWN   = 1 << 2
 BUTTON_LEFT   = 1 << 1
 BUTTON_RIGHT  = 1 << 0
 
-MOVE_INTERVAL = $05
-
-VIRUS_MOVE_INTERVAL = $15
-VIRUS_CHANGE_FRAME_INTERVAL = $3f
+VIRUS_MOVE_INTERVAL = $05
+VIRUS_CHANGE_FRAME_INTERVAL = $1f
 VIRUS_FRAME_0 = $e0
 VIRUS_FRAME_1 = $e1
 
@@ -90,7 +89,7 @@ PILL_HEIGHT = $08
 COLLISSION = $01
 NO_COLLISSION = $00
 
-NO_VIRUSES = $04
+NO_VIRUSES = $01
 
 
 Reset:
@@ -148,6 +147,8 @@ CLEARMEM:
   STA $2006
 
   LDX #$00
+  LDA #$01
+  STA nmiTimer
 
 .include "pallete.asm"
 
@@ -158,6 +159,7 @@ MainGameLoop:
   JSR ReactOnInput
   JSR ComputeLogic
   JSR RenderGraphics
+  JSR WaitForNmi
   JMP MainGameLoop
 
 ComputeLogic:
@@ -179,10 +181,18 @@ CheckCollisions:
   :
   RTS
 
+WaitForNmi:
+  LDA nmiTimer			;vblank wait
+WaitForNmiLoop:
+  CMP nmiTimer
+  BEQ WaitForNmiLoop
+  RTS
+
 NMI:
   LDA #$02 ; copy sprite data from $0200 => PPU memory for display
   STA $4014
   INC frame
+  INC nmiTimer
   RTI
 
 .include "gamepad.asm"
