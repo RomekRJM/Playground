@@ -1,13 +1,46 @@
-def get_variables(file_name):
-    lines = []
-    with open(file_name, 'r') as s:
-        for line in s.readlines():
-            if line.startswith('.define'):
-                _, name, addr = line.split()
-                addr = addr.replace('$', '')
-                lines.append((addr, name))
+import os
 
-    return lines
+class VariableEnumerator():
+    def __init__(self):
+        self.counter = 0;
+
+    def enumerate_variables_in_file(self, file_name):
+        variables = []
+        with open(file_name, 'r+') as s:
+            while True:
+                line = s.readline()
+                if line.startswith('.define'):
+                    _, name, addr = line.split()
+                    adjusted_line = line.replace(addr, self.__hex_counter_in6502format())
+                    s.seek(-len(line), 1)
+                    s.write(adjusted_line)
+                    variables.append((self.__hex_counter(), name))
+
+                    self.counter += 1
+                elif not line:
+                    break
+
+        return variables
+
+    def __hex_counter(self):
+        return hex(self.counter).split('x')[1]
+
+    def __hex_counter_in6502format(self):
+        return '${}'.format(self.__hex_counter().zfill(2))
+
+def enumerate_all_variables(dir):
+    enumerator = VariableEnumerator()
+    variables = []
+
+    for root, dirs, files in os.walk(dir, topdown=False):
+       for file in files:
+           if file.endswith(".asm"):
+               variables += enumerator.enumerate_variables_in_file(os.path.join(root, file))
+
+    return variables
+
+
+
 
 
 def save_to_map_file(file_name, variables):
@@ -24,5 +57,5 @@ def save_to_map_file(file_name, variables):
 
 if __name__ == '__main__':
     num_to_display = 24
-    variables = get_variables('nesdemia.asm')
+    variables = enumerate_all_variables('.')
     save_to_map_file('nesdemia.mem.txt', variables[-num_to_display:])
