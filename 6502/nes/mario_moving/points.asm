@@ -1,5 +1,5 @@
 RenderPoints:
-  LDA $08
+  LDA #$00
   STA pointIndexOffset
   LDA pointIndex0
   STA currentPointIndex
