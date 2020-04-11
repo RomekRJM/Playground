@@ -7,6 +7,11 @@ NextRandomByte:
   STA randomByte
   RTS
 
+NextRandom3Bits:
+  JSR NextRandomByte
+  AND #%00000111
+  RTS
+
 NextRandom7Bits:
   JSR NextRandomByte
   AND #%01111111
@@ -25,4 +30,12 @@ NextRandom1or2:
     RTS
   :
   LDA #$02
+  RTS
+
+NextRandom128To255:
+  JSR NextRandom7Bits
+  BEQ :+
+    CLC
+    ADC #$7F
+  :
   RTS

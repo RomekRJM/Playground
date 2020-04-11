@@ -106,7 +106,7 @@ MoveVirusOnX:
     CLC
     ADC virusXSpeed
     STA virusLeft
-    CMP #$fd
+    CMP #$fb
     BCC MoveVirusOnY
     JSR KillVirus
     RTS
@@ -127,7 +127,7 @@ MoveVirusOnY:
     CLC
     ADC virusYSpeed
     STA virusTop
-    CMP #$fd
+    CMP #$fb
     BCC FinishMoveVirus
     JSR KillVirus
     RTS
@@ -224,28 +224,101 @@ SpawnNewVirus:
   JSR NextRandom1or2
   STA virusYSpeed
 
-  JSR NextRandomBool
-  STA virusXDirection
+  JSR NextRandom3Bits
   TAX
-  JSR NextRandom7Bits
-  CPX #$00
-  BEQ :+
-    CLC
-    ADC #$7F
+  CPX #$00  ; top-left quarter, virusLeft=0, virusTop=[0, 127]
+  BNE :+
+    LDA #$00
+    STA virusXDirection
+    STA virusYDirection
+    LDA #$03
+    STA virusLeft
+    JSR NextRandom7Bits
+    STA virusTop
+    JMP EndAxisPick
   :
-  STA virusLeft
-
-  JSR NextRandomBool
-  STA virusYDirection
-  TAX
-  JSR NextRandom7Bits
-  CPX #$00
-  BEQ :+
-    CLC
-    ADC #$7F
+  CPX #$01  ; top-left quarter, virusLeft=[0,127], virusTop=0
+  BNE :+
+    LDA #$00
+    STA virusXDirection
+    STA virusYDirection
+    LDA #$03
+    STA virusTop
+    JSR NextRandom7Bits
+    STA virusLeft
+    JMP EndAxisPick
   :
-  STA virusTop
+  CPX #$02  ; top-right quarter, virusLeft=[128,255], virusTop=0
+  BNE :+
+    LDA #$01
+    STA virusXDirection
+    LDA #$00
+    STA virusYDirection
+    LDA #$03
+    STA virusTop
+    JSR NextRandom128To255
+    STA virusLeft
+    JMP EndAxisPick
+  :
+  CPX #$03  ; top-right quarter, virusLeft=255, virusTop=[0,127]
+  BNE :+
+    LDA #$01
+    STA virusXDirection
+    LDA #$00
+    STA virusYDirection
+    JSR NextRandom7Bits
+    STA virusTop
+    LDA #$fa
+    STA virusLeft
+    JMP EndAxisPick
+  :
+  CPX #$04  ; bottom-left quarter, virusLeft=0, virusTop=[128,255]
+  BNE :+
+    LDA #$00
+    STA virusXDirection
+    STA virusLeft
+    LDA #$01
+    STA virusYDirection
+    JSR NextRandom128To255
+    STA virusTop
+    JMP EndAxisPick
+  :
+  CPX #$05  ; bottom-left quarter, virusLeft=[0,127], virusTop=255
+  BNE :+
+    LDA #$00
+    STA virusXDirection
+    LDA #$01
+    STA virusYDirection
+    JSR NextRandom7Bits
+    STA virusLeft
+    LDA #$fa
+    STA virusTop
+    JMP EndAxisPick
+  :
+  CPX #$06  ; bottom-right quarter, virusLeft=[128,255], virusTop=255
+  BNE :+
+    LDA #$01
+    STA virusXDirection
+    STA virusYDirection
+    JSR NextRandom128To255
+    STA virusLeft
+    LDA #$fa
+    STA virusTop
+    JMP EndAxisPick
+  :
+  CPX #$07  ; bottom-right quarter, virusLeft=255, virusTop=[128,255]
+  BNE :+
+    LDA #$01
+    STA virusXDirection
+    STA virusYDirection
+    JSR NextRandom128To255
+    STA virusTop
+    LDA #$fa
+    STA virusLeft
+    JMP EndAxisPick
+  :
 
+EndAxisPick:
   LDA #$01
   STA virusAlive
   RTS
