@@ -106,7 +106,7 @@ MoveVirusOnX:
     CLC
     ADC virusXSpeed
     STA virusLeft
-    CMP #$fb
+    CMP #$f7
     BCC MoveVirusOnY
     JSR KillVirus
     RTS
@@ -127,7 +127,7 @@ MoveVirusOnY:
     CLC
     ADC virusYSpeed
     STA virusTop
-    CMP #$fb
+    CMP #$f7
     BCC FinishMoveVirus
     JSR KillVirus
     RTS
@@ -268,7 +268,7 @@ SpawnNewVirus:
     STA virusYDirection
     JSR NextRandom7Bits
     STA virusTop
-    LDA #$fa
+    LDA #$f7
     STA virusLeft
     JMP EndAxisPick
   :
@@ -291,7 +291,7 @@ SpawnNewVirus:
     STA virusYDirection
     JSR NextRandom7Bits
     STA virusLeft
-    LDA #$fa
+    LDA #$f7
     STA virusTop
     JMP EndAxisPick
   :
@@ -302,7 +302,7 @@ SpawnNewVirus:
     STA virusYDirection
     JSR NextRandom128To255
     STA virusLeft
-    LDA #$fa
+    LDA #$f7
     STA virusTop
     JMP EndAxisPick
   :
@@ -313,7 +313,7 @@ SpawnNewVirus:
     STA virusYDirection
     JSR NextRandom128To255
     STA virusTop
-    LDA #$fa
+    LDA #$f7
     STA virusLeft
     JMP EndAxisPick
   :
