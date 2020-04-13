@@ -12,6 +12,11 @@ NextRandom3Bits:
   AND #%00000111
   RTS
 
+NextRandom6Bits:
+  JSR NextRandomByte
+  AND #%01111111
+  RTS
+
 NextRandom7Bits:
   JSR NextRandomByte
   AND #%01111111
@@ -34,8 +39,17 @@ NextRandom1or2:
 
 NextRandom128To255:
   JSR NextRandom7Bits
-  BEQ :+
-    CLC
-    ADC #$7F
-  :
+  CLC
+  ADC #$7F
+  RTS
+
+NextRandom16To206:
+  JSR NextRandom7Bits
+  STA $00
+  JSR NextRandom6Bits
+  CLC
+  ADC $00
+  CLC
+  ADC #$10
+  
   RTS

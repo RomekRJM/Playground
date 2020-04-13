@@ -11,14 +11,12 @@ SpawnPill:
     DEC pillLifeTime
     BNE :+
       LDA frame
-      JSR NextRandomByte
-      ADC #$d0
+      JSR NextRandom16To206
       STA pillLeft
       CLC
       ADC #PILL_WIDTH
       STA pillRight
-      JSR NextRandomByte
-      AND #$d0
+      JSR NextRandom16To206
       STA pillTop
       CLC
       ADC #PILL_HEIGHT
