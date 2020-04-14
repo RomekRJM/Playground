@@ -160,13 +160,14 @@ RenderViruses:
   STA virusAnimationChangeFrame
 
   LDA virusAnimationFrame
-  CMP #VIRUS_FRAME_0
+  CMP #$30 ; VirusData3
   BEQ :+
-    LDA #VIRUS_FRAME_0
+    CLC
+    ADC #$10
     STA virusAnimationFrame
     JMP InitVirusesRendering
   :
-  LDA #VIRUS_FRAME_1
+  LDA #$00
   STA virusAnimationFrame
 
 InitVirusesRendering:
@@ -194,12 +195,12 @@ RenderVirus:
   LDA #$10
   STA $00 ; virus frames
 
-  LDY #$00
+  LDY virusAnimationFrame
   LDX #$00
   STX $01
 LoadVirusSprites:
   LDX $01
-  LDA VirusData, Y
+  LDA VirusData0, Y
   CPX #$03
   BNE :+
     CLC
@@ -210,9 +211,6 @@ LoadVirusSprites:
     CLC
     ADC virusTop
   :
-  ;CPX #$01
-  ;BNE SetVirusFrame
-  ;LDA virusAnimationFrame
 
 SetVirusFrame:
   INX

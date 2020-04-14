@@ -1,6 +1,6 @@
 PaletteData:
   .byte $22,$29,$1A,$0F,$22,$36,$17,$0f,$22,$30,$21,$0f,$22,$27,$17,$0F  ;background palette data
-  .byte $21,$16,$bc,$ac,$22,$1A,$30,$af,$22,$08,$30,$27,$22,$0F,$36,$17  ;sprite palette data
+  .byte $21,$19,$bc,$dc,$22,$1A,$30,$cf,$02,$88,$30,$27,$22,$0F,$ac,$17  ;sprite palette data
 
 SpriteData:
   .byte $00, $00, $00, $00
@@ -15,17 +15,29 @@ SpriteData:
 PillData:
   .byte $00, $75, $00, $00
 
-VirusData:
+VirusData0:
   .byte $00, $c2, $00, $00
   .byte $00, $c3, $00, $08
   .byte $08, $d2, $00, $00
   .byte $08, $d3, $00, $08
 
 VirusData1:
-  .byte $08, $e2, $00, $08
-  .byte $08, $e3, $00, $08
-  .byte $08, $f2, $00, $08
+  .byte $00, $e2, $00, $00
+  .byte $00, $e3, $00, $08
+  .byte $08, $f2, $00, $00
   .byte $08, $f3, $00, $08
+
+VirusData2:
+  .byte $00, $a2, $00, $00
+  .byte $00, $a3, $00, $08
+  .byte $08, $b2, $00, $00
+  .byte $08, $b3, $00, $08
+
+VirusData3:
+  .byte $00, $82, $00, $00
+  .byte $00, $83, $00, $08
+  .byte $08, $92, $00, $00
+  .byte $08, $93, $00, $08
 
 Zero:
   .byte $10, $60, $00, $f0

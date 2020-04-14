@@ -73,11 +73,9 @@ BUTTON_DOWN   = 1 << 2
 BUTTON_LEFT   = 1 << 1
 BUTTON_RIGHT  = 1 << 0
 
-NO_VIRUSES = $0a
+NO_VIRUSES = $08
 VIRUS_MOVE_INTERVAL = $04
 VIRUS_CHANGE_FRAME_INTERVAL = $1f
-VIRUS_FRAME_0 = $e0
-VIRUS_FRAME_1 = $e1
 
 PILL_LIFE_TIME = $1a
 
@@ -225,4 +223,4 @@ RenderGraphics:
   ;
 
 .segment "CHARS"
-  .incbin "hellomario.chr"
+  .incbin "nesdemia.chr"
