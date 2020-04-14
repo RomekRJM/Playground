@@ -191,31 +191,45 @@ RenderVirus:
     RTS
   :
 
-  LDX spriteCounter
+  LDA #$10
+  STA $00 ; virus frames
+
   LDY #$00
+  LDX #$00
+  STX $01
 LoadVirusSprites:
+  LDX $01
   LDA VirusData, Y
-  CPY #$03
+  CPX #$03
   BNE :+
     CLC
     ADC virusLeft
   :
-  CPY #$00
+  CPX #$00
   BNE :+
     CLC
     ADC virusTop
   :
-  CPY #$01
-  BNE SetVirusFrame
-  LDA virusAnimationFrame
+  ;CPX #$01
+  ;BNE SetVirusFrame
+  ;LDA virusAnimationFrame
 
 SetVirusFrame:
+  INX
+  CPX #$04
+  BNE :+
+    LDX #$00
+  :
+  STX $01
+  LDX spriteCounter
   STA $0200, X
   INX
-  INY
-  CPY #$04
-  BNE LoadVirusSprites
   STX spriteCounter
+  INY
+  LDX $01
+  DEC $00
+  LDA $00
+  BNE LoadVirusSprites
   RTS
 
 SpawnNewVirus:
