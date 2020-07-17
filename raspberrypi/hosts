@@ -1,0 +1,7 @@
+[pis]
+192.168.0.67
+
+[all:vars]
+ansible_connection=ssh
+ansible_ssh_user=pi
+ansible_ssh_private_key_file=~/.ssh/raspberrypi
