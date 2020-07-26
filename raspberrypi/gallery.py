@@ -50,7 +50,7 @@ def clone_repos(repos):
 
 def directory_size(path):
     root_directory = Path(path)
-    return sum(f.stat().st_size for f in root_directory.glob('*') if f.is_file())
+    return sum(f.stat().st_size for f in root_directory.glob('**/*') if f.is_file())
 
 
 if __name__ == "__main__":
