@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from git import Repo
 import requests
@@ -33,6 +34,8 @@ class GitlabClient:
 
 
 def clone_repos(repos):
+    repo_dirs = []
+
     for repo in repos:
         repo_dir = "{}/{}".format(PATH, repo)
         if not os.path.isdir(repo_dir):
@@ -41,7 +44,17 @@ def clone_repos(repos):
                     .format(GITLAB_TOKEN, GITLAB_USER.lower(), repo),
                 repo_dir)
 
+        repo_dirs.append(repo_dir)
+
+    return repo_dirs
+
+def directory_size(path):
+    root_directory = Path(path)
+    return sum(f.stat().st_size for f in root_directory.glob('*') if f.is_file())
+
 
 if __name__ == "__main__":
     projects = GitlabClient(GITLAB_TOKEN).list_projects_in_group(GITLAB_GROUP)
-    clone_repos(projects)
+    repo_dirs = clone_repos(projects)
+
+    print([{r: directory_size(r)} for r in repo_dirs])
