@@ -4,6 +4,9 @@ from git import Repo
 import requests
 
 
+GITLAB_GROUP = os.getenv("GITLAB_GROUP")
+GITLAB_TOKEN = os.getenv("GITLAB_TOKEN")
+GITLAB_USER = os.getenv("GITLAB_USER")
 GALLERY_PROJECTS={"query":  "{ group(fullPath: \"rsgallery\") { id name projects { nodes { name } } } }"}
 PATH="/tmp"
 
@@ -29,14 +32,16 @@ class GitlabClient:
         return [list(x.values())[0] for x in nodes]
 
 
-def clone_repo(repos):
+def clone_repos(repos):
     for repo in repos:
-        Repo.clone_from("https://gitlab.com/{}".format(repo),
-                        "{}/{}".format(PATH, repo))
+        repo_dir = "{}/{}".format(PATH, repo)
+        if not os.path.isdir(repo_dir):
+            Repo.clone_from(
+                "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git"
+                    .format(GITLAB_TOKEN, GITLAB_USER.lower(), repo),
+                repo_dir)
 
 
 if __name__ == "__main__":
-    GITLAB_GROUP = os.getenv("GITLAB_GROUP")
-    GITLAB_TOKEN = os.getenv("GITLAB_TOKEN")
     projects = GitlabClient(GITLAB_TOKEN).list_projects_in_group(GITLAB_GROUP)
-    clone_repo(projects)
+    clone_repos(projects)
