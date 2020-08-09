@@ -1,9 +1,18 @@
+import logging
+from logging.handlers import RotatingFileHandler
 import os
 from pathlib import Path
 from shutil import copyfile
 
 from git import Repo
 import requests
+
+LOG_PATH = os.getenv("LOG_PATH", "/var/log/gallery.log")
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger("GALLERY")
+handler = RotatingFileHandler(LOG_PATH, maxBytes=1024*1024*10, backupCount=3)
+logger.addHandler(handler)
 
 
 GITLAB_GROUP = os.getenv("GITLAB_GROUP")
@@ -67,24 +76,36 @@ def is_media_file(f):
 
 
 def fill_in_repo(src, repo):
+    logger.info("Copying files from {} to {}".format(src, repo))
+
+    git = Repo.init("/tmp", bare=True).git
     path = Path(src)
     repo_size = MAX_REPO_SIZE - directory_size(repo)
+
+    logger.debug("Repo {} size before changes {}".format(repo, repo_size))
 
     for f in path.glob('**/*'):
         old_path = str(f.resolve())
 
         if f.is_file() and is_media_file(f):
+            new_path = old_path.replace(src, repo)
+            logger.info("Moving file from {} to {}".format(old_path, new_path))
             repo_size -= f.stat().st_size
             if repo_size <= 0:
+                logger.info("File not moved, as repo size exceeds maximum")
                 break
 
-            copyfile(old_path, old_path.replace(src, repo))
+            current_file_hash = git.hash_object(f.absolute())
+            copyfile(old_path, new_path)
+            logger.info("File {} created.".format(new_path))
 
         elif f.is_dir():
             new_path = Path("{}/{}".format(repo, old_path.replace(src, "")))
+            logger.info("Creating directory {}".format(new_path.absolute()))
 
             if not new_path.exists():
                 new_path.mkdir()
+                logger.info("Directory already exists")
 
 
 if __name__ == "__main__":
