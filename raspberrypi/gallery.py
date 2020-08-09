@@ -1,3 +1,4 @@
+from datetime import datetime
 import logging
 from logging.handlers import RotatingFileHandler
 import os
@@ -11,15 +12,14 @@ LOG_PATH = os.getenv("LOG_PATH", "/var/log/gallery.log")
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger("GALLERY")
-handler = RotatingFileHandler(LOG_PATH, maxBytes=1024*1024*10, backupCount=3)
+handler = RotatingFileHandler(LOG_PATH, maxBytes=1024 * 1024 * 10, backupCount=3)
 logger.addHandler(handler)
-
 
 GITLAB_GROUP = os.getenv("GITLAB_GROUP")
 GITLAB_TOKEN = os.getenv("GITLAB_TOKEN")
 GITLAB_USER = os.getenv("GITLAB_USER")
-GALLERY_PROJECTS = {"query":  "{ group(fullPath: \"" + GITLAB_GROUP
-                              + "\") { id name projects { nodes { name description id } } } }"}
+GALLERY_PROJECTS = {"query": "{ group(fullPath: \"" + GITLAB_GROUP
+                             + "\") { id name projects { nodes { name description id } } } }"}
 PATH = "/tmp"
 
 MAX_REPO_SIZE = 100000000
@@ -33,53 +33,76 @@ class GitlabClient:
         self.api_url = "https://gitlab.com/api/v4"
         self.graphql_url = "https://gitlab.com/api/graphql"
         self.private_token = private_token
+        self.headers = {
+            "Authorization": "Bearer {}".format(self.private_token),
+            "Content-Type": "application/json"
+        }
 
     def list_projects_in_group(self):
         response = requests.post(
             url=self.graphql_url,
             params=GALLERY_PROJECTS,
-            headers={
-                "Authorization": "Bearer {}".format(self.private_token),
-                "Content-Type": "application/json"
-            }
+            headers=self.headers
         )
         response.raise_for_status()
 
-        nodes = response.json()['data']['group']['projects']['nodes']
+        group = response.json()['data']['group']
+        nodes = group['projects']['nodes']
 
-        return [{"id": x["id"].split("/")[-1], "name": x["name"], "description": x["description"]} for x in nodes]
+        return {
+            "groupId": group["id"].split("/")[-1],
+            "projects":
+                [
+                    {
+                        "id": x["id"].split("/")[-1],
+                        "name": x["name"],
+                        "full": REPO_FULL_MARKER in x["description"]
+                    }
+                    for x in nodes
+                ]
+        }
 
     def get_repo_descriptor(self, repo_id):
         response = requests.get(
             url="{}/projects/{}/repository/files/{}/raw?ref=master".format(self.api_url, repo_id, REPO_DESCRIPTOR),
-            headers={
-                "Authorization": "Bearer {}".format(self.private_token),
-                "Content-Type": "application/json"
-            }
+            headers=self.headers
         )
         response.raise_for_status()
 
         return response.text
 
+    def add_project_in_group(self, project_name, group_id):
+        response = requests.post(
+            url="{}/projects".format(self.api_url),
+            headers=self.headers,
+            name=project_name,
+            namespace_id=group_id
+        )
+        response.raise_for_status()
 
-def clone_repos():
-    gitlab_client = GitlabClient(GITLAB_TOKEN)
-    projects = gitlab_client.list_projects_in_group()
+
+def clone_repo(repo, repo_dir):
+    Repo.clone_from(
+        "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git".format(GITLAB_TOKEN, GITLAB_USER.lower(), repo),
+        repo_dir)
+
+    return "{}/{}".format(repo_dir, repo)
+
+
+def clone_repos(gitlab_client, projects_in_group):
     repo_dirs = []
 
-    for repo in projects:
+    for repo in projects_in_group["projects"]:
         name = repo['name']
-        description = repo['description']
+        full = repo['full']
         id = repo["id"]
         repo_dir = "{}/{}".format(PATH, name)
 
-        if REPO_FULL_MARKER in description:
+        if full:
             gitlab_client.get_repo_descriptor(id)
         else:
             if not os.path.isdir(repo_dir):
-                Repo.clone_from(
-                    "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git".format(GITLAB_TOKEN, GITLAB_USER.lower(), repo),
-                    repo_dir)
+                clone_repo(repo, repo_dir)
 
         repo_dirs.append(repo_dir)
 
@@ -101,21 +124,21 @@ def is_media_file(f):
     return False
 
 
-def fill_in_repo(src, f, repo_dir):
-    logger.info("Copying files from {} to {}".format(src, repo_dir))
+def fill_in_repo(src, f, dst_dir):
+    logger.info("Copying files from {} to {}".format(src, dst_dir))
     git = Repo.init("/tmp", bare=True).git
     old_path = str(f.resolve())
 
-    repo_size = MAX_REPO_SIZE - directory_size(repo_dir)
+    repo_size = MAX_REPO_SIZE - directory_size(dst_dir)
 
-    logger.debug("Repo {} size before changes {}".format(repo_dir, repo_size))
+    logger.debug("Repo {} size before changes {}".format(dst_dir, repo_size))
 
     if f.is_file() and is_media_file(f):
-        new_path = old_path.replace(src, repo_dir)
-        logger.info("Moving file from {} to {}".format(old_path, new_path))
+        new_path = old_path.replace(src, dst_dir)
+        logger.info("Copying file from {} to {}".format(old_path, new_path))
         repo_size -= f.stat().st_size
         if repo_size <= 0:
-            logger.info("File not moved, as repo size exceeds maximum")
+            logger.info("File not copied, as repo size exceeds maximum")
             return False
 
         current_file_hash = git.hash_object(f.absolute())
@@ -123,7 +146,7 @@ def fill_in_repo(src, f, repo_dir):
         logger.info("File {} created.".format(new_path))
 
     elif f.is_dir():
-        new_path = Path("{}/{}".format(repo_dir, old_path.replace(src, "")))
+        new_path = Path("{}/{}".format(dst_dir, old_path.replace(src, "")))
         logger.info("Creating directory {}".format(new_path.absolute()))
 
         if not new_path.exists():
@@ -133,21 +156,29 @@ def fill_in_repo(src, f, repo_dir):
     return True
 
 
-def add_new_repo():
-    return "dummy_name"
+def create_and_clone_repo(gitlab_client, group_id, dst_dir):
+    project_name = "gal" + datetime.now().strftime("%Y%m%dH%M%S")
+    logger.info("Creating new repository {} in group {}".format(project_name, group_id))
+    gitlab_client.add_project_in_group(project_name, group_id)
+
+    return clone_repo(project_name, dst_dir)
 
 
-def execute(src, repo_dir, repo_dirs):
+def execute(src, dst_dir):
+    gitlab_client = GitlabClient(GITLAB_TOKEN)
+    projects_in_group = gitlab_client.list_projects_in_group()
+    repo_dirs = clone_repos(gitlab_client, projects_in_group)
+
+    group_id = projects_in_group["groupId"]
     path = Path(src)
 
     for f in path.glob('**/*'):
-        if not fill_in_repo(src, f, repo_dir):
-            repo_dir = add_new_repo()
+        if not fill_in_repo(src, f, dst_dir):
+            dst_dir = create_and_clone_repo(gitlab_client, group_id, dst_dir)
+            fill_in_repo(src, f, dst_dir)
 
 
 if __name__ == "__main__":
-    repo_dirs = clone_repos()
-
-    execute("/home/sabina/workspace/photos", "/tmp", repo_dirs)
+    execute("/home/sabina/workspace/photos", "/tmp")
 
     print(directory_size("/tmp"))
