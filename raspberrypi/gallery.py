@@ -9,15 +9,16 @@ import requests
 GITLAB_GROUP = os.getenv("GITLAB_GROUP")
 GITLAB_TOKEN = os.getenv("GITLAB_TOKEN")
 GITLAB_USER = os.getenv("GITLAB_USER")
-GALLERY_PROJECTS={"query":  "{ group(fullPath: \"rsgallery\") { id name projects { nodes { name } } } }"}
-PATH="/tmp"
+GALLERY_PROJECTS = {"query":  "{ group(fullPath: \"rsgallery\") { id name projects { nodes { name } } } }"}
+PATH = "/tmp"
 MAX_REPO_SIZE = 100000000
+MEDIA_FILES = ["jpg", "jpeg", "png", "mov"]
+
 
 class GitlabClient:
     def __init__(self, private_token):
         self.url = "https://gitlab.com/api/graphql"
         self.private_token = private_token
-
 
     def list_projects_in_group(self, group_name):
         response = requests.post(
@@ -42,26 +43,37 @@ def clone_repos(repos):
         repo_dir = "{}/{}".format(PATH, repo)
         if not os.path.isdir(repo_dir):
             Repo.clone_from(
-                "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git"
-                    .format(GITLAB_TOKEN, GITLAB_USER.lower(), repo),
+                "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git".format(GITLAB_TOKEN, GITLAB_USER.lower(), repo),
                 repo_dir)
 
         repo_dirs.append(repo_dir)
 
     return repo_dirs
 
+
 def directory_size(src):
     path = Path(src)
     return sum(f.stat().st_size for f in path.glob('**/*') if f.is_file())
 
+
+def is_media_file(f):
+    file_name = f.name.lower()
+
+    for media_file in MEDIA_FILES:
+        if file_name.endswith(media_file):
+            return True
+
+    return False
+
+
 def fill_in_repo(src, repo):
     path = Path(src)
-    repo_size = MAX_REPO_SIZE - directory_size(src)
+    repo_size = MAX_REPO_SIZE - directory_size(repo)
 
     for f in path.glob('**/*'):
         old_path = str(f.resolve())
 
-        if f.is_file():
+        if f.is_file() and is_media_file(f):
             repo_size -= f.stat().st_size
             if repo_size <= 0:
                 break
@@ -69,11 +81,16 @@ def fill_in_repo(src, repo):
             copyfile(old_path, old_path.replace(src, repo))
 
         elif f.is_dir():
-            Path("{}/{}".format(repo, old_path.replace(src, ""))).mkdir()
+            new_path = Path("{}/{}".format(repo, old_path.replace(src, "")))
+
+            if not new_path.exists():
+                new_path.mkdir()
 
 
 if __name__ == "__main__":
     projects = GitlabClient(GITLAB_TOKEN).list_projects_in_group(GITLAB_GROUP)
     repo_dirs = clone_repos(projects)
 
-    fill_in_repo("/Users/roman.subik/tomcat", "/tmp")
+    fill_in_repo("/home/sabina/workspace/photos", "/tmp")
+
+    print(directory_size("/tmp"))
