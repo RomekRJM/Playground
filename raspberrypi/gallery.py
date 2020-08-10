@@ -20,9 +20,9 @@ GITLAB_TOKEN = os.getenv("GITLAB_TOKEN")
 GITLAB_USER = os.getenv("GITLAB_USER")
 GALLERY_PROJECTS = {"query": "{ group(fullPath: \"" + GITLAB_GROUP
                              + "\") { id name projects { nodes { name description id } } } }"}
-PATH = "/tmp"
+TEMPORARY_LOCATION = "/tmp"
 
-MAX_REPO_SIZE = 100000000
+MAX_REPO_SIZE = 9900000000 # 9.9GB
 MEDIA_FILES = ["jpg", "jpeg", "png", "mov"]
 REPO_FULL_MARKER = "REPO_FULL"
 REPO_DESCRIPTOR = "repo.descriptor"
@@ -82,6 +82,16 @@ class GitlabClient:
         )
         response.raise_for_status()
 
+    def set_project_description(self, project_id, description):
+        response = requests.put(
+            url="{}/projects/{}".format(self.api_url, project_id),
+            headers=self.headers,
+            params={
+                "description": description
+            }
+        )
+        response.raise_for_status()
+
 
 def clone_repo(repo_name, repo_dir):
     new_project_path = os.path.join(repo_dir, repo_name)
@@ -99,13 +109,17 @@ def clone_repos(gitlab_client, projects_in_group):
         name = repo['name']
         full = repo['full']
         id = repo["id"]
-        repo_dir = os.path.join(PATH, name)
+        repo_dir = os.path.join(TEMPORARY_LOCATION, name)
 
         if full:
-            gitlab_client.get_repo_descriptor(id)
+            if not os.path.exists(repo_dir):
+                Path(repo_dir).mkdir()
+
+            with open(os.path.join(repo_dir, REPO_DESCRIPTOR)) as f:
+                f.write(gitlab_client.get_repo_descriptor(id))
         else:
             if not os.path.isdir(repo_dir):
-                repo_dir = clone_repo(name, PATH)
+                repo_dir = clone_repo(name, TEMPORARY_LOCATION)
 
         repo_dirs.append(repo_dir)
 
@@ -127,34 +141,35 @@ def is_media_file(f):
     return False
 
 
-def fill_in_repo(src, f, dst_dir):
-    logger.info("Copying files from {} to {}".format(src, dst_dir))
-    git = Repo.init("/tmp", bare=True).git
+def fill_in_repo(src, f, repo_dir, file_hashes):
+    git = Repo.init(TEMPORARY_LOCATION, bare=True).git
     old_path = str(f.resolve())
 
-    repo_size = MAX_REPO_SIZE - directory_size(dst_dir)
+    repo_size = MAX_REPO_SIZE - directory_size(repo_dir)
 
-    logger.debug("Repo {} size before changes {}".format(dst_dir, repo_size))
+    logger.debug("Repo {} size before changes {}".format(repo_dir, repo_size))
 
     if f.is_file() and is_media_file(f):
-        new_path = old_path.replace(src, dst_dir)
+        current_file_hash = git.hash_object(f.absolute())
+        previous_file = file_hashes.get(current_file_hash)
+        if previous_file:
+            logger.info("File {} already exists under {}".format(old_path, previous_file))
+            return True
+
+        new_path = old_path.replace(src, repo_dir)
         logger.info("Copying file from {} to {}".format(old_path, new_path))
         repo_size -= f.stat().st_size
         if repo_size <= 0:
             logger.info("File not copied, as repo size exceeds maximum")
             return False
 
-        current_file_hash = git.hash_object(f.absolute())
+        new_dir = os.path.dirname(new_path)
+        if not os.path.exists(new_dir):
+            logger.info("Creating directory structure {}".format(new_dir))
+            os.makedirs(new_dir)
+
         copyfile(old_path, new_path)
         logger.info("File {} created.".format(new_path))
-
-    elif f.is_dir():
-        new_path = Path(os.path.join(dst_dir, old_path.replace(src, "")))
-        logger.info("Creating directory {}".format(new_path.absolute()))
-
-        if not new_path.exists():
-            new_path.mkdir()
-            logger.info("Directory already exists")
 
     return True
 
@@ -167,21 +182,79 @@ def create_and_clone_repo(gitlab_client, group_id, dst_dir):
     return clone_repo(project_name, dst_dir)
 
 
+def commit_repo_descriptor(repo_dir):
+    git = Repo.init(repo_dir, bare=True).git
+    git.index.add(["."])
+    git.index.commit("Add images.")
+    ls = git.ls_files("-s").splitlines()
+    descriptor_path = os.path.join(repo_dir, REPO_DESCRIPTOR)
+
+    with open(descriptor_path, "w") as f:
+        for line in ls:
+            if len(line.split()) != 4:
+                continue
+
+            _, git_hash, _, file_path = line.split()
+            f.write("{} {}\n".format(git_hash, file_path))
+
+    git.index.add(["."])
+    git.index.commit("Modify repo descriptors.")
+
+
+def load_hashes_from_repo_descriptors(src, projects_in_group):
+    file_hashes = {}
+    for project in projects_in_group["projects"]:
+        repo_descriptor_path = Path(os.path.join(src, project["name"], REPO_DESCRIPTOR))
+        if not repo_descriptor_path.exists():
+            continue
+
+        with open(repo_descriptor_path) as f:
+            lines = f.readlines()
+            for line in lines:
+                git_hash, path = line.split()
+                file_hashes["git_hash"] = path
+
+    return file_hashes
+
+
+def ensure_temporary_location_exists():
+    if os.path.exists(TEMPORARY_LOCATION):
+        if not os.path.isdir(TEMPORARY_LOCATION):
+            raise FileExistsError("{} already exists but is not a directory.".format(TEMPORARY_LOCATION))
+        return
+
+    os.makedirs(TEMPORARY_LOCATION)
+
+
+def get_current_project(projects_in_group):
+    return next(filter(lambda x: not x["full"], projects_in_group["projects"]))
+
+
+def close_repo(gitlab_client, project_id):
+    gitlab_client.set_project_description(project_id, )
+
+
 def execute(src, dst_dir):
+    ensure_temporary_location_exists()
+
     gitlab_client = GitlabClient(GITLAB_TOKEN)
     projects_in_group = gitlab_client.list_projects_in_group()
-    repo_dirs = clone_repos(gitlab_client, projects_in_group)
+    clone_repos(gitlab_client, projects_in_group)
+    file_hashes = load_hashes_from_repo_descriptors(src, projects_in_group)
 
     group_id = projects_in_group["groupId"]
     path = Path(src)
+    project = get_current_project(projects_in_group)
 
     for f in path.glob('**/*'):
-        if not fill_in_repo(src, f, dst_dir):
-            dst_dir = create_and_clone_repo(gitlab_client, group_id, dst_dir)
-            fill_in_repo(src, f, dst_dir)
+        repo_dir = os.path.join(dst_dir, project["name"])
+        if not fill_in_repo(src, f, repo_dir, file_hashes):
+            commit_repo_descriptor(repo_dir)
+            close_repo(gitlab_client, project["id"])
+            repo_dir = create_and_clone_repo(gitlab_client, group_id, dst_dir)
+            fill_in_repo(src, f, repo_dir, file_hashes)
 
 
 if __name__ == "__main__":
-    execute("/home/sabina/workspace/photos", "/tmp")
-
-    print(directory_size("/tmp"))
+    # recreate_repo_descriptor("/tmp/gal202007190433")
+    execute("/home/sabina/workspace/photos", TEMPORARY_LOCATION)
