@@ -56,7 +56,7 @@ class GitlabClient:
                     {
                         "id": x["id"].split("/")[-1],
                         "name": x["name"],
-                        "full": REPO_FULL_MARKER in x["description"]
+                        "full": x["description"] and REPO_FULL_MARKER in x["description"]
                     }
                     for x in nodes
                 ]
@@ -75,18 +75,21 @@ class GitlabClient:
         response = requests.post(
             url="{}/projects".format(self.api_url),
             headers=self.headers,
-            name=project_name,
-            namespace_id=group_id
+            params={
+                "name": project_name,
+                "namespace_id": group_id
+            }
         )
         response.raise_for_status()
 
 
-def clone_repo(repo, repo_dir):
+def clone_repo(repo_name, repo_dir):
+    new_project_path = os.path.join(repo_dir, repo_name)
     Repo.clone_from(
-        "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git".format(GITLAB_TOKEN, GITLAB_USER.lower(), repo),
-        repo_dir)
+        "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git".format(GITLAB_TOKEN, GITLAB_GROUP.lower(), repo_name),
+        new_project_path)
 
-    return "{}/{}".format(repo_dir, repo)
+    return new_project_path
 
 
 def clone_repos(gitlab_client, projects_in_group):
@@ -96,13 +99,13 @@ def clone_repos(gitlab_client, projects_in_group):
         name = repo['name']
         full = repo['full']
         id = repo["id"]
-        repo_dir = "{}/{}".format(PATH, name)
+        repo_dir = os.path.join(PATH, name)
 
         if full:
             gitlab_client.get_repo_descriptor(id)
         else:
             if not os.path.isdir(repo_dir):
-                clone_repo(repo, repo_dir)
+                repo_dir = clone_repo(name, PATH)
 
         repo_dirs.append(repo_dir)
 
@@ -146,7 +149,7 @@ def fill_in_repo(src, f, dst_dir):
         logger.info("File {} created.".format(new_path))
 
     elif f.is_dir():
-        new_path = Path("{}/{}".format(dst_dir, old_path.replace(src, "")))
+        new_path = Path(os.path.join(dst_dir, old_path.replace(src, "")))
         logger.info("Creating directory {}".format(new_path.absolute()))
 
         if not new_path.exists():
@@ -157,7 +160,7 @@ def fill_in_repo(src, f, dst_dir):
 
 
 def create_and_clone_repo(gitlab_client, group_id, dst_dir):
-    project_name = "gal" + datetime.now().strftime("%Y%m%dH%M%S")
+    project_name = "gal" + datetime.now().strftime("%Y%m%d%H%M%S")
     logger.info("Creating new repository {} in group {}".format(project_name, group_id))
     gitlab_client.add_project_in_group(project_name, group_id)
 
