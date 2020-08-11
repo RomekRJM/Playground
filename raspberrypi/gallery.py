@@ -77,7 +77,8 @@ class GitlabClient:
             headers=self.headers,
             params={
                 "name": project_name,
-                "namespace_id": group_id
+                "namespace_id": group_id,
+                "visibility": "private"
             }
         )
         response.raise_for_status()
@@ -334,5 +335,4 @@ def execute(src, dst_dir):
 
 
 if __name__ == "__main__":
-    # recreate_repo_descriptor("/tmp/gal202007190433")
     execute("/home/sabina/workspace/photos2", TEMPORARY_LOCATION)
