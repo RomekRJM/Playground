@@ -92,9 +92,36 @@ class GitlabClient:
         )
         response.raise_for_status()
 
+    def add_group(self, group_name):
+        response = requests.post(
+            url="{}/groups".format(self.api_url),
+            headers=self.headers,
+            params={
+                "name": group_name,
+                "path": group_name
+            }
+        )
+        response.raise_for_status()
 
-def clone_repo(repo_name, repo_dir):
+    def get_group(self, group_name):
+        response = requests.get(
+            url="{}/groups".format(self.api_url),
+            headers=self.headers,
+            params={
+                "name": group_name
+            }
+        )
+        response.raise_for_status()
+
+        return response.json()
+
+
+def clone_or_pull_repo(repo_name, repo_dir):
     new_project_path = os.path.join(repo_dir, repo_name)
+
+    if os.path.exists(new_project_path):
+        Repo(new_project_path).remotes.origin.pull()
+
     Repo.clone_from(
         "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git".format(GITLAB_TOKEN, GITLAB_GROUP.lower(), repo_name),
         new_project_path)
@@ -119,7 +146,7 @@ def clone_repos(gitlab_client, projects_in_group):
                 f.write(gitlab_client.get_repo_descriptor(id))
         else:
             if not os.path.isdir(repo_dir):
-                repo_dir = clone_repo(name, TEMPORARY_LOCATION)
+                repo_dir = clone_or_pull_repo(name, TEMPORARY_LOCATION)
 
         repo_dirs.append(repo_dir)
 
@@ -179,10 +206,10 @@ def create_and_clone_repo(gitlab_client, group_id, dst_dir):
     logger.info("Creating new repository {} in group {}".format(project_name, group_id))
     gitlab_client.add_project_in_group(project_name, group_id)
 
-    return clone_repo(project_name, dst_dir)
+    return clone_or_pull_repo(project_name, dst_dir)
 
 
-def commit_repo_descriptor(repo_dir):
+def commit_and_push_repo_with_descriptor(repo_dir):
     git = Repo.init(repo_dir, bare=True).git
     git.index.add(["."])
     git.index.commit("Add images.")
@@ -199,6 +226,7 @@ def commit_repo_descriptor(repo_dir):
 
     git.index.add(["."])
     git.index.commit("Modify repo descriptors.")
+    git.remotes.origin.push()
 
 
 def load_hashes_from_repo_descriptors(src, projects_in_group):
@@ -226,18 +254,34 @@ def ensure_temporary_location_exists():
     os.makedirs(TEMPORARY_LOCATION)
 
 
+def ensure_group_exists(gitlab_client, group_name):
+    group = gitlab_client.get_group(group_name)
+
+    if not group:
+        gitlab_client.add_group(group_name)
+
+
+def ensure_project_exists_in_group(gitlab_client, dst_dir):
+    projects_in_group = gitlab_client.list_projects_in_group()
+
+    if not projects_in_group.get("projects"):
+        create_and_clone_repo(gitlab_client, projects_in_group["groupId"], dst_dir)
+
+
 def get_current_project(projects_in_group):
     return next(filter(lambda x: not x["full"], projects_in_group["projects"]))
 
 
 def close_repo(gitlab_client, project_id):
-    gitlab_client.set_project_description(project_id, )
+    gitlab_client.set_project_description(project_id, REPO_FULL_MARKER)
 
 
 def execute(src, dst_dir):
-    ensure_temporary_location_exists()
-
     gitlab_client = GitlabClient(GITLAB_TOKEN)
+    ensure_temporary_location_exists()
+    ensure_group_exists(gitlab_client, GITLAB_GROUP)
+    ensure_project_exists_in_group(gitlab_client, dst_dir)
+
     projects_in_group = gitlab_client.list_projects_in_group()
     clone_repos(gitlab_client, projects_in_group)
     file_hashes = load_hashes_from_repo_descriptors(src, projects_in_group)
@@ -249,7 +293,7 @@ def execute(src, dst_dir):
     for f in path.glob('**/*'):
         repo_dir = os.path.join(dst_dir, project["name"])
         if not fill_in_repo(src, f, repo_dir, file_hashes):
-            commit_repo_descriptor(repo_dir)
+            commit_and_push_repo_with_descriptor(repo_dir)
             close_repo(gitlab_client, project["id"])
             repo_dir = create_and_clone_repo(gitlab_client, group_id, dst_dir)
             fill_in_repo(src, f, repo_dir, file_hashes)
