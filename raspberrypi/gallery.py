@@ -204,6 +204,10 @@ def fill_in_repo(src, f, repo_dir, file_hashes):
     logger.debug("Repo {} size before changes {}".format(repo_dir, repo_size))
 
     if f.is_file() and is_media_file(f):
+
+        if f.stat().st_size > MAX_REPO_SIZE:
+            logger.error("File {} can not be added as it's to large.".format(old_path))
+
         current_file_hash = git.hash_object(f.absolute())
         previous_file = file_hashes.get(current_file_hash)
         if previous_file:
