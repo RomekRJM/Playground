@@ -237,38 +237,42 @@ def create_and_clone_repo(gitlab_client, group_id, dst_dir):
 
 def commit_and_push_repo_with_descriptor(repo_dir):
     repo = Repo.init(repo_dir)
-    repo.index.add(["."])
+    repo.git.add()
     repo.index.commit("Add images.")
     ls = repo.git.ls_files("-s").splitlines()
     descriptor_path = os.path.join(repo_dir, REPO_DESCRIPTOR)
 
     with open(descriptor_path, "w") as f:
         for line in ls:
-            if len(line.split()) != 4:
+            if len(line.split("\t")) != 2:
                 continue
 
-            _, git_hash, _, file_path = line.split()
+            data, file_path = line.split("\t")
 
-            if ".git/" not in file_path:
-                f.write("{} {}\n".format(git_hash, file_path))
+            if len(data.split()) != 3:
+                continue
 
-    repo.index.add(["."])
+            _, git_hash, _ = data.split()
+
+            f.write("{}\t{}\n".format(git_hash, file_path))
+
+    repo.git.add(["."])
     repo.index.commit("Modify repo descriptors.")
     repo.remotes.origin.push(progress=ProgressLogger())
 
 
-def load_hashes_from_repo_descriptors(src, projects_in_group):
+def load_hashes_from_repo_descriptors(dst_dir, projects_in_group):
     file_hashes = {}
     for project in projects_in_group["projects"]:
-        repo_descriptor_path = Path(os.path.join(src, project["name"], REPO_DESCRIPTOR))
+        repo_descriptor_path = Path(os.path.join(dst_dir, project["name"], REPO_DESCRIPTOR))
         if not repo_descriptor_path.exists():
             continue
 
         with open(repo_descriptor_path) as f:
             lines = f.readlines()
             for line in lines:
-                git_hash, file_path = line.split()
-                file_hashes["git_hash"] = file_path
+                git_hash, file_path = line.split("\t")
+                file_hashes[git_hash] = file_path.replace("\n", "")
 
     return file_hashes
 
@@ -312,7 +316,7 @@ def execute(src, dst_dir):
 
     projects_in_group = gitlab_client.list_projects_in_group()
     clone_repos(gitlab_client, projects_in_group)
-    file_hashes = load_hashes_from_repo_descriptors(src, projects_in_group)
+    file_hashes = load_hashes_from_repo_descriptors(dst_dir, projects_in_group)
 
     group_id = projects_in_group["groupId"]
     path = Path(src)
@@ -331,4 +335,4 @@ def execute(src, dst_dir):
 
 if __name__ == "__main__":
     # recreate_repo_descriptor("/tmp/gal202007190433")
-    execute("/home/sabina/workspace/photos", TEMPORARY_LOCATION)
+    execute("/home/sabina/workspace/photos2", TEMPORARY_LOCATION)
