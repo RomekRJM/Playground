@@ -10,7 +10,7 @@ import requests
 
 
 def sanitize_path(path):
-    return path[-1] if path and path.endswith("/") else path
+    return path[:-1] if path and path.endswith("/") else path
 
 
 LOG_PATH = os.getenv("LOG_PATH", "/var/log/gallery.log")
@@ -28,7 +28,7 @@ GALLERY_PROJECTS = {"query": "{ group(fullPath: \"" + GITLAB_GROUP
                              + "\") { id name projects { nodes { name description id } } } }"}
 TEMPORARY_LOCATION = sanitize_path("/tmp")
 
-MAX_REPO_SIZE = 9900000000  # 9.9GB
+MAX_REPO_SIZE = 4950000000  # 4.95GiB as git will double that in .git/ and gitlab has 10GiB / repo limit
 MEDIA_FILES = ["jpg", "jpeg", "png", "mov"]
 REPO_FULL_MARKER = "REPO_FULL"
 REPO_DESCRIPTOR = "repo.descriptor"
@@ -248,6 +248,7 @@ def create_and_clone_repo(gitlab_client, group_id, dst_dir):
 
 def commit_and_push_repo_with_descriptor(repo_dir):
     repo = Repo.init(repo_dir)
+    logger.info("Indexing changes, this might take a while.")
     repo.git.add()
     repo.index.commit("Add images.")
     ls = repo.git.ls_files("-s").splitlines()
@@ -269,6 +270,7 @@ def commit_and_push_repo_with_descriptor(repo_dir):
 
     repo.git.add(["."])
     repo.index.commit("Modify repo descriptors.")
+    logger.info("Pushing changes to the remote repo, this might take a while.")
     repo.remotes.origin.push(progress=ProgressLogger())
 
 
