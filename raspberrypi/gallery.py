@@ -8,6 +8,11 @@ from shutil import copyfile
 from git import Repo, RemoteProgress
 import requests
 
+
+def sanitize_path(path):
+    return path[-1] if path and path.endswith("/") else path
+
+
 LOG_PATH = os.getenv("LOG_PATH", "/var/log/gallery.log")
 
 logging.basicConfig(level=logging.INFO)
@@ -18,9 +23,10 @@ logger.addHandler(handler)
 GITLAB_GROUP = os.getenv("GITLAB_GROUP")
 GITLAB_TOKEN = os.getenv("GITLAB_TOKEN")
 GITLAB_USER = os.getenv("GITLAB_USER")
+SOURCE_LOCATION = sanitize_path(os.getenv("SOURCE_LOCATION"))
 GALLERY_PROJECTS = {"query": "{ group(fullPath: \"" + GITLAB_GROUP
                              + "\") { id name projects { nodes { name description id } } } }"}
-TEMPORARY_LOCATION = "/tmp"
+TEMPORARY_LOCATION = sanitize_path("/tmp")
 
 MAX_REPO_SIZE = 9900000000  # 9.9GB
 MEDIA_FILES = ["jpg", "jpeg", "png", "mov"]
@@ -314,6 +320,7 @@ def close_repo(gitlab_client, project_id):
 
 
 def execute(src, dst_dir):
+    logger.info("Starting script.")
     gitlab_client = GitlabClient(GITLAB_TOKEN)
     ensure_temporary_location_exists()
     ensure_group_exists(gitlab_client, GITLAB_GROUP)
@@ -327,6 +334,8 @@ def execute(src, dst_dir):
     path = Path(src)
     project = get_current_project(projects_in_group)
 
+    logger.info("Discovering files and folders to copy from {}. This might take a while.".format(src))
+
     for f in path.glob('**/*'):
         repo_dir = os.path.join(dst_dir, project["name"])
         if not fill_in_repo(src, f, repo_dir, file_hashes):
@@ -339,4 +348,4 @@ def execute(src, dst_dir):
 
 
 if __name__ == "__main__":
-    execute("/home/sabina/workspace/photos2", TEMPORARY_LOCATION)
+    execute(SOURCE_LOCATION, TEMPORARY_LOCATION)
