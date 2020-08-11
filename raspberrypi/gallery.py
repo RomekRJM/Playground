@@ -5,7 +5,7 @@ import os
 from pathlib import Path
 from shutil import copyfile
 
-from git import Repo
+from git import Repo, RemoteProgress
 import requests
 
 LOG_PATH = os.getenv("LOG_PATH", "/var/log/gallery.log")
@@ -22,7 +22,7 @@ GALLERY_PROJECTS = {"query": "{ group(fullPath: \"" + GITLAB_GROUP
                              + "\") { id name projects { nodes { name description id } } } }"}
 TEMPORARY_LOCATION = "/tmp"
 
-MAX_REPO_SIZE = 9900000000 # 9.9GB
+MAX_REPO_SIZE = 9900000000  # 9.9GB
 MEDIA_FILES = ["jpg", "jpeg", "png", "mov"]
 REPO_FULL_MARKER = "REPO_FULL"
 REPO_DESCRIPTOR = "repo.descriptor"
@@ -116,15 +116,41 @@ class GitlabClient:
         return response.json()
 
 
+class ProgressLogger(RemoteProgress):
+    def update(self, op_code, cur_count, max_count=None, message=''):
+        logger.info("{} {}/{} {}% {}".format(
+            self.__to_text(op_code), int(float(cur_count)), int(float(max_count or 100.0)),
+            cur_count * 100 / (max_count or 100.0), message)
+        )
+
+    @staticmethod
+    def __to_text(op_code):
+        text = ""
+        x = 1
+        op_code_names = ["BEGIN", "END", "COUNTING", "COMPRESSING", "WRITING", "RECEIVING", "RESOLVING",
+                         "FINDING_SOURCES", "CHECKING_OUT"]
+
+        for o in op_code_names:
+            if op_code & x == x:
+                text += o + " "
+
+            x = x << 1
+
+        return text
+
+
 def clone_or_pull_repo(repo_name, repo_dir):
     new_project_path = os.path.join(repo_dir, repo_name)
+    progress = ProgressLogger()
 
     if os.path.exists(new_project_path):
-        Repo(new_project_path).remotes.origin.pull()
-
-    Repo.clone_from(
-        "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git".format(GITLAB_TOKEN, GITLAB_GROUP.lower(), repo_name),
-        new_project_path)
+        logger.info("Pulling project {} into {}".format(repo_name, new_project_path))
+        Repo(new_project_path).remotes.origin.pull(progress=progress)
+    else:
+        logger.info("Cloning project {} into {}".format(repo_name, new_project_path))
+        Repo.clone_from(
+            "https://gitlab-ci-token:{}@gitlab.com/{}/{}.git".format(GITLAB_TOKEN, GITLAB_GROUP.lower(), repo_name),
+            new_project_path, progress)
 
     return new_project_path
 
@@ -210,10 +236,10 @@ def create_and_clone_repo(gitlab_client, group_id, dst_dir):
 
 
 def commit_and_push_repo_with_descriptor(repo_dir):
-    git = Repo.init(repo_dir, bare=True).git
-    git.index.add(["."])
-    git.index.commit("Add images.")
-    ls = git.ls_files("-s").splitlines()
+    repo = Repo.init(repo_dir)
+    repo.index.add(["."])
+    repo.index.commit("Add images.")
+    ls = repo.git.ls_files("-s").splitlines()
     descriptor_path = os.path.join(repo_dir, REPO_DESCRIPTOR)
 
     with open(descriptor_path, "w") as f:
@@ -222,11 +248,13 @@ def commit_and_push_repo_with_descriptor(repo_dir):
                 continue
 
             _, git_hash, _, file_path = line.split()
-            f.write("{} {}\n".format(git_hash, file_path))
 
-    git.index.add(["."])
-    git.index.commit("Modify repo descriptors.")
-    git.remotes.origin.push()
+            if ".git/" not in file_path:
+                f.write("{} {}\n".format(git_hash, file_path))
+
+    repo.index.add(["."])
+    repo.index.commit("Modify repo descriptors.")
+    repo.remotes.origin.push(progress=ProgressLogger())
 
 
 def load_hashes_from_repo_descriptors(src, projects_in_group):
@@ -239,8 +267,8 @@ def load_hashes_from_repo_descriptors(src, projects_in_group):
         with open(repo_descriptor_path) as f:
             lines = f.readlines()
             for line in lines:
-                git_hash, path = line.split()
-                file_hashes["git_hash"] = path
+                git_hash, file_path = line.split()
+                file_hashes["git_hash"] = file_path
 
     return file_hashes
 
@@ -297,6 +325,8 @@ def execute(src, dst_dir):
             close_repo(gitlab_client, project["id"])
             repo_dir = create_and_clone_repo(gitlab_client, group_id, dst_dir)
             fill_in_repo(src, f, repo_dir, file_hashes)
+
+    commit_and_push_repo_with_descriptor(repo_dir)
 
 
 if __name__ == "__main__":
