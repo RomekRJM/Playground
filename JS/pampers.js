@@ -1,11 +1,16 @@
 function get_item_count(title) {
-    var title_text = title.innerText;
-    console.log(title_text);
+    var title_text = title.innerText.toLowerCase();
+    var math_expression = title_text.match(/[0-9]+\s*x\s*[0-9]+/g, "");
+
+    if (math_expression) {
+        return parseInt(eval(math_expression[0].replace("x", "*")))
+    }
+
     title_text = title_text.replace(/[^0-9][0-9]\s+/g, "");
     title_text = title_text.replace(/[0-9]+\s+-\s+[0-9]+/g, "");
     var item_count = title_text.match(/[0-9]+/);
 
-    if (item_count.length > 0) {
+    if (item_count) {
         return parseInt(item_count[0]);
     }
 
@@ -44,12 +49,11 @@ for (i = 0; i < titles.length; i++) {
         bestBang4Buck = ratio;
         bestItem = title_element;
         bestCount = item_count;
-
         console.log(price + "/" + item_count + "=" + ratio);
     }
 }
 
 console.log("Best item is " + bestItem.innerText + " at price point "
-        + bestBang4Buck + " PLN/nappy. Total nappies: " + bestCount);
+        + bestBang4Buck + " PLN/item. Total quantity: " + bestCount);
 
 bestItem;
