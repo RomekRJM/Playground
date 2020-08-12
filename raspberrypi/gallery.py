@@ -15,7 +15,10 @@ def sanitize_path(path):
 
 LOG_PATH = os.getenv("LOG_PATH", "/var/log/gallery.log")
 
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(name)-9s %(levelname)-8s %(message)s'
+)
 logger = logging.getLogger("GALLERY")
 handler = RotatingFileHandler(LOG_PATH, maxBytes=1024 * 1024 * 10, backupCount=3)
 logger.addHandler(handler)
@@ -124,11 +127,25 @@ class GitlabClient:
 
 
 class ProgressLogger(RemoteProgress):
+    def __init__(self):
+        super().__init__()
+        self.last_update = datetime.now()
+
     def update(self, op_code, cur_count, max_count=None, message=''):
-        logger.info("{} {}/{} {}% {}".format(
-            self.__to_text(op_code), int(float(cur_count)), int(float(max_count or 100.0)),
-            cur_count * 100 / (max_count or 100.0), message)
-        )
+        _cur_count = int(float(cur_count))
+        _max_count = int(float(max_count or 100.0))
+        _percentage = min(cur_count * 100 / (max_count or 100.0), 100)
+        _op_code = self.__to_text(op_code)
+
+        logger.info("{} {}/{} {}% {}".format(_op_code, _cur_count, _max_count, _percentage, message))
+
+        update_time = (datetime.now() - self.last_update).total_seconds()
+
+        if update_time > 30:
+            for han in logger.handlers:
+                han.flush()
+
+            self.last_update = datetime.now()
 
     @staticmethod
     def __to_text(op_code):
