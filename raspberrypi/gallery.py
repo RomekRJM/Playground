@@ -29,7 +29,7 @@ GITLAB_USER = os.getenv("GITLAB_USER")
 SOURCE_LOCATION = sanitize_path(os.getenv("SOURCE_LOCATION"))
 GALLERY_PROJECTS = {"query": "{ group(fullPath: \"" + GITLAB_GROUP
                              + "\") { id name projects { nodes { name description id } } } }"}
-TEMPORARY_LOCATION = sanitize_path("/tmp")
+TEMPORARY_LOCATION = sanitize_path("/home/sabina/tmp")
 
 MAX_REPO_SIZE = 4950000000  # 4.95GiB as git will double that in .git/ and gitlab has 10GiB / repo limit
 MEDIA_FILES = ["jpg", "jpeg", "png", "mov"]
@@ -268,6 +268,14 @@ def commit_and_push_repo_with_descriptor(repo_dir):
     logger.info("Indexing changes, this might take a while.")
     repo.git.add()
     repo.index.commit("Add images.")
+    add_repo_descriptor(repo, repo_dir)
+    repo.git.add(["."])
+    repo.index.commit("Modify repo descriptors.")
+    logger.info("Pushing changes to the remote repo, this might take a while.")
+    repo.remotes.origin.push(progress=ProgressLogger())
+
+
+def add_repo_descriptor(repo, repo_dir):
     ls = repo.git.ls_files("-s").splitlines()
     descriptor_path = os.path.join(repo_dir, REPO_DESCRIPTOR)
 
@@ -284,11 +292,6 @@ def commit_and_push_repo_with_descriptor(repo_dir):
             _, git_hash, _ = data.split()
 
             f.write("{}\t{}\n".format(git_hash, file_path))
-
-    repo.git.add(["."])
-    repo.index.commit("Modify repo descriptors.")
-    logger.info("Pushing changes to the remote repo, this might take a while.")
-    repo.remotes.origin.push(progress=ProgressLogger())
 
 
 def load_hashes_from_repo_descriptors(dst_dir, projects_in_group):
