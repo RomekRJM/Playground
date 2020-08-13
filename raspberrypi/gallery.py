@@ -271,6 +271,7 @@ def commit_and_push_repo_with_descriptor(repo_dir):
     add_repo_descriptor(repo, repo_dir)
     repo.git.add(["."])
     repo.index.commit("Modify repo descriptors.")
+    repo.config_writer().set_value("http", "postBuffer", "52428800").release()
     logger.info("Pushing changes to the remote repo, this might take a while.")
     repo.remotes.origin.push(progress=ProgressLogger())
 
