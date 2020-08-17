@@ -356,15 +356,16 @@ def execute(src, dst_dir):
     group_id = projects_in_group["groupId"]
     path = Path(src)
     project = get_current_project(projects_in_group)
+    repo_dir = os.path.join(dst_dir, project["name"])
 
     logger.info("Discovering files and folders to copy from {}. This might take a while.".format(src))
 
     for f in path.glob('**/*'):
-        repo_dir = os.path.join(dst_dir, project["name"])
         if not fill_in_repo(src, f, repo_dir, file_hashes):
             commit_and_push_repo_with_descriptor(repo_dir)
             close_repo(gitlab_client, project["id"])
             repo_dir = create_and_clone_repo(gitlab_client, group_id, dst_dir)
+            project = get_current_project(projects_in_group)
             fill_in_repo(src, f, repo_dir, file_hashes)
 
     commit_and_push_repo_with_descriptor(repo_dir)
