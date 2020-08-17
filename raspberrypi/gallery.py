@@ -1,4 +1,5 @@
 from datetime import datetime
+import io
 import logging
 from logging.handlers import RotatingFileHandler
 import os
@@ -199,7 +200,10 @@ def clone_repos(gitlab_client, projects_in_group):
                 Path(repo_dir).mkdir()
 
             with open(os.path.join(repo_dir, REPO_DESCRIPTOR)) as f:
-                f.write(gitlab_client.get_repo_descriptor(id))
+                try:
+                    f.write(gitlab_client.get_repo_descriptor(id))
+                except io.UnsupportedOperation:
+                    logger.debug("Repo descriptor already exists, doing nothing.")
         else:
             if not os.path.isdir(repo_dir):
                 repo_dir = clone_or_pull_repo(name, TEMPORARY_LOCATION)
@@ -335,8 +339,17 @@ def ensure_group_exists(gitlab_client, group_name):
 
 def ensure_project_exists_in_group(gitlab_client, dst_dir):
     projects_in_group = gitlab_client.list_projects_in_group()
+    create_project = False
 
     if not projects_in_group.get("projects"):
+        create_project = True
+
+    try:
+        get_current_project(projects_in_group)
+    except StopIteration:
+        create_project = True
+
+    if create_project:
         create_and_clone_repo(gitlab_client, projects_in_group["groupId"], dst_dir)
 
 
