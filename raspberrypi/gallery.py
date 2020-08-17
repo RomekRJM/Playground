@@ -102,6 +102,12 @@ class GitlabClient:
         )
         response.raise_for_status()
 
+    def delete_project(self, project_id):
+        response = requests.delete(
+            url="{}/projects/{}".format(self.api_url, project_id),
+            headers=self.headers
+        )
+
     def add_group(self, group_name):
         response = requests.post(
             url="{}/groups".format(self.api_url),
@@ -371,5 +377,15 @@ def execute(src, dst_dir):
     commit_and_push_repo_with_descriptor(repo_dir)
 
 
+def clean_up_empty():
+    gitlab_client = GitlabClient(GITLAB_TOKEN)
+    projects_in_group = gitlab_client.list_projects_in_group()
+
+    for p in projects_in_group["projects"]:
+        if REPO_FULL_MARKER not in p["description"]:
+            gitlab_client.delete_project(p["id"])
+
+
 if __name__ == "__main__":
     execute(SOURCE_LOCATION, TEMPORARY_LOCATION)
+    # clean_up_empty()
