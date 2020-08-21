@@ -14,7 +14,7 @@ def sanitize_path(path):
     return path[:-1] if path and path.endswith("/") else path
 
 
-LOG_PATH = os.getenv("LOG_PATH", "/var/log/gallery.log")
+LOG_PATH = os.getenv("LOG_PATH", "gallery.log")
 
 logging.basicConfig(
     level=logging.INFO,
@@ -276,12 +276,12 @@ def create_and_clone_repo(gitlab_client, group_id, dst_dir):
 def commit_and_push_repo_with_descriptor(repo_dir):
     repo = Repo.init(repo_dir)
     logger.info("Indexing changes, this might take a while.")
-    repo.git.add()
+    repo.git.add(["."])
     repo.index.commit("Add images.")
     add_repo_descriptor(repo, repo_dir)
     repo.git.add(["."])
     repo.index.commit("Modify repo descriptors.")
-    repo.config_writer().set_value("http", "postBuffer", "1048576000").release()
+    repo.config_writer().set_value("http", "postBuffer", str(MAX_REPO_SIZE)).release()
     logger.info("Pushing changes to the remote repo, this might take a while.")
     repo.remotes.origin.push(progress=ProgressLogger())
 
@@ -358,6 +358,7 @@ def get_current_project(projects_in_group):
 
 
 def close_repo(gitlab_client, project_id):
+    logger.info("Closing project {}.".format(project_id))
     gitlab_client.set_project_description(project_id, REPO_FULL_MARKER)
 
 
