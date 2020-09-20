@@ -30,7 +30,7 @@ titles = $$('article div div div h2')
             .filter(el => el.innerText.trim().length > 0)
 prices = $$('article div div div span')
             .filter(el => el.innerText.match(/[0-9]+,[0-9]+ zł$/g))
-            .filter(el => el.classList.length == 1);
+            .filter(el => el.classList.length == 2);
 
 var i;
 var bestBang4Buck = 9999999;
