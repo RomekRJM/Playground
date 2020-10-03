@@ -1,3 +1,6 @@
+"""
+Removes all rom files unsupported by KrzysIO Cart from a given directory.
+"""
 import argparse
 import os
 
@@ -42,7 +45,7 @@ def clean_up(directory):
 def process_file(directory, dirpath, name):
     full_path = os.path.join(directory, dirpath, name)
     delete = False
-    if full_path.endswith('.nes') and 'mapper' in full_path.lower():
+    if full_path.endswith('.nes'):
         with open(full_path, "rb") as f:
             if not is_valid_krzysiocart_rom(f):
                 delete = True
