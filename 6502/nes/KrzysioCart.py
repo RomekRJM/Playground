@@ -1,5 +1,5 @@
 """
-Removes all rom files unsupported by KrzysIO Cart from a given directory.
+Removes all rom files unsupported by Krzysio Cart from a given directory.
 """
 import argparse
 import os
