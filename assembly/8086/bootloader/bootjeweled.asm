@@ -1,21 +1,60 @@
 [bits 16] ; use 16 bits
 [org 0x7c00] ; sets the start address
 
-init:
-  mov si, msg ; loads the address of "msg" into SI register
-  mov ah, 0x0e ; sets AH to 0xe (function teletype)
+mov ah, 0   ; set display mode function.
+mov al, 13h ; mode 13h = 320x200 pixels, 256 colors.
+int 10h     ; set it!
 
-print_char:
-  lodsb ; loads the current byte from SI into AL and increments the address in SI
-  cmp al, 0 ; compares AL to zero
-  je done ; if AL == 0, jump to "done"
-  int 0x10 ; print to screen using function 0xe of interrupt 0x10
-  jmp print_char ; repeat with next byte
+game_loop:
 
-done:
-  hlt ; stop execution
+  inner_game_loop:
 
-msg: db "Hello world!", 0 ; we need to explicitely put the zero byte here
+    call draw_square
+    mov ax, col
+    adc ax, 30
+    mov [col_e], ax
+    adc ax, 20
+    mov [col], ax
+    cmp ax, 290
+    jle inner_game_loop
+
+    mov ax, 10
+    mov [col], ax
+    mov ax, [row]
+    adc ax, 30
+    mov [row_e], ax
+    adc ax, 20
+    mov [row], ax
+    cmp ax, 150
+    jle inner_game_loop
+
+  jmp game_loop
+
+
+draw_square:
+  mov cx, [col]  ;col
+  mov dx, [row]  ;row
+
+  colcount:
+  inc cx
+  mov ah, 0ch ; put pixel
+  mov al, 0ch ; pick color
+  int 10h
+
+  cmp cx, [col_e]
+  jne colcount
+
+  mov cx, [col]  ; reset to start of col
+  inc dx      ; next row
+  cmp dx, [row_e]
+  jne colcount
+
+  ret
+
+col: dw 20
+row: dw 20
+col_e: dw 50
+row_e: dw 50
 
 times 510-($-$$) db 0 ; fill the output file with zeroes until 510 bytes are full
 dw 0xaa55 ; magic number that tells the BIOS this is bootable
