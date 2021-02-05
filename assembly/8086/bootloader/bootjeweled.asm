@@ -38,13 +38,13 @@ game_loop:
 
 
 draw_square:
+  call rand_color
   mov cx, [col]  ;col
   mov dx, [row]  ;row
 
   draw_line:
   inc cx
   mov ah, 0ch ; put pixel
-  mov al, 0ch ; pick color
   int 10h
 
   cmp cx, [col_e]
@@ -54,6 +54,12 @@ draw_square:
   inc dx
   cmp dx, [row_e]
   jne draw_line
+
+  ret
+
+rand_color:
+  int 1ah    ; get number of ticks since midnight
+  mov al, dl
 
   ret
 
