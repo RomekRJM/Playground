@@ -7,13 +7,24 @@ int 10h     ; set it!
 
 game_loop:
 
+  mov al, 0
+  mov [col], word 0
+  mov [row], word 0
+  mov [col_e], word 320
+  mov [row_e], word 200
+  call draw_square
+
   draw_cursor:
 
+  mov ax, word [cur_x]
+  mov [col], ax
+  mov ax, word [cur_y]
+  mov [row], ax
+  mov ax, word [cur_xe]
+  mov [col_e], ax
+  mov ax, word [cur_ye]
+  mov [row_e], ax
   mov al, 7
-  mov [col], word 10
-  mov [row], word 6
-  mov [col_e], word 68
-  mov [row_e], word 34
   call draw_square
 
   mov al, 8
@@ -44,7 +55,55 @@ game_loop:
   cmp ax, 200
   jle draw_gems
 
+get_input:
+  mov ah, 1    ; Check if key pressed
+  int 22
+  pushf
+  xor ax, ax       ; Wait for a key
+  int 22
+  popf
+  jnz get_input
 
+  cmp al, 100 ; d pressed
+  jne check_right
+
+  mov ax, word [cur_x]
+  add ax, 30
+  mov [cur_x], ax
+  add ax, 58
+  mov [cur_xe], ax
+
+check_right:
+  cmp al, 97 ; a pressed
+  jne check_down
+
+  mov ax, word [cur_xe]
+  sub ax, 30
+  mov [cur_xe], ax
+  sub ax, 58
+  mov [cur_x], ax
+
+check_down:
+  cmp al, 115 ; s pressed
+  jne check_up
+
+  mov ax, word [cur_ye]
+  add ax, 2
+  mov [cur_y], ax
+  add ax, 28
+  mov [cur_ye], ax
+
+check_up:
+  cmp al, 119 ; w pressed
+  jne continue_game_loop
+
+  mov ax, word [cur_ye]
+  sub ax, 30
+  mov [cur_ye], ax
+  sub ax, 28
+  mov [cur_y], ax
+
+continue_game_loop:
   jmp game_loop
 
 
@@ -52,7 +111,7 @@ draw_square:
   mov cx, [col]  ;col
   mov dx, [row]  ;row
 
-  draw_line:
+draw_line:
   inc cx
   mov ah, 0ch ; put pixel
   int 10h
@@ -70,7 +129,6 @@ draw_square:
 rand_color:
   ;int 1ah    ; get number of ticks since midnight
   mov al, 10
-
   ret
 
 col: dw 14
@@ -78,10 +136,10 @@ row: dw 10
 col_e: dw 34
 row_e: dw 30
 
-cur_y: dw 10
-cur_x: dw 8
-cur_ye: dw 38
-cur_xe: dw 60
+cur_x: dw 10
+cur_y: dw 6
+cur_xe: dw 68
+cur_ye: dw 34
 
 times 510-($-$$) db 0 ; fill the output file with zeroes until 510 bytes are full
 dw 0xaa55 ; magic number that tells the BIOS this is bootable
