@@ -56,6 +56,9 @@ get_input:
   cmp al, 100 ; d pressed
   jne check_right
 
+  cmp [cur_xe], word 296
+  jg check_right
+
   mov ax, word [cur_x]
   add ax, 30
   mov [cur_x], ax
@@ -65,6 +68,9 @@ get_input:
 check_right:
   cmp al, 97 ; a pressed
   jne check_down
+
+  cmp [cur_x], word 10
+  jle check_down
 
   mov ax, word [cur_xe]
   sub ax, 30
@@ -76,6 +82,9 @@ check_down:
   cmp al, 115 ; s pressed
   jne check_up
 
+  cmp [cur_ye], word 184
+  jge check_up
+
   mov ax, word [cur_ye]
   add ax, 2
   mov [cur_y], ax
@@ -85,6 +94,9 @@ check_down:
 check_up:
   cmp al, 119 ; w pressed
   jne continue_game_loop
+
+  cmp [cur_y], word 6
+  jle continue_game_loop
 
   mov ax, word [cur_ye]
   sub ax, 30
