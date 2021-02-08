@@ -7,25 +7,9 @@ int 10h     ; set it!
 
 game_loop:
 
-  mov al, 0
-  mov [col], word 0
-  mov [row], word 0
-  mov [col_e], word 320
-  mov [row_e], word 200
-  call draw_square
-
-  draw_cursor:
-
-  mov ax, word [cur_x]
-  mov [col], ax
-  mov ax, word [cur_y]
-  mov [row], ax
-  mov ax, word [cur_xe]
-  mov [col_e], ax
-  mov ax, word [cur_ye]
-  mov [row_e], ax
-  mov al, 7
-  call draw_square
+  redraw_cursor:
+  mov bl, 7
+  call draw_cursor
 
   mov al, 8
   mov [col], word 14
@@ -63,6 +47,11 @@ get_input:
   int 22
   popf
   jnz get_input
+
+  push ax
+  mov bl, 0
+  call draw_cursor
+  pop ax
 
   cmp al, 100 ; d pressed
   jne check_right
@@ -129,6 +118,19 @@ draw_line:
 rand_color:
   ;int 1ah    ; get number of ticks since midnight
   mov al, 10
+  ret
+
+draw_cursor:
+  mov ax, word [cur_x]
+  mov [col], ax
+  mov ax, word [cur_y]
+  mov [row], ax
+  mov ax, word [cur_xe]
+  mov [col_e], ax
+  mov ax, word [cur_ye]
+  mov [row_e], ax
+  mov al, bl
+  call draw_square
   ret
 
 col: dw 14
