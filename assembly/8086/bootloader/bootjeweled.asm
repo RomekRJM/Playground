@@ -1,8 +1,7 @@
 [bits 16] ; use 16 bits
 [org 0x7c00] ; sets the start address
 
-mov ah, 0   ; set display mode function.
-mov al, 13h ; mode 13h = 320x200 pixels, 256 colors.
+mov ax, 13h ; ah = 0, al = 13h => 320x200 pixels, 256 colors.
 int 10h     ; set it!
 
 game_loop:
