@@ -4,7 +4,19 @@
 mov ax, 13h ; ah = 0, al = 13h => 320x200 pixels, 256 colors.
 int 10h     ; set it!
 
+; here we create an array containing gems in upper memory
+mov di, 2000
+
+prepare_gem_board:
+  mov al, 0bah    ; put smth
+  mov [di], al
+  inc di
+  cmp di, 2060
+  jle prepare_gem_board
+
+
 game_loop:
+  mov di, 2000
 
   redraw_cursor:
   mov bl, 7
@@ -17,7 +29,7 @@ game_loop:
   mov [row_e], word 30
 
   draw_gems:
-
+  ; mov al, [di] - fix this
   call draw_square
   mov ax, [col]
   adc ax, 30
@@ -126,10 +138,6 @@ draw_line:
 
   ret
 
-rand_color:
-  ;int 1ah    ; get number of ticks since midnight
-  mov al, 10
-  ret
 
 draw_cursor:
   mov ax, word [cur_x]
@@ -153,6 +161,7 @@ cur_x: dw 10
 cur_y: dw 6
 cur_xe: dw 68
 cur_ye: dw 34
+
 
 times 510-($-$$) db 0 ; fill the output file with zeroes until 510 bytes are full
 dw 0xaa55 ; magic number that tells the BIOS this is bootable
