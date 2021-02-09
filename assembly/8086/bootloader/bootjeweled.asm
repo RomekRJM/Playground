@@ -5,18 +5,18 @@ mov ax, 13h ; ah = 0, al = 13h => 320x200 pixels, 256 colors.
 int 10h     ; set it!
 
 ; here we create an array containing gems in upper memory
-mov di, 2000
+mov si, 2000
 
 prepare_gem_board:
-  mov al, 0bah    ; put smth
-  mov [di], al
-  inc di
-  cmp di, 2060
+  call random_10
+  mov [si], al
+  inc si
+  cmp si, 2060
   jle prepare_gem_board
 
 
 game_loop:
-  mov di, 2000
+  mov si, 2000
 
   redraw_cursor:
   mov bl, 7
@@ -28,8 +28,11 @@ game_loop:
   mov [col_e], word 34
   mov [row_e], word 30
 
+  mov si, 2000
+
   draw_gems:
-  ; mov al, [di] - fix this
+  mov al, byte [si]
+  inc si
   call draw_square
   mov ax, [col]
   adc ax, 30
@@ -152,6 +155,18 @@ draw_cursor:
   call draw_square
   ret
 
+
+; returns "random" value 1-4 in al
+random_10:
+  mov ax, [rand_number]
+  rol ax, 2
+  adc ax, [rand_number]
+  adc ax, 13
+  mov [rand_number], ax
+  and ax, 11b
+  inc ax
+  ret
+
 col: dw 14
 row: dw 10
 col_e: dw 34
@@ -161,6 +176,8 @@ cur_x: dw 10
 cur_y: dw 6
 cur_xe: dw 68
 cur_ye: dw 34
+
+rand_number: db 1
 
 
 times 510-($-$$) db 0 ; fill the output file with zeroes until 510 bytes are full
