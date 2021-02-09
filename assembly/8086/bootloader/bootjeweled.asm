@@ -67,11 +67,24 @@ get_input:
   call draw_cursor
   pop ax
 
-  cmp al, 100 ; d pressed
+check_enter:
+  cmp al, 13
   jne check_right
 
+  ; gem swap
+  mov si, selected_gem_0
+  mov bx, [si]
+  mov di, selected_gem_1
+  mov cx, [di]
+  mov [si], cx
+  mov [di], bx
+
+check_right:
+  cmp al, 100 ; d pressed
+  jne check_left
+
   cmp [cur_xe], word 296
-  jg check_right
+  jg check_left
 
   mov ax, word [cur_x]
   add ax, 30
@@ -79,7 +92,10 @@ get_input:
   add ax, 58
   mov [cur_xe], ax
 
-check_right:
+  inc word [selected_gem_0]
+  inc word [selected_gem_1]
+
+check_left:
   cmp al, 97 ; a pressed
   jne check_down
 
@@ -91,6 +107,9 @@ check_right:
   mov [cur_xe], ax
   sub ax, 58
   mov [cur_x], ax
+
+  dec word [selected_gem_0]
+  dec word [selected_gem_1]
 
 check_down:
   cmp al, 115 ; s pressed
@@ -105,6 +124,12 @@ check_down:
   add ax, 28
   mov [cur_ye], ax
 
+  mov ax, [selected_gem_0]
+  adc ax, 10
+  mov [selected_gem_0], ax
+  inc ax
+  mov [selected_gem_1], ax
+
 check_up:
   cmp al, 119 ; w pressed
   jne continue_game_loop
@@ -117,6 +142,12 @@ check_up:
   mov [cur_ye], ax
   sub ax, 28
   mov [cur_y], ax
+
+  mov ax, [selected_gem_0]
+  sub ax, 10
+  mov [selected_gem_0], ax
+  dec ax
+  mov [selected_gem_1], ax
 
 continue_game_loop:
   jmp game_loop
@@ -177,8 +208,10 @@ cur_y: dw 6
 cur_xe: dw 68
 cur_ye: dw 34
 
-rand_number: db 1
+selected_gem_0: dw 2000
+selected_gem_1: dw 2001
 
+rand_number: db 1
 
 times 510-($-$$) db 0 ; fill the output file with zeroes until 510 bytes are full
 dw 0xaa55 ; magic number that tells the BIOS this is bootable
