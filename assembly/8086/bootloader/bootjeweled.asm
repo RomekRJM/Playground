@@ -206,8 +206,13 @@ recompute_gem_array:
     jne gems_differ
 
   gems_the_same:
+    cmp cx, 0
+    je increase_by_2
     inc cx
-    ; mov [gem_array+bx], byte 0 ; test
+    jmp recompute_next_element
+
+  increase_by_2:
+    mov cx, 2
     jmp recompute_next_element
 
   gems_differ:
@@ -219,7 +224,7 @@ recompute_gem_array:
     sub bx, cx
 
   blacken_loop:
-    mov [gem_array+bx], byte 0
+    mov [gem_array+bx+2], byte 0
     inc bx
     dec cx
     cmp cx, 0
