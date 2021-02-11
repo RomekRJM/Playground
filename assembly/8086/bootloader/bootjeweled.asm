@@ -78,6 +78,8 @@ check_enter:
   mov [gem_array+bx], cl
   mov [gem_array+bx+1], al
 
+  call recompute_gem_array
+
 
 check_right:
   cmp al, 100 ; d pressed
@@ -190,6 +192,50 @@ random_10:
   mov [rand_number], ax
   and ax, 11b
   inc ax
+  ret
+
+
+recompute_gem_array:
+  xor bx, bx ; index in gem table
+  xor cx, cx ; how many repeats so far
+  mov dx, [gem_array+bx] ; currently repeated value
+
+  recompute_loop:
+    mov ax, [gem_array+bx+1]
+    cmp [gem_array+bx], ax
+    jne gems_differ
+
+  gems_the_same:
+    inc cx
+    ; mov [gem_array+bx], byte 0 ; test
+    jmp recompute_next_element
+
+  gems_differ:
+    cmp cx, 2
+    jl no_match
+
+    inc cx
+    mov ax, bx
+    sub bx, cx
+
+  blacken_loop:
+    mov [gem_array+bx], byte 0
+    inc bx
+    dec cx
+    cmp cx, 0
+    jne blacken_loop
+
+    mov bx, ax
+
+  no_match:
+    xor cx, cx
+    mov dx, [gem_array+bx+1] ; new gem color
+
+  recompute_next_element:
+    inc bx
+    cmp bx, 60
+    jne recompute_loop
+
   ret
 
 selected_gem_0: db 0
