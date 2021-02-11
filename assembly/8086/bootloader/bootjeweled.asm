@@ -79,6 +79,7 @@ check_enter:
   mov [gem_array+bx+1], al
 
   call recompute_gem_array
+  call slide_gems_down
 
 
 check_right:
@@ -198,7 +199,6 @@ random_10:
 recompute_gem_array:
   xor bx, bx ; index in gem table
   xor cx, cx ; how many repeats so far
-  mov dx, [gem_array+bx] ; currently repeated value
 
   recompute_loop:
     mov ax, [gem_array+bx+1]
@@ -234,7 +234,6 @@ recompute_gem_array:
 
   no_match:
     xor cx, cx
-    mov dx, [gem_array+bx+1] ; new gem color
 
   recompute_next_element:
     inc bx
@@ -242,6 +241,41 @@ recompute_gem_array:
     jne recompute_loop
 
   ret
+
+
+slide_gems_down:
+
+  slide_round:
+    mov bl, 60 ; index in gem table
+    xor cx, cx
+
+  slide_loop:
+    dec bl
+    cmp [gem_array+bx], byte 0
+    jne slide_next_element
+
+    cmp bl, 10
+    jge slide_below_top
+
+    call random_10
+    mov [gem_array+bx], al
+    jmp slide_next_element
+
+  slide_below_top:
+    mov al, byte [gem_array+bx-10]
+    mov [gem_array+bx], al
+    mov [gem_array+bx-10], byte 0
+    inc cx
+
+  slide_next_element:
+    cmp bl, 0
+    jne slide_loop
+
+  ; cmp cx, 0
+  ; jne slide_round
+
+  ret
+
 
 selected_gem_0: db 0
 
@@ -256,8 +290,9 @@ cur_xe: dw 68
 cur_ye: dw 34
 
 rand_number: db 1
+blackened: db 0
 
-gem_array: db 4
+gem_array: db
 
 times 510-($-$$) db 0 ; fill the output file with zeroes until 510 bytes are full
 dw 0xaa55 ; magic number that tells the BIOS this is bootable
