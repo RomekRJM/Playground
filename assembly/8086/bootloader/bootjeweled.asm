@@ -5,18 +5,18 @@ mov ax, 13h ; ah = 0, al = 13h => 320x200 pixels, 256 colors.
 int 10h     ; set it!
 
 ; here we create an array containing gems in upper memory
-mov si, 2000
+lea si, gem_array
 
 prepare_gem_board:
   call random_10
   mov [si], al
   inc si
-  cmp si, 2060
+  cmp si, gem_array + 60
   jle prepare_gem_board
 
 
 game_loop:
-  mov si, 2000
+  lea si, gem_array
 
   redraw_cursor:
   mov bl, 7
@@ -28,7 +28,7 @@ game_loop:
   mov [col_e], word 34
   mov [row_e], word 30
 
-  mov si, 2000
+  lea si, gem_array
 
   draw_gems:
   mov al, byte [si]
@@ -71,13 +71,13 @@ check_enter:
   cmp al, 13
   jne check_right
 
-  ; gem swap
-  mov si, selected_gem_0
-  mov bx, [si]
-  mov di, selected_gem_1
-  mov cx, [di]
-  mov [si], cx
-  mov [di], bx
+  mov bl, [selected_gem_0]
+
+  mov al, [gem_array+bx]
+  mov cl, [gem_array+bx+1]
+  mov [gem_array+bx], cl
+  mov [gem_array+bx+1], al
+
 
 check_right:
   cmp al, 100 ; d pressed
@@ -92,8 +92,7 @@ check_right:
   add ax, 58
   mov [cur_xe], ax
 
-  inc word [selected_gem_0]
-  inc word [selected_gem_1]
+  inc byte [selected_gem_0]
 
 check_left:
   cmp al, 97 ; a pressed
@@ -108,8 +107,7 @@ check_left:
   sub ax, 58
   mov [cur_x], ax
 
-  dec word [selected_gem_0]
-  dec word [selected_gem_1]
+  dec byte [selected_gem_0]
 
 check_down:
   cmp al, 115 ; s pressed
@@ -124,11 +122,9 @@ check_down:
   add ax, 28
   mov [cur_ye], ax
 
-  mov ax, [selected_gem_0]
-  adc ax, 10
-  mov [selected_gem_0], ax
-  inc ax
-  mov [selected_gem_1], ax
+  mov al, [selected_gem_0]
+  adc al, 10
+  mov [selected_gem_0], al
 
 check_up:
   cmp al, 119 ; w pressed
@@ -143,11 +139,9 @@ check_up:
   sub ax, 28
   mov [cur_y], ax
 
-  mov ax, [selected_gem_0]
-  sub ax, 10
-  mov [selected_gem_0], ax
-  dec ax
-  mov [selected_gem_1], ax
+  mov al, [selected_gem_0]
+  sub al, 10
+  mov [selected_gem_0], al
 
 continue_game_loop:
   jmp game_loop
@@ -198,6 +192,8 @@ random_10:
   inc ax
   ret
 
+selected_gem_0: db 0
+
 col: dw 14
 row: dw 10
 col_e: dw 34
@@ -208,10 +204,9 @@ cur_y: dw 6
 cur_xe: dw 68
 cur_ye: dw 34
 
-selected_gem_0: dw 2000
-selected_gem_1: dw 2001
-
 rand_number: db 1
+
+gem_array: db 4
 
 times 510-($-$$) db 0 ; fill the output file with zeroes until 510 bytes are full
 dw 0xaa55 ; magic number that tells the BIOS this is bootable

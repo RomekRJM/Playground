@@ -1,6 +1,6 @@
 To do a copy of machine memory, invoke in qemu monitor studio:
 
-`dump-guest-memory memdump.txt 0 6000`
+`dump-guest-memory memdump.txt 0 2500`
 
 to open this file in a readable format, do:
 
