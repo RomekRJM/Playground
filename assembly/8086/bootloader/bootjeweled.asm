@@ -78,8 +78,80 @@ check_enter:
   mov [gem_array+bx], cl
   mov [gem_array+bx+1], al
 
-  call recompute_gem_array
-  call slide_gems_down
+  recompute_gem_array:
+    xor bx, bx ; index in gem table
+    xor cx, cx ; how many repeats so far
+
+    recompute_loop:
+      mov ax, [gem_array+bx+1]
+      cmp [gem_array+bx], ax
+      jne gems_differ
+
+    gems_the_same:
+      cmp cx, 0
+      je increase_by_2
+      inc cx
+      jmp recompute_next_element
+
+    increase_by_2:
+      mov cx, 2
+      jmp recompute_next_element
+
+    gems_differ:
+      cmp cx, 2
+      jl no_match
+
+      inc cx
+      mov ax, bx
+      sub bx, cx
+
+    blacken_loop:
+      mov [gem_array+bx+2], byte 0
+      inc bx
+      dec cx
+      cmp cx, 0
+      jne blacken_loop
+
+      mov bx, ax
+
+    no_match:
+      xor cx, cx
+
+    recompute_next_element:
+      inc bx
+      cmp bx, 60
+      jne recompute_loop
+
+  slide_gems_down:
+
+    slide_round:
+      mov bl, 60 ; index in gem table
+      xor cx, cx
+
+    slide_loop:
+      dec bl
+      cmp [gem_array+bx], byte 0
+      jne slide_next_element
+
+      cmp bl, 10
+      jge slide_below_top
+
+      call random_10
+      mov [gem_array+bx], al
+      jmp slide_next_element
+
+    slide_below_top:
+      mov al, byte [gem_array+bx-10]
+      mov [gem_array+bx], al
+      mov [gem_array+bx-10], byte 0
+      inc cx
+
+    slide_next_element:
+      cmp bl, 0
+      jne slide_loop
+
+    ; cmp cx, 0
+    ; jne slide_round
 
 
 check_right:
@@ -193,87 +265,6 @@ random_10:
   mov [rand_number], ax
   and ax, 11b
   inc ax
-  ret
-
-
-recompute_gem_array:
-  xor bx, bx ; index in gem table
-  xor cx, cx ; how many repeats so far
-
-  recompute_loop:
-    mov ax, [gem_array+bx+1]
-    cmp [gem_array+bx], ax
-    jne gems_differ
-
-  gems_the_same:
-    cmp cx, 0
-    je increase_by_2
-    inc cx
-    jmp recompute_next_element
-
-  increase_by_2:
-    mov cx, 2
-    jmp recompute_next_element
-
-  gems_differ:
-    cmp cx, 2
-    jl no_match
-
-    inc cx
-    mov ax, bx
-    sub bx, cx
-
-  blacken_loop:
-    mov [gem_array+bx+2], byte 0
-    inc bx
-    dec cx
-    cmp cx, 0
-    jne blacken_loop
-
-    mov bx, ax
-
-  no_match:
-    xor cx, cx
-
-  recompute_next_element:
-    inc bx
-    cmp bx, 60
-    jne recompute_loop
-
-  ret
-
-
-slide_gems_down:
-
-  slide_round:
-    mov bl, 60 ; index in gem table
-    xor cx, cx
-
-  slide_loop:
-    dec bl
-    cmp [gem_array+bx], byte 0
-    jne slide_next_element
-
-    cmp bl, 10
-    jge slide_below_top
-
-    call random_10
-    mov [gem_array+bx], al
-    jmp slide_next_element
-
-  slide_below_top:
-    mov al, byte [gem_array+bx-10]
-    mov [gem_array+bx], al
-    mov [gem_array+bx-10], byte 0
-    inc cx
-
-  slide_next_element:
-    cmp bl, 0
-    jne slide_loop
-
-  ; cmp cx, 0
-  ; jne slide_round
-
   ret
 
 
