@@ -81,6 +81,7 @@ check_enter:
   recompute_gem_array:
     xor bx, bx ; index in gem table
     xor cx, cx ; how many repeats so far
+    mov [gem_table_round_changed], 0
 
     recompute_loop:
       mov ax, [gem_array+bx+1]
@@ -101,6 +102,7 @@ check_enter:
       cmp cx, 2
       jl no_match
 
+      inc byte [gem_table_round_changed]
       inc cx
       mov ax, bx
       sub bx, cx
@@ -133,6 +135,10 @@ check_enter:
       cmp [gem_array+bx], byte 0
       jne slide_next_element
 
+      inc byte [gem_table_round_changed]
+
+      ; if this is upper row, there is nothing we can slide down
+      ; we need to fill in the holes with random gems
       cmp bl, 10
       jge slide_below_top
 
@@ -140,6 +146,7 @@ check_enter:
       mov [gem_array+bx], al
       jmp slide_next_element
 
+    ; if this is not a top row, we simply fill in the hole with the gem above
     slide_below_top:
       mov al, byte [gem_array+bx-10]
       mov [gem_array+bx], al
@@ -150,9 +157,14 @@ check_enter:
       cmp bl, 0
       jne slide_loop
 
-    ; cmp cx, 0
-    ; jne slide_round
+      ; possibly not all elements had fallen down
+      cmp cx, 0
+      jne slide_loop
 
+    ; in last round we either removed some gems or moved blocks check_down
+    ; so we need to check if we can do it one more time
+    cmp [gems_the_same], 0
+    jne recompute_gem_array
 
 check_right:
   cmp al, 100 ; d pressed
@@ -281,7 +293,7 @@ cur_xe: dw 68
 cur_ye: dw 34
 
 rand_number: db 1
-blackened: db 0
+gem_table_round_changed: db 0
 
 gem_array: db
 
