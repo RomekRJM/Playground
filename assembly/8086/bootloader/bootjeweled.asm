@@ -8,7 +8,7 @@ int 10h     ; set it!
 lea si, gem_array
 
 prepare_gem_board:
-  call random_10
+  call random_1_4
   mov [si], al
   inc si
   cmp si, gem_array + 60
@@ -81,7 +81,7 @@ check_enter:
   recompute_gem_array:
     xor bx, bx ; index in gem table
     xor cx, cx ; how many repeats so far
-    mov [gem_table_round_changed], 0
+    mov [gem_table_round_changed], byte 0
 
     recompute_loop:
       mov ax, [gem_array+bx+1]
@@ -128,21 +128,20 @@ check_enter:
 
     slide_round:
       mov bl, 60 ; index in gem table
-      xor cx, cx
 
     slide_loop:
       dec bl
       cmp [gem_array+bx], byte 0
       jne slide_next_element
 
-      inc byte [gem_table_round_changed]
+      ; inc byte [gem_table_round_changed]
 
       ; if this is upper row, there is nothing we can slide down
       ; we need to fill in the holes with random gems
       cmp bl, 10
       jge slide_below_top
 
-      call random_10
+      call random_1_4
       mov [gem_array+bx], al
       jmp slide_next_element
 
@@ -151,20 +150,19 @@ check_enter:
       mov al, byte [gem_array+bx-10]
       mov [gem_array+bx], al
       mov [gem_array+bx-10], byte 0
-      inc cx
 
     slide_next_element:
       cmp bl, 0
       jne slide_loop
 
       ; possibly not all elements had fallen down
-      cmp cx, 0
-      jne slide_loop
+      ; cmp cx, 0
+      ; jne slide_loop
 
     ; in last round we either removed some gems or moved blocks check_down
     ; so we need to check if we can do it one more time
-    cmp [gems_the_same], 0
-    jne recompute_gem_array
+    ; cmp [gems_the_same], byte 0
+    ; jne recompute_gem_array
 
 check_right:
   cmp al, 100 ; d pressed
@@ -210,7 +208,7 @@ check_down:
   mov [cur_ye], ax
 
   mov al, [selected_gem_0]
-  adc al, 10
+  add al, 10
   mov [selected_gem_0], al
 
 check_up:
@@ -269,12 +267,12 @@ draw_cursor:
 
 
 ; returns "random" value 1-4 in al
-random_10:
-  mov ax, [rand_number]
+random_1_4:
+  mov ax, [4096]
   rol ax, 2
-  adc ax, [rand_number]
+  adc ax, [4096]
   adc ax, 13
-  mov [rand_number], ax
+  mov [4096], ax
   and ax, 11b
   inc ax
   ret
@@ -292,7 +290,6 @@ cur_y: dw 6
 cur_xe: dw 68
 cur_ye: dw 34
 
-rand_number: db 1
 gem_table_round_changed: db 0
 
 gem_array: db
