@@ -152,8 +152,9 @@ check_enter:
       mov [gem_array+bx-10], byte 0
 
     slide_next_element:
-      cmp bl, 0
-      jne slide_loop
+      ; UNCOMMENT ME!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+      ; cmp bl, 0
+      ; jne slide_loop
 
       ; possibly not all elements had fallen down
       ; cmp cx, 0
@@ -171,11 +172,8 @@ check_right:
   cmp [cur_xe], word 296
   jg check_left
 
-  mov ax, word [cur_x]
-  add ax, 30
-  mov [cur_x], ax
-  add ax, 58
-  mov [cur_xe], ax
+  mov dx, 30
+  call move_cursor_x
 
   inc byte [selected_gem_0]
 
@@ -186,11 +184,8 @@ check_left:
   cmp [cur_x], word 10
   jle check_down
 
-  mov ax, word [cur_xe]
-  sub ax, 30
-  mov [cur_xe], ax
-  sub ax, 58
-  mov [cur_x], ax
+  mov dx, 65506
+  call move_cursor_x
 
   dec byte [selected_gem_0]
 
@@ -201,11 +196,8 @@ check_down:
   cmp [cur_ye], word 184
   jge check_up
 
-  mov ax, word [cur_ye]
-  add ax, 2
-  mov [cur_y], ax
-  add ax, 28
-  mov [cur_ye], ax
+  mov dx, 30
+  call move_cursor_y
 
   mov al, [selected_gem_0]
   add al, 10
@@ -218,11 +210,8 @@ check_up:
   cmp [cur_y], word 6
   jle continue_game_loop
 
-  mov ax, word [cur_ye]
-  sub ax, 30
-  mov [cur_ye], ax
-  sub ax, 28
-  mov [cur_y], ax
+  mov dx, 65506
+  call move_cursor_y
 
   mov al, [selected_gem_0]
   sub al, 10
@@ -275,6 +264,31 @@ random_1_4:
   mov [4096], ax
   and ax, 11b
   inc ax
+  ret
+
+
+; dx - value to increase x by
+move_cursor_x:
+  mov bx, cur_xe
+  call calculate_move
+  mov bx, cur_x
+  call calculate_move
+  ret
+
+; dx - value to increase y by
+move_cursor_y:
+  mov bx, cur_ye
+  call calculate_move
+  mov bx, cur_y
+  call calculate_move
+  ret
+
+; bx - memory location to increase
+; dx - how much to add
+calculate_move:
+  mov cx, [bx]
+  add cx, dx
+  mov [bx], cx
   ret
 
 
