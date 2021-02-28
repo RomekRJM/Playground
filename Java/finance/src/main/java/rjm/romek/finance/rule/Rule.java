@@ -2,13 +2,13 @@ package rjm.romek.finance.rule;
 
 import lombok.RequiredArgsConstructor;
 
-import java.util.Currency;
+import javax.money.MonetaryAmount;
 import java.util.Date;
 
 @RequiredArgsConstructor
 public abstract class Rule {
-    private final Currency targetValue;
+    private final MonetaryAmount targetValue;
     private final RuleType type;
 
-    public abstract boolean applies(Date date, Currency price);
+    public abstract boolean applies(Date date, MonetaryAmount price);
 }

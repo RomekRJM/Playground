@@ -4,14 +4,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import rjm.romek.finance.rule.Rule;
 
-import java.util.Currency;
+import javax.money.MonetaryAmount;
 import java.util.Date;
 
 @Getter
 @RequiredArgsConstructor
 public abstract class Alert {
-    private final Currency target;
+    private final MonetaryAmount target;
     private final Rule rule;
 
-    public abstract boolean isTriggered(Date atTimestamp, Currency value);
+    public abstract boolean isTriggered(Date atTimestamp, MonetaryAmount value);
 }

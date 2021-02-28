@@ -1,9 +1,9 @@
 package rjm.romek.finance.grabber;
 
-import java.util.Currency;
+import javax.money.MonetaryAmount;
 import java.util.Date;
 import java.util.Map;
 
 public interface Grabber {
-    Map<Date, Currency> grabPrice();
+    Map<Date, MonetaryAmount> grabPrice();
 }
