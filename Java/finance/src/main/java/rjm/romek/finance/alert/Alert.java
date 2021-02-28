@@ -1,10 +1,17 @@
 package rjm.romek.finance.alert;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import rjm.romek.finance.rule.Rule;
 
 import java.util.Currency;
 import java.util.Date;
 
-public interface Alert {
-    boolean isTriggered(Currency price, Date atTimestamp, Rule rule);
+@Getter
+@RequiredArgsConstructor
+public abstract class Alert {
+    private final Currency target;
+    private final Rule rule;
+
+    public abstract boolean isTriggered(Date atTimestamp, Currency value);
 }
