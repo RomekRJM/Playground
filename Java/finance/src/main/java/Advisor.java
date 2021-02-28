@@ -1,9 +1,10 @@
 import lombok.AllArgsConstructor;
 import rjm.romek.finance.alert.Alert;
-import rjm.romek.finance.grabber.Grabber;
+import rjm.romek.finance.scraper.Grabber;
 import rjm.romek.finance.notifier.Notifier;
 
 import javax.money.MonetaryAmount;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -12,7 +13,7 @@ import java.util.stream.Collectors;
 public class Advisor {
     private Notifier notifier;
 
-    public void check(Grabber grabber, Alert alert) {
+    public void check(Grabber grabber, Alert alert) throws IOException {
         Map<Date, MonetaryAmount> pricePoints = grabber.grabPrice();
 
         Map<Date, MonetaryAmount> dataPointsWhenTriggered =

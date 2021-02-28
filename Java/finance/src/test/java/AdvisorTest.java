@@ -3,11 +3,12 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import rjm.romek.finance.alert.Alert;
-import rjm.romek.finance.grabber.Grabber;
+import rjm.romek.finance.scraper.Grabber;
 import rjm.romek.finance.notifier.Notifier;
 
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Map;
@@ -35,14 +36,14 @@ class AdvisorTest {
     private Advisor advisor;
 
     @BeforeEach
-    public void setUp() {
+    public void setUp() throws IOException {
         MockitoAnnotations.openMocks(this);
         advisor = new Advisor(notifier);
         when(grabber.grabPrice()).thenReturn(priceInTime);
     }
 
     @Test
-    public void shouldTriggerAlert() {
+    public void shouldTriggerAlert() throws IOException {
         when(alert.isTriggered(any(), any())).thenReturn(true);
 
         advisor.check(grabber, alert);
@@ -51,7 +52,7 @@ class AdvisorTest {
     }
 
     @Test
-    public void shouldNotTriggerAlert() {
+    public void shouldNotTriggerAlert() throws IOException {
         when(alert.isTriggered(any(), any())).thenReturn(false);
 
         advisor.check(grabber, alert);
