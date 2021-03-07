@@ -13,20 +13,20 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GoogleGrabberTest {
 
-    private Grabber googleGrabber;
+  private Grabber googleGrabber;
 
-    @BeforeEach
-    public void setUp() {
-        googleGrabber = new GoogleGrabber("google+share+price");
-    }
+  @BeforeEach
+  public void setUp() {
+    googleGrabber = new GoogleGrabber("google+share+price");
+  }
 
-    @Test
-    public void testPrice() throws IOException {
-        Map<Date, MonetaryAmount> dateMonetaryAmountMap = googleGrabber.grabPrice();
-        Optional<MonetaryAmount> first = dateMonetaryAmountMap.values().stream().findFirst();
+  @Test
+  public void testPrice() throws IOException, CouldNotGrabPriceException {
+    Map<Date, MonetaryAmount> dateMonetaryAmountMap = googleGrabber.grabPrice();
+    Optional<MonetaryAmount> first = dateMonetaryAmountMap.values().stream().findFirst();
 
-        assertEquals(1, dateMonetaryAmountMap.size());
-        assertTrue(first.isPresent());
-        assertEquals("USD", first.get().getCurrency().getCurrencyCode());
-    }
+    assertEquals(1, dateMonetaryAmountMap.size());
+    assertTrue(first.isPresent());
+    assertEquals("USD", first.get().getCurrency().getCurrencyCode());
+  }
 }

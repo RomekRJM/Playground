@@ -6,5 +6,6 @@ import java.util.Date;
 import java.util.Map;
 
 public interface Grabber {
-    Map<Date, MonetaryAmount> grabPrice() throws IOException;
+
+  Map<Date, MonetaryAmount> grabPrice() throws IOException, CouldNotGrabPriceException;
 }

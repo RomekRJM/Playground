@@ -10,8 +10,9 @@ import java.util.Date;
 @Getter
 @RequiredArgsConstructor
 public abstract class Alert {
-    private final MonetaryAmount target;
-    private final Rule rule;
 
-    public abstract boolean isTriggered(Date atTimestamp, MonetaryAmount value);
+  private final MonetaryAmount target;
+  private final Rule rule;
+
+  public abstract boolean isTriggered(Date atTimestamp, MonetaryAmount value);
 }

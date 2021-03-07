@@ -15,28 +15,55 @@ import java.util.Map;
 
 @AllArgsConstructor
 public class GoogleGrabber implements Grabber {
-    private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8";
-    private static final String QUERY_SEARCH_EXPRESSION = "g-card-section div g-card-section div span span span";
 
-    private final String asset;
+  private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8";
+  private static final String QUERY_SEARCH_EXPRESSION = "g-card-section div g-card-section div span span span";
 
-    @Override
-    public Map<Date, MonetaryAmount> grabPrice() throws IOException {
-        String assetSearchUrl = String.format(SEARCH_URL, asset);
+  private final String asset;
 
-        Document doc = Jsoup.connect(assetSearchUrl).get();
-        Elements elements = doc.select(QUERY_SEARCH_EXPRESSION);
+  @Override
+  public Map<Date, MonetaryAmount> grabPrice() throws IOException, CouldNotGrabPriceException {
+    String assetSearchUrl = String.format(SEARCH_URL, asset);
 
-        List<Element> found = elements.subList(0, 2);
-        Double value = Double.valueOf(found.get(0).childNodes().get(0).toString().replaceAll(",", ""));
-        String currency = found.get(1).childNodes().get(0).toString().trim();
+    Document doc = Jsoup.connect(assetSearchUrl).get();
 
-        return Map.of(
-                new Date(),
-                Monetary.getDefaultAmountFactory()
-                        .setCurrency(Monetary.getCurrency(currency))
-                        .setNumber(value)
-                        .create()
-        );
+    return extractMonetaryData(doc);
+  }
+
+  private Map<Date, MonetaryAmount> extractMonetaryData(Document doc)
+      throws CouldNotGrabPriceException {
+    Elements elements = doc.select(QUERY_SEARCH_EXPRESSION);
+
+    if (elements.size() < 2) {
+      throw new CouldNotGrabPriceException("Not all required elements found in the response.");
     }
+
+    List<Element> found = elements.subList(0, 2);
+
+    return Map.of(
+        new Date(),
+        Monetary.getDefaultAmountFactory()
+            .setCurrency(Monetary.getCurrency(getCurrency(elements.get(1))))
+            .setNumber(getValue(elements.get(0)))
+            .create()
+    );
+  }
+
+  private Double getValue(Element element) throws CouldNotGrabPriceException {
+    if (element.childNodes().isEmpty()) {
+      throw new CouldNotGrabPriceException("Unable to parse the value from the response.");
+    }
+
+    String value = element.childNodes().get(0).toString().replaceAll(",", "");
+    return Double.valueOf(value);
+  }
+
+  private String getCurrency(Element element) throws CouldNotGrabPriceException {
+    if (element.childNodes().isEmpty()) {
+      throw new CouldNotGrabPriceException("Unable to parse the value from the response.");
+    }
+
+    return element.childNodes().get(0).toString().trim();
+  }
+
 }

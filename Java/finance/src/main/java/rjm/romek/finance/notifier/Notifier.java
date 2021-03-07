@@ -7,5 +7,6 @@ import java.util.Date;
 import java.util.Map;
 
 public interface Notifier {
-    void notify(String who, Alert what, Map<Date, MonetaryAmount> when);
+
+  void notify(String who, Alert what, Map<Date, MonetaryAmount> when);
 }
