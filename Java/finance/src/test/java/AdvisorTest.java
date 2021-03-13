@@ -1,21 +1,22 @@
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+import java.io.IOException;
+import java.util.Date;
+import java.util.Map;
+import javax.money.Monetary;
+import javax.money.MonetaryAmount;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import rjm.romek.finance.DateUtil;
 import rjm.romek.finance.alert.Alert;
+import rjm.romek.finance.notifier.Notifier;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 import rjm.romek.finance.scraper.Grabber;
-import rjm.romek.finance.notifier.Notifier;
-
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import java.io.IOException;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Map;
-
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
 
 class AdvisorTest {
 
@@ -29,9 +30,9 @@ class AdvisorTest {
   private Grabber grabber;
 
   private Map<Date, MonetaryAmount> priceInTime = Map.of(
-      createDate(14, 14, 0), createDollars(1),
-      createDate(14, 15, 0), createDollars(2),
-      createDate(14, 16, 0), createDollars(3)
+      DateUtil.createDate(14, 14, 0), createDollars(1),
+      DateUtil.createDate(14, 15, 0), createDollars(2),
+      DateUtil.createDate(14, 16, 0), createDollars(3)
   );
 
   private Advisor advisor;
@@ -66,10 +67,4 @@ class AdvisorTest {
         .setCurrency("USD").setNumber(amount).create();
   }
 
-  private static Date createDate(int hours, int minutes, int seconds) {
-    return new Calendar.Builder()
-        .setDate(2045, 2, 12)
-        .setTimeOfDay(hours, minutes, seconds)
-        .build().getTime();
-  }
 }

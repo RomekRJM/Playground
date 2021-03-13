@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import javax.money.MonetaryAmount;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import rjm.romek.finance.notifier.Notifier;
 import rjm.romek.finance.rule.Rule;
 
 @Getter
@@ -17,8 +16,6 @@ public class Alert {
 
   private final Rule rule;
   private final Integer occurrencesToActivate;
-  private final Notifier notifier;
-  private final String who;
 
   public boolean checkTrigger(Map<Date, MonetaryAmount> map) {
     int numberOfOccurencies = 0;

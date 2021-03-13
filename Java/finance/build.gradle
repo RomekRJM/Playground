@@ -32,6 +32,7 @@ dependencies {
 
     implementation 'org.javamoney:moneta:1.4.2'
     implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'javax.mail:mail:1.4.7'
 }
 
 dependencyManagement {
