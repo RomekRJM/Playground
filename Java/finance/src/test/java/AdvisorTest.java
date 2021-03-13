@@ -45,7 +45,7 @@ class AdvisorTest {
 
   @Test
   public void shouldTriggerAlert() throws IOException, CouldNotGrabPriceException {
-    when(alert.isTriggered(any(), any())).thenReturn(true);
+    when(alert.checkTrigger(Map.of(any(), any()))).thenReturn(true);
 
     advisor.check(grabber, alert);
 
@@ -54,7 +54,7 @@ class AdvisorTest {
 
   @Test
   public void shouldNotTriggerAlert() throws IOException, CouldNotGrabPriceException {
-    when(alert.isTriggered(any(), any())).thenReturn(false);
+    when(alert.checkTrigger(Map.of(any(), any()))).thenReturn(false);
 
     advisor.check(grabber, alert);
 

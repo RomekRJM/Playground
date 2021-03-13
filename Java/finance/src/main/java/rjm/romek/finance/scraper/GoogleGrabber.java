@@ -54,7 +54,10 @@ public class GoogleGrabber implements Grabber {
       throw new CouldNotGrabPriceException("Unable to parse the value from the response.");
     }
 
-    String value = element.childNodes().get(0).toString().replaceAll(",", "");
+    String value = element.childNodes().get(0).toString()
+        .replaceAll(",", "")
+        .replaceAll("&nbsp;", "");
+
     return Double.valueOf(value);
   }
 
