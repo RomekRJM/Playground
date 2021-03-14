@@ -1,17 +1,26 @@
+package rjm.romek.finance;
+
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 import javax.money.MonetaryAmount;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.notifier.Notifier;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 import rjm.romek.finance.scraper.Grabber;
 
+@NoArgsConstructor
 @AllArgsConstructor
+@Getter
+@JsonDeserialize
 public class Advisor {
 
   private Notifier notifier;
+  private String name;
 
   public void check(Grabber grabber, Alert alert) throws IOException, CouldNotGrabPriceException {
     Map<Date, MonetaryAmount> pricePoints = grabber.grabPrice();

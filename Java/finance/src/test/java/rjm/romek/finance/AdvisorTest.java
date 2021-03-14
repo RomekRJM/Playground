@@ -1,3 +1,5 @@
+package rjm.romek.finance;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -12,7 +14,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import rjm.romek.finance.DateUtil;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.notifier.Notifier;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
@@ -40,7 +41,7 @@ class AdvisorTest {
   @BeforeEach
   public void setUp() throws IOException, CouldNotGrabPriceException {
     MockitoAnnotations.openMocks(this);
-    advisor = new Advisor(notifier);
+    advisor = new Advisor(notifier, "");
     when(grabber.grabPrice()).thenReturn(priceInTime);
   }
 

@@ -1,5 +1,6 @@
 package rjm.romek.finance.notifier;
 
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Date;
 import java.util.Map;
 import java.util.Properties;
@@ -12,6 +13,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.money.MonetaryAmount;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,6 +21,8 @@ import rjm.romek.finance.alert.Alert;
 
 @Component
 @Slf4j
+@JsonDeserialize
+@NoArgsConstructor
 public class EmailNotifier implements Notifier {
 
   private static final String SUBJECT = "Finance Alert";
