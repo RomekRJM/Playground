@@ -1,6 +1,7 @@
 package rjm.romek.finance;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -15,14 +16,14 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import rjm.romek.finance.alert.Alert;
-import rjm.romek.finance.notifier.Notifier;
+import rjm.romek.finance.notifier.EmailNotifier;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 import rjm.romek.finance.scraper.Grabber;
 
 class AdvisorTest {
 
   @Mock
-  private Notifier notifier;
+  private EmailNotifier notifier;
 
   @Mock
   private Alert alert;
@@ -47,7 +48,7 @@ class AdvisorTest {
 
   @Test
   public void shouldTriggerAlert() throws IOException, CouldNotGrabPriceException {
-    when(alert.checkTrigger(Map.of(any(), any()))).thenReturn(true);
+    when(alert.checkTrigger(anyMap())).thenReturn(true);
 
     advisor.check(grabber, alert);
 
@@ -56,7 +57,7 @@ class AdvisorTest {
 
   @Test
   public void shouldNotTriggerAlert() throws IOException, CouldNotGrabPriceException {
-    when(alert.checkTrigger(Map.of(any(), any()))).thenReturn(false);
+    when(alert.checkTrigger(anyMap())).thenReturn(false);
 
     advisor.check(grabber, alert);
 

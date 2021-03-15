@@ -23,7 +23,7 @@ import rjm.romek.finance.alert.Alert;
 @Slf4j
 @JsonDeserialize
 @NoArgsConstructor
-public class EmailNotifier implements Notifier {
+public class EmailNotifier {
 
   private static final String SUBJECT = "Finance Alert";
   private static final String MESSAGE = "%s has been %s the price point %s for %s times in a row.";
@@ -41,7 +41,6 @@ public class EmailNotifier implements Notifier {
   @Value("${SMTP_PASSWORD}")
   private String smtpPassword;
 
-  @Override
   public void notify(String who, Alert what, Map<Date, MonetaryAmount> when) {
 
     sendEmail(getSession(), who, SUBJECT, MESSAGE, smtpUser);

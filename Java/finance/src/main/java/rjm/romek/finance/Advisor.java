@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import rjm.romek.finance.alert.Alert;
-import rjm.romek.finance.notifier.Notifier;
+import rjm.romek.finance.notifier.EmailNotifier;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 import rjm.romek.finance.scraper.Grabber;
 
@@ -19,16 +19,15 @@ import rjm.romek.finance.scraper.Grabber;
 @JsonDeserialize
 public class Advisor {
 
-  private Notifier notifier;
+  private EmailNotifier notifier;
   private String name;
 
   public void check(Grabber grabber, Alert alert) throws IOException, CouldNotGrabPriceException {
     Map<Date, MonetaryAmount> pricePoints = grabber.grabPrice();
 
     if (alert.checkTrigger(pricePoints)) {
-      return;
+      notifier.notify("romek@example.com", alert, pricePoints);
     }
 
-    notifier.notify("romek@example.com", alert, pricePoints);
   }
 }
