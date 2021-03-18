@@ -5,15 +5,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
 import rjm.romek.finance.notifier.EmailNotifier;
+import rjm.romek.finance.scraper.GoogleGrabber;
 
 class DeserializerTest {
+
   private final Deserializer deserializer = new Deserializer();
 
   private File testFile;
@@ -32,7 +33,8 @@ class DeserializerTest {
 
   @Test
   public void shouldSerialize() throws IOException {
-    Advisor advisor = new Advisor(new EmailNotifier(), "abcd");
+    Advisor advisor = new Advisor(new EmailNotifier().withEmail("wawel@o2.pl"),
+        new GoogleGrabber("google+share+price"), "abcd");
     Collection<Advisor> advisors = Collections.singletonList(advisor);
     File tmpFile = File.createTempFile("asd", "yaml");
     deserializer.save(advisors, tmpFile);

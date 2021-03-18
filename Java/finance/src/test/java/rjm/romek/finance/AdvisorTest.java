@@ -42,7 +42,7 @@ class AdvisorTest {
   @BeforeEach
   public void setUp() throws IOException, CouldNotGrabPriceException {
     MockitoAnnotations.openMocks(this);
-    advisor = new Advisor(notifier, "");
+    advisor = new Advisor(notifier, grabber, "");
     when(grabber.grabPrice()).thenReturn(priceInTime);
   }
 
@@ -50,18 +50,18 @@ class AdvisorTest {
   public void shouldTriggerAlert() throws IOException, CouldNotGrabPriceException {
     when(alert.checkTrigger(anyMap())).thenReturn(true);
 
-    advisor.check(grabber, alert);
+    advisor.check(alert);
 
-    verify(notifier, times(1)).notify(any(), any(), any());
+    verify(notifier, times(1)).notify(any(), any());
   }
 
   @Test
   public void shouldNotTriggerAlert() throws IOException, CouldNotGrabPriceException {
     when(alert.checkTrigger(anyMap())).thenReturn(false);
 
-    advisor.check(grabber, alert);
+    advisor.check(alert);
 
-    verify(notifier, times(0)).notify(any(), any(), any());
+    verify(notifier, times(0)).notify(any(), any());
   }
 
   private static MonetaryAmount createDollars(int amount) {

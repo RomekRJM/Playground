@@ -1,25 +1,26 @@
 package rjm.romek.finance.scraper;
 
-import lombok.AllArgsConstructor;
+import java.io.IOException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import javax.money.Monetary;
+import javax.money.MonetaryAmount;
+import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.money.Monetary;
-import javax.money.MonetaryAmount;
-import java.io.IOException;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-@AllArgsConstructor
-public class GoogleGrabber implements Grabber {
+@NoArgsConstructor
+public class GoogleGrabber extends Grabber {
 
   private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8";
   private static final String QUERY_SEARCH_EXPRESSION = "g-card-section div g-card-section div span span span";
 
-  private final String asset;
+  public GoogleGrabber(String asset) {
+    super(asset);
+  }
 
   @Override
   public Map<Date, MonetaryAmount> grabPrice() throws IOException, CouldNotGrabPriceException {

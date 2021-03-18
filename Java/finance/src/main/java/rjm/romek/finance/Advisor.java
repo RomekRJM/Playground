@@ -20,13 +20,14 @@ import rjm.romek.finance.scraper.Grabber;
 public class Advisor {
 
   private EmailNotifier notifier;
+  private Grabber grabber;
   private String name;
 
-  public void check(Grabber grabber, Alert alert) throws IOException, CouldNotGrabPriceException {
+  public void check(Alert alert) throws IOException, CouldNotGrabPriceException {
     Map<Date, MonetaryAmount> pricePoints = grabber.grabPrice();
 
     if (alert.checkTrigger(pricePoints)) {
-      notifier.notify("romek@example.com", alert, pricePoints);
+      notifier.notify(alert, pricePoints);
     }
 
   }

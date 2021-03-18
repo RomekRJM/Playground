@@ -1,5 +1,6 @@
 package rjm.romek.finance.notifier;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Date;
 import java.util.Map;
@@ -13,6 +14,7 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.money.MonetaryAmount;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,27 +25,39 @@ import rjm.romek.finance.alert.Alert;
 @Slf4j
 @JsonDeserialize
 @NoArgsConstructor
+@Getter
 public class EmailNotifier {
 
   private static final String SUBJECT = "Finance Alert";
   private static final String MESSAGE = "%s has been %s the price point %s for %s times in a row.";
 
+  @Value("${EMAIL_TO}")
+  private String email;
 
+  @JsonIgnore
   @Value("${SMTP_HOST}")
   private String smtpHost;
 
+  @JsonIgnore
   @Value("${SMTP_PORT}")
   private String smtpPort;
 
+  @JsonIgnore
   @Value("${SMTP_USER}")
   private String smtpUser;
 
+  @JsonIgnore
   @Value("${SMTP_PASSWORD}")
   private String smtpPassword;
 
-  public void notify(String who, Alert what, Map<Date, MonetaryAmount> when) {
+  public void notify(Alert what, Map<Date, MonetaryAmount> when) {
 
-    sendEmail(getSession(), who, SUBJECT, MESSAGE, smtpUser);
+    sendEmail(getSession(), email, SUBJECT, MESSAGE, smtpUser);
+  }
+
+  public EmailNotifier withEmail(String email) {
+    this.email = email;
+    return this;
   }
 
   private Session getSession() {
@@ -64,7 +78,7 @@ public class EmailNotifier {
     return Session.getInstance(props, auth);
   }
 
-  private static void sendEmail(Session session, String toEmail, String subject, String body,
+  private static void sendEmail(Session session, String email, String subject, String body,
       String from) {
 
     try {
@@ -79,7 +93,7 @@ public class EmailNotifier {
       msg.setText(body, "UTF-8");
       msg.setSentDate(new Date());
 
-      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(toEmail, false));
+      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email, false));
       Transport.send(msg, msg.getAllRecipients());
 
     } catch (MessagingException e) {

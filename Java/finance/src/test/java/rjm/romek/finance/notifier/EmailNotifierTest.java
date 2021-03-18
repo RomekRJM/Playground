@@ -18,7 +18,7 @@ class EmailNotifierTest {
 
   @Test
   public void shouldSendEmail() {
-    emailNotifier.notify("romek.rjm@gmail.com",
+    emailNotifier.notify(
         new Alert(
             new PriceAboveRule(
                 getDollars(1234)
@@ -26,9 +26,9 @@ class EmailNotifierTest {
             2000
         ),
         Map.of(
-            DateUtil.createDate(14, 11, 00), getDollars(1500),
-            DateUtil.createDate(14, 12, 00), getDollars(1502),
-            DateUtil.createDate(14, 13, 00), getDollars(1506)
+            DateUtil.createDate(14, 11, 0), getDollars(1500),
+            DateUtil.createDate(14, 12, 0), getDollars(1502),
+            DateUtil.createDate(14, 13, 0), getDollars(1506)
         )
     );
   }
