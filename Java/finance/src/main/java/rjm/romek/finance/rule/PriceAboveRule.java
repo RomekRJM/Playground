@@ -1,8 +1,10 @@
 package rjm.romek.finance.rule;
 
 import javax.money.MonetaryAmount;
+import lombok.NoArgsConstructor;
 import rjm.romek.finance.validator.CurrencyValidator;
 
+@NoArgsConstructor
 public class PriceAboveRule extends Rule {
 
   public PriceAboveRule(MonetaryAmount targetValue) {
