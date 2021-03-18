@@ -10,7 +10,9 @@ import java.util.Collections;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.util.ResourceUtils;
+import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.notifier.EmailNotifier;
+import rjm.romek.finance.rule.PriceAboveRule;
 import rjm.romek.finance.scraper.GoogleGrabber;
 
 class DeserializerTest {
@@ -33,10 +35,14 @@ class DeserializerTest {
 
   @Test
   public void shouldSerialize() throws IOException {
-    Advisor advisor = new Advisor(new EmailNotifier().withEmail("wawel@o2.pl"),
-        new GoogleGrabber("google+share+price"), "abcd");
+    Advisor advisor = new Advisor(
+        new EmailNotifier().withEmail("wawel@o2.pl"),
+        new GoogleGrabber("google+share+price"),
+        "abcd",
+        new Alert(new PriceAboveRule(MonetaryUtil.getDollars(1300)), 3));
     Collection<Advisor> advisors = Collections.singletonList(advisor);
     File tmpFile = File.createTempFile("asd", "yaml");
     deserializer.save(advisors, tmpFile);
+    return;
   }
 }

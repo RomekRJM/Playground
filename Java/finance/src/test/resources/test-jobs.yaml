@@ -4,3 +4,47 @@
   grabber: !<GoogleGrabber>
     asset: "google+share+price"
   name: "abcd"
+  alert:
+    rule: !<PriceAboveRule>
+      targetValue:
+        currency:
+          context:
+            empty: false
+            providerName: "java.util.Currency"
+          defaultFractionDigits: 2
+          currencyCode: "USD"
+          numericCode: 840
+        number: 1300
+        factory:
+          defaultMonetaryContext:
+            precision: 0
+            amountType: "org.javamoney.moneta.Money"
+            maxScale: 63
+            fixedScale: false
+            empty: false
+            providerName: null
+          maxNumber: null
+          minNumber: null
+          amountType: "org.javamoney.moneta.Money"
+          maximalMonetaryContext:
+            precision: 0
+            amountType: "org.javamoney.moneta.Money"
+            maxScale: -1
+            fixedScale: false
+            empty: false
+            providerName: null
+        context:
+          precision: 0
+          amountType: "org.javamoney.moneta.Money"
+          maxScale: 63
+          fixedScale: false
+          empty: false
+          providerName: null
+        negative: false
+        zero: false
+        positive: true
+        negativeOrZero: false
+        positiveOrZero: true
+        numberStripped: 1.3E+3
+      type: "ABOVE_PRICE_POINT"
+    occurrencesToActivate: 3

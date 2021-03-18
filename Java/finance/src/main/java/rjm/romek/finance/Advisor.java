@@ -22,8 +22,9 @@ public class Advisor {
   private EmailNotifier notifier;
   private Grabber grabber;
   private String name;
+  private Alert alert;
 
-  public void check(Alert alert) throws IOException, CouldNotGrabPriceException {
+  public void check() throws IOException, CouldNotGrabPriceException {
     Map<Date, MonetaryAmount> pricePoints = grabber.grabPrice();
 
     if (alert.checkTrigger(pricePoints)) {
