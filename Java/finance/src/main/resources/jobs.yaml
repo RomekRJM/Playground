@@ -1,3 +1,13 @@
 ---
-- name: "Google stock advisor"
-  notifier: {}
+- notifier:
+    email: "wawel@o2.pl"
+  grabber: !<GoogleGrabber>
+    asset: "google+share+price"
+  name: "abcd"
+  alert:
+    rule: !<PriceAboveRule>
+      targetValue:
+        currencyCode: "USD"
+        amount: 1300
+      type: "ABOVE_PRICE_POINT"
+    occurrencesToActivate: 3

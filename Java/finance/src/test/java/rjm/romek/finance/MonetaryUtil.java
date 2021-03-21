@@ -1,13 +1,13 @@
 package rjm.romek.finance;
 
 import javax.money.Monetary;
-import javax.money.MonetaryAmount;
+import rjm.romek.finance.monetary.SimpleMonetaryAmount;
 
 public class MonetaryUtil {
-  public static MonetaryAmount getDollars(Integer amount) {
-    return Monetary.getDefaultAmountFactory()
+  public static SimpleMonetaryAmount getDollars(Integer amount) {
+    return new SimpleMonetaryAmount(Monetary.getDefaultAmountFactory()
         .setCurrency(Monetary.getCurrency("USD"))
         .setNumber(amount)
-        .create();
+        .create());
   }
 }

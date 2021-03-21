@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 import javax.money.MonetaryAmount;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import rjm.romek.finance.monetary.SimpleMonetaryAmount;
 
 @Getter
 @RequiredArgsConstructor
@@ -16,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 })
 public abstract class Rule {
 
-  protected final MonetaryAmount targetValue;
+  protected final SimpleMonetaryAmount targetValue;
   protected final RuleType type;
 
   public Rule() {
