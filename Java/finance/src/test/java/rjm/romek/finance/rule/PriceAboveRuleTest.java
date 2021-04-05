@@ -11,11 +11,11 @@ class PriceAboveRuleTest {
 
   @Test
   public void shouldApply() {
-    assertTrue(priceAboveRule.applies(MonetaryUtil.getDollars(2).getMonetaryUnit()));
+    assertTrue(priceAboveRule.applies(MonetaryUtil.getDollars(2).getMonetaryAmount()));
   }
 
   @Test
   public void shouldNotApply() {
-    assertFalse(priceAboveRule.applies(MonetaryUtil.getDollars(0.5).getMonetaryUnit()));
+    assertFalse(priceAboveRule.applies(MonetaryUtil.getDollars(0.5).getMonetaryAmount()));
   }
 }

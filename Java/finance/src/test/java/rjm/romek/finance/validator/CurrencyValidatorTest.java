@@ -9,9 +9,9 @@ import rjm.romek.finance.MonetaryUtil;
 
 class CurrencyValidatorTest {
 
-  private final MonetaryAmount dollars = MonetaryUtil.getDollars(123).getMonetaryUnit();
+  private final MonetaryAmount dollars = MonetaryUtil.getDollars(123).getMonetaryAmount();
   private final MonetaryAmount euros = MonetaryUtil.getSimpleMonetaryAmount("EUR", 123)
-      .getMonetaryUnit();
+      .getMonetaryAmount();
 
   @Test
   public void shouldPassValidation() {

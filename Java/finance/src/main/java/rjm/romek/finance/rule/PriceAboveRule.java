@@ -15,7 +15,7 @@ public class PriceAboveRule extends Rule {
   @Override
   public boolean applies(MonetaryAmount value) {
     assert targetValue != null;
-    CurrencyValidator.validate(targetValue.getMonetaryUnit(), value);
-    return value.isGreaterThan(targetValue.getMonetaryUnit());
+    CurrencyValidator.validate(targetValue.getMonetaryAmount(), value);
+    return value.isGreaterThan(targetValue.getMonetaryAmount());
   }
 }

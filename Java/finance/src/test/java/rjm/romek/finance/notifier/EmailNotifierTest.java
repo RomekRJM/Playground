@@ -27,9 +27,9 @@ class EmailNotifierTest {
             2000
         ),
         Map.of(
-            DateUtil.createDate(14, 11, 0), MonetaryUtil.getDollars(1500).getMonetaryUnit(),
-            DateUtil.createDate(14, 12, 0), MonetaryUtil.getDollars(1502).getMonetaryUnit(),
-            DateUtil.createDate(14, 13, 0), MonetaryUtil.getDollars(1506).getMonetaryUnit()
+            DateUtil.createDate(14, 11, 0), MonetaryUtil.getDollars(1500).getMonetaryAmount(),
+            DateUtil.createDate(14, 12, 0), MonetaryUtil.getDollars(1502).getMonetaryAmount(),
+            DateUtil.createDate(14, 13, 0), MonetaryUtil.getDollars(1506).getMonetaryAmount()
         )
     );
   }

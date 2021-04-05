@@ -23,7 +23,7 @@ public class Alert {
         return false;
       }
     };
-    this.occurrencesToActivate = 0;
+    this.occurrencesToActivate = -1;
   }
 
   public boolean checkTrigger(Map<Date, MonetaryAmount> map) {
@@ -38,6 +38,6 @@ public class Alert {
       }
     }
 
-    return numberOfOccurencies >= occurrencesToActivate;
+    return occurrencesToActivate < 0 ? false : numberOfOccurencies >= occurrencesToActivate;
   }
 }

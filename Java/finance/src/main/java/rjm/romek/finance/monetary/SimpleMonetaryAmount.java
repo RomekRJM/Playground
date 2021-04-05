@@ -20,7 +20,7 @@ public class SimpleMonetaryAmount {
   }
 
   @JsonIgnore
-  public MonetaryAmount getMonetaryUnit() {
+  public MonetaryAmount getMonetaryAmount() {
     return Monetary.getDefaultAmountFactory()
         .setCurrency(Monetary.getCurrency(currencyCode))
         .setNumber(amount)
