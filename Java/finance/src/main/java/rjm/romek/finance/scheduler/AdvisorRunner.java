@@ -17,8 +17,8 @@ public class AdvisorRunner implements Runnable {
     try {
       advisor.check();
     } catch (IOException | CouldNotGrabPriceException e) {
-      log.error(String.format("There was a problem running advisor %s. Error: %", advisor.getName(),
-          e.getMessage()));
+      log.error("There was a problem running advisor %s. Error: %s", advisor.getName(),
+          e.getMessage());
     }
   }
 }

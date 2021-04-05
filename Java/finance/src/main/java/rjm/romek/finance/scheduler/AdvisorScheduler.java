@@ -3,6 +3,7 @@ package rjm.romek.finance.scheduler;
 import java.io.IOException;
 import java.util.Collection;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.context.ApplicationListener;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
@@ -14,32 +15,32 @@ import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class AdvisorScheduler implements ApplicationListener<ApplicationReadyEvent> {
 
   private final Deserializer deserializer;
   private final ThreadPoolTaskScheduler taskScheduler;
 
   // https://www.baeldung.com/spring-task-scheduler
-  // todo: fix error handling, gracefully shut down with error codes
   @Override
   public void onApplicationEvent(ApplicationReadyEvent event) {
     Collection<Advisor> tasks = null;
     try {
       tasks = deserializer.load();
     } catch (IOException e) {
-      e.printStackTrace();
+      log.error("Could not read advisor definition file: %s", e.getMessage());
+      System.exit(1);
     }
-
-    assert tasks != null;
 
     tasks.forEach((t) -> {
       taskScheduler.schedule(() -> {
         try {
           t.check();
         } catch (IOException e) {
-          e.printStackTrace();
+          log.error("There was a problem while running the scheduler %s: %s", t.getName(),
+              e.getMessage());
         } catch (CouldNotGrabPriceException e) {
-          e.printStackTrace();
+          log.error("Problem while grabbing the price.", e);
         }
       }, new CronTrigger(t.getCron()));
       new AdvisorRunner(t);
