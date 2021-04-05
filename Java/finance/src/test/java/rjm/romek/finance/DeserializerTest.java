@@ -6,7 +6,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import rjm.romek.finance.advisor.Advisor;
 import rjm.romek.finance.advisor.Deserializer;
@@ -17,18 +16,11 @@ import rjm.romek.finance.scraper.GoogleGrabber;
 
 class DeserializerTest {
 
-  private final Deserializer deserializer = new Deserializer();
-
-  private String testFileName;
-
-  @BeforeEach
-  public void setUp() {
-    testFileName = "test-jobs.yaml";
-  }
+  private final Deserializer deserializer = new Deserializer("test-jobs.yaml");
 
   @Test
   public void shouldDeserialize() throws IOException {
-    Collection<Advisor> loaded = deserializer.load(testFileName);
+    Collection<Advisor> loaded = deserializer.load();
 
     assertEquals(1, loaded.size());
   }

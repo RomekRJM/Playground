@@ -4,12 +4,14 @@ import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 import rjm.romek.finance.DateUtil;
 import rjm.romek.finance.MonetaryUtil;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.rule.PriceAboveRule;
 
 @SpringBootTest
+@ActiveProfiles(profiles = "test")
 class EmailNotifierTest {
 
   @Autowired

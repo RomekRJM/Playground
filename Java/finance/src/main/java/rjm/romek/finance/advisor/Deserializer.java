@@ -7,24 +7,26 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Deserializer {
 
-  public static final String CONFIG_FILE = "jobs.yaml";
+  private final String configFile;
+
   private static final PathMatchingResourcePatternResolver RESOURCE_PATTERN_RESOLVER
       = new PathMatchingResourcePatternResolver();
 
-  public Collection<Advisor> load() throws IOException {
-    return load(CONFIG_FILE);
+  public Deserializer(@Value("${application.configFile}") String configFile) {
+    this.configFile = configFile;
   }
 
-  public Collection<Advisor> load(String filePath) throws IOException {
+  public Collection<Advisor> load() throws IOException {
     ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
 
-    return mapper.readValue(getJobsDefinitionFile(filePath), new TypeReference<List<Advisor>>() {
+    return mapper.readValue(getJobsDefinitionFile(configFile), new TypeReference<List<Advisor>>() {
     });
   }
 
