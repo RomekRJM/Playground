@@ -24,12 +24,12 @@ public class AdvisorScheduler implements ApplicationListener<ApplicationReadyEve
   // https://www.baeldung.com/spring-task-scheduler
   @Override
   public void onApplicationEvent(ApplicationReadyEvent event) {
-    Collection<Advisor> tasks = null;
+    Collection<Advisor> tasks;
     try {
       tasks = deserializer.load();
     } catch (IOException e) {
       log.error("Could not read advisor definition file: %s", e.getMessage());
-      System.exit(1);
+      return;
     }
 
     tasks.forEach((t) -> {

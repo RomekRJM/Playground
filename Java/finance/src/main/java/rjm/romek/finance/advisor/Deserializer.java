@@ -7,13 +7,15 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Deserializer {
 
   public static final String CONFIG_FILE = "jobs.yaml";
+  private static final PathMatchingResourcePatternResolver RESOURCE_PATTERN_RESOLVER
+      = new PathMatchingResourcePatternResolver();
 
   public Collection<Advisor> load() throws IOException {
     return load(CONFIG_FILE);
@@ -32,6 +34,6 @@ public class Deserializer {
   }
 
   private File getJobsDefinitionFile(String filePath) throws IOException {
-    return new ClassPathResource("classpath:" + filePath).getFile();
+    return RESOURCE_PATTERN_RESOLVER.getResource(filePath).getFile();
   }
 }

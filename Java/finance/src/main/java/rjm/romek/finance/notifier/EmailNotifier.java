@@ -31,23 +31,23 @@ public class EmailNotifier {
   private static final String SUBJECT = "Finance Alert";
   private static final String MESSAGE = "%s has been %s the price point %s for %s times in a row.";
 
-  @Value("${EMAIL_TO}")
+  @Value("${EMAIL_TO:wawel@o2.pl}")
   private String email;
 
   @JsonIgnore
-  @Value("${SMTP_HOST}")
+  @Value("${SMTP_HOST:test.host@o2.pl}")
   private String smtpHost;
 
   @JsonIgnore
-  @Value("${SMTP_PORT}")
+  @Value("${SMTP_PORT:457}")
   private String smtpPort;
 
   @JsonIgnore
-  @Value("${SMTP_USER}")
+  @Value("${SMTP_USER:test}")
   private String smtpUser;
 
   @JsonIgnore
-  @Value("${SMTP_PASSWORD}")
+  @Value("${SMTP_PASSWORD:test}")
   private String smtpPassword;
 
   public void notify(Alert what, Map<Date, MonetaryAmount> when) {
