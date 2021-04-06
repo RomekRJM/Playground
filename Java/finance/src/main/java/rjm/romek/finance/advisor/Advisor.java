@@ -3,7 +3,7 @@ package rjm.romek.finance.advisor;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
+import java.util.SortedMap;
 import javax.money.MonetaryAmount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,7 +28,7 @@ public class Advisor {
   public void check() throws IOException, CouldNotGrabPriceException {
     validate();
 
-    Map<Date, MonetaryAmount> pricePoints = grabber.grabPrice();
+    SortedMap<Date, MonetaryAmount> pricePoints = grabber.grabPrice();
 
     if (alert.checkTrigger(pricePoints)) {
       notifier.notify(alert, pricePoints);

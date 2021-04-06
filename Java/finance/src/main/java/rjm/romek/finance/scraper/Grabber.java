@@ -5,10 +5,10 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+import java.util.SortedMap;
 import javax.money.MonetaryAmount;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
 
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @JsonSubTypes({
@@ -27,6 +27,6 @@ public abstract class Grabber {
     this.asset = asset;
   }
 
-  public abstract Map<Date, MonetaryAmount> grabPrice()
+  public abstract SortedMap<Date, MonetaryAmount> grabPrice()
       throws IOException, CouldNotGrabPriceException;
 }

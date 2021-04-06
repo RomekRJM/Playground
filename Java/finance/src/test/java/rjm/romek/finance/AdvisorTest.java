@@ -1,14 +1,13 @@
 package rjm.romek.finance;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyMap;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Map;
+import java.util.SortedMap;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import org.junit.jupiter.api.BeforeEach;
@@ -32,11 +31,8 @@ class AdvisorTest {
   @Mock
   private Grabber grabber;
 
-  private Map<Date, MonetaryAmount> priceInTime = Map.of(
-      DateUtil.createDate(14, 14, 0), createDollars(1),
-      DateUtil.createDate(14, 15, 0), createDollars(2),
-      DateUtil.createDate(14, 16, 0), createDollars(3)
-  );
+  private SortedMap<Date, MonetaryAmount> priceInTime = MonetaryDateUtil
+      .createDataPoints("USD", 1, 2, 3);
 
   private Advisor advisor;
 
@@ -49,7 +45,7 @@ class AdvisorTest {
 
   @Test
   public void shouldTriggerAlert() throws IOException, CouldNotGrabPriceException {
-    when(alert.checkTrigger(anyMap())).thenReturn(true);
+    when(alert.checkTrigger(any())).thenReturn(true);
 
     advisor.check();
 
@@ -58,7 +54,7 @@ class AdvisorTest {
 
   @Test
   public void shouldNotTriggerAlert() throws IOException, CouldNotGrabPriceException {
-    when(alert.checkTrigger(anyMap())).thenReturn(false);
+    when(alert.checkTrigger(any())).thenReturn(false);
 
     advisor.check();
 

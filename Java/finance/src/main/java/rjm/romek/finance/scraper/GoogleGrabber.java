@@ -3,7 +3,8 @@ package rjm.romek.finance.scraper;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import lombok.NoArgsConstructor;
@@ -23,7 +24,7 @@ public class GoogleGrabber extends Grabber {
   }
 
   @Override
-  public Map<Date, MonetaryAmount> grabPrice() throws IOException, CouldNotGrabPriceException {
+  public SortedMap<Date, MonetaryAmount> grabPrice() throws IOException, CouldNotGrabPriceException {
     String assetSearchUrl = String.format(SEARCH_URL, asset);
 
     Document doc = Jsoup.connect(assetSearchUrl).get();
@@ -31,7 +32,7 @@ public class GoogleGrabber extends Grabber {
     return extractMonetaryData(doc);
   }
 
-  private Map<Date, MonetaryAmount> extractMonetaryData(Document doc)
+  private SortedMap<Date, MonetaryAmount> extractMonetaryData(Document doc)
       throws CouldNotGrabPriceException {
     Elements elements = doc.select(QUERY_SEARCH_EXPRESSION);
 
@@ -40,14 +41,15 @@ public class GoogleGrabber extends Grabber {
     }
 
     List<Element> found = elements.subList(0, 2);
-
-    return Map.of(
-        new Date(),
+    SortedMap<Date, MonetaryAmount> map = new TreeMap<>();
+    map.put(new Date(),
         Monetary.getDefaultAmountFactory()
             .setCurrency(Monetary.getCurrency(getCurrency(elements.get(1))))
             .setNumber(getValue(elements.get(0)))
             .create()
     );
+
+    return map;
   }
 
   private Double getValue(Element element) throws CouldNotGrabPriceException {
