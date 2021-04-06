@@ -1,7 +1,6 @@
 package rjm.romek.finance.notifier;
 
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import rjm.romek.finance.MonetaryDateUtil;
@@ -12,8 +11,8 @@ import rjm.romek.finance.rule.PriceAboveRule;
 @ActiveProfiles(profiles = "test")
 class EmailNotifierTest {
 
-  @Autowired
-  EmailNotifier emailNotifier;
+  private final EmailNotifier emailNotifier = new EmailNotifier("wawel@o2.pl", "mail.o2.pl", "457", "test",
+      "test");
 
   @Test
   public void shouldSendEmail() {

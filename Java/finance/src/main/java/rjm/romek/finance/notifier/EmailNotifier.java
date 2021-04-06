@@ -14,17 +14,17 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import javax.money.MonetaryAmount;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 import rjm.romek.finance.alert.Alert;
 
-@Component
 @Slf4j
 @JsonDeserialize
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 public class EmailNotifier {
 
@@ -53,11 +53,6 @@ public class EmailNotifier {
   public void notify(Alert what, Map<Date, MonetaryAmount> when) {
 
     sendEmail(getSession(), email, SUBJECT, MESSAGE, smtpUser);
-  }
-
-  public EmailNotifier withEmail(String email) {
-    this.email = email;
-    return this;
   }
 
   private Session getSession() {

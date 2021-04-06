@@ -28,7 +28,7 @@ class DeserializerTest {
   @Test
   public void shouldSerialize() throws IOException {
     Advisor advisor = new Advisor(
-        new EmailNotifier().withEmail("wawel@o2.pl"),
+        new EmailNotifier("wawel@o2.pl", "", "", "", ""),
         new GoogleGrabber("google+share+price"),
         "abcd",
         new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(1300)), 3),
@@ -37,6 +37,5 @@ class DeserializerTest {
     Collection<Advisor> advisors = Collections.singletonList(advisor);
     File tmpFile = File.createTempFile("asd", "yaml");
     deserializer.save(advisors, tmpFile);
-    return;
   }
 }

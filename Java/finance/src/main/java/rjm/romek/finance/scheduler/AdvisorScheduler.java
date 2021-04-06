@@ -21,7 +21,6 @@ public class AdvisorScheduler implements ApplicationListener<ApplicationReadyEve
   private final Deserializer deserializer;
   private final ThreadPoolTaskScheduler taskScheduler;
 
-  // https://www.baeldung.com/spring-task-scheduler
   @Override
   public void onApplicationEvent(ApplicationReadyEvent event) {
     Collection<Advisor> tasks;
