@@ -4,7 +4,7 @@
   grabber: !<GoogleGrabber>
     asset: "google+share+price"
   name: "abcd"
-  cron: "@daily"
+  cron: "*/10 * * * * *"
   alert:
     rule: !<PriceAboveRule>
       targetValue:

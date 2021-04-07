@@ -11,7 +11,6 @@ import org.springframework.scheduling.support.CronTrigger;
 import org.springframework.stereotype.Service;
 import rjm.romek.finance.advisor.Advisor;
 import rjm.romek.finance.advisor.Deserializer;
-import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 
 @Service
 @AllArgsConstructor
@@ -27,22 +26,11 @@ public class AdvisorScheduler implements ApplicationListener<ApplicationReadyEve
     try {
       tasks = deserializer.load();
     } catch (IOException e) {
-      log.error("Could not read advisor definition file: %s", e.getMessage());
+      log.error("Could not read advisor definition file: {}", e.getMessage());
       return;
     }
 
-    tasks.forEach((t) -> {
-      taskScheduler.schedule(() -> {
-        try {
-          t.check();
-        } catch (IOException e) {
-          log.error("There was a problem while running the scheduler %s: %s", t.getName(),
-              e.getMessage());
-        } catch (CouldNotGrabPriceException e) {
-          log.error("Problem while grabbing the price.", e);
-        }
-      }, new CronTrigger(t.getCron()));
-      new AdvisorRunner(t);
-    });
+    tasks.forEach((t) ->
+        taskScheduler.schedule(new AdvisorRunner(t), new CronTrigger(t.getCron())));
   }
 }
