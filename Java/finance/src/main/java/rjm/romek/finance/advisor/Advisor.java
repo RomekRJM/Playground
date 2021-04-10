@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.notifier.EmailNotifier;
+import rjm.romek.finance.notifier.MessageBuilder;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 import rjm.romek.finance.scraper.Grabber;
 
@@ -31,7 +32,7 @@ public class Advisor {
     SortedMap<Date, MonetaryAmount> pricePoints = grabber.grabPrice();
 
     if (alert.checkTrigger(pricePoints)) {
-      notifier.notify(alert, pricePoints);
+      notifier.notify(new MessageBuilder().build(alert, pricePoints));
     }
   }
 

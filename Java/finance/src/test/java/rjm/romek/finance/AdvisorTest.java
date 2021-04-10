@@ -49,7 +49,7 @@ class AdvisorTest {
 
     advisor.check();
 
-    verify(notifier, times(1)).notify(any(), any());
+    verify(notifier, times(1)).notify(any());
   }
 
   @Test
@@ -58,7 +58,7 @@ class AdvisorTest {
 
     advisor.check();
 
-    verify(notifier, times(0)).notify(any(), any());
+    verify(notifier, times(0)).notify(any());
   }
 
   private static MonetaryAmount createDollars(int amount) {

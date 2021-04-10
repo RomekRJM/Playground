@@ -3,7 +3,6 @@ package rjm.romek.finance.notifier;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Date;
-import java.util.Map;
 import java.util.Properties;
 import javax.mail.Authenticator;
 import javax.mail.Message;
@@ -13,13 +12,11 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import javax.money.MonetaryAmount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import rjm.romek.finance.alert.Alert;
 
 @Slf4j
 @JsonDeserialize
@@ -27,9 +24,6 @@ import rjm.romek.finance.alert.Alert;
 @AllArgsConstructor
 @Getter
 public class EmailNotifier {
-
-  private static final String SUBJECT = "Finance Alert";
-  private static final String MESSAGE = "%s has been %s the price point %s for %s times in a row.";
 
   @Value("${smtp.emailTo}")
   private String email;
@@ -50,9 +44,8 @@ public class EmailNotifier {
   @Value("${smtp.password}")
   private String smtpPassword;
 
-  public void notify(Alert what, Map<Date, MonetaryAmount> when) {
-
-    sendEmail(getSession(), email, SUBJECT, MESSAGE, smtpUser);
+  public void notify(Notification notification) {
+    sendEmail(getSession(), email, notification.getSubject(), notification.getBody(), smtpUser);
   }
 
   private Session getSession() {

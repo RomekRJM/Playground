@@ -20,6 +20,7 @@ repositories {
 
 ext {
     set('springCloudVersion', "2020.0.1")
+    set('greenMailVersion', "1.6.3")
 }
 
 dependencies {
@@ -29,6 +30,8 @@ dependencies {
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation "com.icegreen:greenmail:${greenMailVersion}"
+    testImplementation "com.icegreen:greenmail-spring:${greenMailVersion}"
 
     implementation 'org.javamoney:moneta:1.4.2'
     implementation 'org.jsoup:jsoup:1.13.1'
