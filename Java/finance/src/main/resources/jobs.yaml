@@ -1,14 +1,25 @@
 ---
 - notifier:
-    email: "wawel@o2.pl"
+    email: "romek.rjm@gmail.com"
   grabber: !<GoogleGrabber>
-    asset: "google+share+price"
-  name: "abcd"
-  cron: "*/10 * * * * *"
+    asset: "cdprojekt+share+price"
+  name: "CDProjekt Red share price"
+  cron: "*/60 * * * * *"
+  alert:
+    rule: !<PriceBelowRule>
+      targetValue:
+        currencyCode: "PLN"
+        amount: 150
+    occurrencesToActivate: 1
+- notifier:
+    email: "romek.rjm@gmail.com"
+  grabber: !<GoogleGrabber>
+    asset: "ocado+share+price"
+  name: "Ocado share price"
+  cron: "*/5 * * * * *"
   alert:
     rule: !<PriceAboveRule>
       targetValue:
-        currencyCode: "USD"
-        amount: 1300
-      type: "ABOVE_PRICE_POINT"
-    occurrencesToActivate: 3
+        currencyCode: "GBP"
+        amount: 2000
+    occurrencesToActivate: 1

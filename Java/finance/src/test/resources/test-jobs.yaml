@@ -10,5 +10,4 @@
       targetValue:
         currencyCode: "USD"
         amount: 1300
-      type: "ABOVE_PRICE_POINT"
     occurrencesToActivate: 3

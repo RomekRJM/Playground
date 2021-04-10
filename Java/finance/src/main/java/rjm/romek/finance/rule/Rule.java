@@ -13,16 +13,15 @@ import rjm.romek.finance.monetary.SimpleMonetaryAmount;
 @RequiredArgsConstructor
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @JsonSubTypes({
-    @Type(value = PriceAboveRule.class, name = "PriceAboveRule")
+    @Type(value = PriceAboveRule.class, name = "PriceAboveRule"),
+    @Type(value = PriceAboveRule.class, name = "PriceBelowRule")
 })
 public abstract class Rule {
 
   protected final SimpleMonetaryAmount targetValue;
-  protected final RuleType type;
 
   public Rule() {
     this.targetValue = null;
-    this.type = null;
   }
 
   public abstract boolean applies(MonetaryAmount value);

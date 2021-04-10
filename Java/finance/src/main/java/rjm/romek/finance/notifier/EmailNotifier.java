@@ -69,6 +69,8 @@ public class EmailNotifier {
   private static void sendEmail(Session session, String email, String subject, String body,
       String from) {
 
+    log.info("Notifying {}.");
+
     try {
       MimeMessage msg = new MimeMessage(session);
       msg.addHeader("Content-type", "text/HTML; charset=UTF-8");

@@ -2,22 +2,23 @@ package rjm.romek.finance.scraper;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
-import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import rjm.romek.finance.monetary.MonetaryConverter;
+import rjm.romek.finance.monetary.MonetaryFactory;
 
 @NoArgsConstructor
 public class GoogleGrabber extends Grabber {
 
   private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8";
   private static final String QUERY_SEARCH_EXPRESSION = "g-card-section div g-card-section div span span span";
+  private static final MonetaryFactory MONETARY_FACTORY = new MonetaryFactory();
 
   public GoogleGrabber(String asset) {
     super(asset);
@@ -40,14 +41,12 @@ public class GoogleGrabber extends Grabber {
       throw new CouldNotGrabPriceException("Not all required elements found in the response.");
     }
 
-    List<Element> found = elements.subList(0, 2);
     SortedMap<Date, MonetaryAmount> map = new TreeMap<>();
-    map.put(new Date(),
-        Monetary.getDefaultAmountFactory()
-            .setCurrency(Monetary.getCurrency(getCurrency(elements.get(1))))
-            .setNumber(getValue(elements.get(0)))
-            .create()
-    );
+    String unit = getUnit(elements.get(1));
+    Double value = getValue(elements.get(0));
+    MonetaryConverter monetaryConverter = MONETARY_FACTORY.create(unit);
+
+    map.put(new Date(), monetaryConverter.convert(unit, value));
 
     return map;
   }
@@ -64,7 +63,7 @@ public class GoogleGrabber extends Grabber {
     return Double.valueOf(value);
   }
 
-  private String getCurrency(Element element) throws CouldNotGrabPriceException {
+  private String getUnit(Element element) throws CouldNotGrabPriceException {
     if (element.childNodes().isEmpty()) {
       throw new CouldNotGrabPriceException("Unable to parse the value from the response.");
     }

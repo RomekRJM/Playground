@@ -9,7 +9,7 @@ import rjm.romek.finance.validator.CurrencyValidator;
 public class PriceBelowRule extends Rule {
 
   public PriceBelowRule(SimpleMonetaryAmount targetValue) {
-    super(targetValue, RuleType.BELOW_PRICE_POINT);
+    super(targetValue);
   }
 
   @Override

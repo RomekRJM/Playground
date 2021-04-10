@@ -14,7 +14,7 @@ import rjm.romek.finance.rule.PriceAboveRule;
 class MessageBuilderTest {
 
   private static final String EXPECTED = "Advisor has been above the price point 1234 for 2 "
-      + "times in a row.<br/>Data points: Sun Mar 12 14:00:00 CET 2045: USD 1500.00, "
+      + "times in a row.<br/>Data points: Sun Mar 12 14:10:00 CET 2045: USD 1500.00, "
       + "Sun Mar 12 14:30:00 CET 2045: USD 1510.00";
 
   private NotificationBuilder notificationBuilder = new NotificationBuilder();
