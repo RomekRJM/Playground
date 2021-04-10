@@ -50,18 +50,18 @@ class AdvisorTest {
   public void shouldTriggerAlert() throws IOException, CouldNotGrabPriceException {
     doReturn(true).when(alert).checkTrigger(priceInTime);
 
-    new Advisor(notifier, grabber, "", alert, "@yearly").check();
+    new Advisor(notifier, "recipient", grabber, "", alert, "@yearly").check();
 
-    verify(notifier, times(1)).notify(any());
+    verify(notifier, times(1)).notify(any(), any());
   }
 
   @Test
   public void shouldNotTriggerAlert() throws IOException, CouldNotGrabPriceException {
     doReturn(false).when(alert).checkTrigger(priceInTime);
 
-    new Advisor(notifier, grabber, "", alert, "@yearly").check();
+    new Advisor(notifier, "recipient", grabber, "", alert, "@yearly").check();
 
-    verify(notifier, times(0)).notify(any());
+    verify(notifier, times(0)).notify(any(), any());
   }
 
   private static MonetaryAmount createDollars(int amount) {

@@ -1,9 +1,8 @@
 ---
-- notifier:
-    email: "romek.rjm@gmail.com"
+- name: "CDProjekt Red share price"
+  recipient: "romek.rjm@gmail.com"
   grabber: !<GoogleGrabber>
     asset: "cdprojekt+share+price"
-  name: "CDProjekt Red share price"
   cron: "*/60 * * * * *"
   alert:
     rule: !<PriceBelowRule>
@@ -11,11 +10,10 @@
         currencyCode: "PLN"
         amount: 150
     occurrencesToActivate: 1
-- notifier:
-    email: "romek.rjm@gmail.com"
+- name: "Ocado share price"
+  recipient: "romek.rjm@gmail.com"
   grabber: !<GoogleGrabber>
     asset: "ocado+share+price"
-  name: "Ocado share price"
   cron: "*/5 * * * * *"
   alert:
     rule: !<PriceAboveRule>

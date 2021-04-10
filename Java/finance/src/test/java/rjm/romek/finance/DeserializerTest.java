@@ -28,7 +28,8 @@ class DeserializerTest {
   @Test
   public void shouldSerialize() throws IOException {
     Advisor advisor = new Advisor(
-        new EmailNotifier("wawel@o2.pl", "", "", "", ""),
+        new EmailNotifier("", "", "", ""),
+        "recipient@o2.pl",
         new GoogleGrabber("google+share+price"),
         "abcd",
         new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(1300)), 3),

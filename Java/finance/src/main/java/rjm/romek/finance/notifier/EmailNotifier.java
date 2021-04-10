@@ -17,16 +17,15 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Service;
 
 @Slf4j
 @JsonDeserialize
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
+@Service
 public class EmailNotifier {
-
-  @Value("${smtp.emailTo}")
-  private String email;
 
   @JsonIgnore
   @Value("${smtp.host}")
@@ -44,8 +43,9 @@ public class EmailNotifier {
   @Value("${smtp.password}")
   private String smtpPassword;
 
-  public void notify(Notification notification) {
-    sendEmail(getSession(), email, notification.getSubject(), notification.getBody(), smtpUser);
+  public void notify(String recipient, Notification notification) {
+    sendEmail(getSession(), recipient, notification.getSubject(),
+        notification.getBody(), smtpUser);
   }
 
   private Session getSession() {
@@ -69,7 +69,7 @@ public class EmailNotifier {
   private static void sendEmail(Session session, String email, String subject, String body,
       String from) {
 
-    log.info("Notifying {}.");
+    log.info("Notifying {}", email);
 
     try {
       MimeMessage msg = new MimeMessage(session);

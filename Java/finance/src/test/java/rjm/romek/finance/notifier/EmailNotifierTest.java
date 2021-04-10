@@ -39,12 +39,7 @@ class EmailNotifierTest {
   @Value("${smtp.password}")
   private String senderPassword;
 
-  @Value("${smtp.host}")
-  private String host;
-
-  @Value("${smtp.port}")
-  private String port;
-
+  @Autowired
   private EmailNotifier emailNotifier;
 
   private static final String SUBJECT = "subject";
@@ -65,15 +60,14 @@ class EmailNotifierTest {
 
   @Test
   public void shouldSendEmail() throws MessagingException {
-    emailNotifier = new EmailNotifier(receiverUser, host, port, senderUser, senderPassword);
-    emailNotifier.notify(new Notification(BODY, SUBJECT));
+    emailNotifier.notify(receiverUser, new Notification(BODY, SUBJECT));
     assertMessageReceived(BODY, SUBJECT);
   }
 
   @Test
-  public void shouldNotSendEmailWithWrongCredentials() throws MessagingException {
-    emailNotifier = new EmailNotifier(receiverUser, host, port, senderUser, "wrong");
-    emailNotifier.notify(new Notification(BODY, SUBJECT));
+  public void shouldNotSendEmailOnConnectionError() throws MessagingException {
+    greenMail.stop();
+    emailNotifier.notify(receiverUser, new Notification(BODY, SUBJECT));
     assertNoMessages();
   }
 
@@ -83,7 +77,7 @@ class EmailNotifierTest {
     assertEquals(subject, message.getSubject());
   }
 
-  private void assertNoMessages() throws MessagingException {
+  private void assertNoMessages() {
     assertFalse(greenMail.waitForIncomingEmail(1000, 1));
     assertEquals(0, greenMail.getReceivedMessages().length);
   }
