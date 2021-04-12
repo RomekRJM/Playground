@@ -10,7 +10,6 @@ import org.junit.jupiter.api.Test;
 import rjm.romek.finance.advisor.Advisor;
 import rjm.romek.finance.advisor.Deserializer;
 import rjm.romek.finance.alert.Alert;
-import rjm.romek.finance.notifier.EmailNotifier;
 import rjm.romek.finance.rule.PriceAboveRule;
 import rjm.romek.finance.scraper.GoogleGrabber;
 
@@ -28,7 +27,6 @@ class DeserializerTest {
   @Test
   public void shouldSerialize() throws IOException {
     Advisor advisor = new Advisor(
-        new EmailNotifier("", "", "", ""),
         "recipient@o2.pl",
         new GoogleGrabber("google+share+price"),
         "abcd",

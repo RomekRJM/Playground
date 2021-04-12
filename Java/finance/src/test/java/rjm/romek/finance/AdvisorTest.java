@@ -16,6 +16,8 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import rjm.romek.finance.advisor.Advisor;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.notifier.EmailNotifier;
@@ -24,9 +26,10 @@ import rjm.romek.finance.rule.Rule;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 import rjm.romek.finance.scraper.Grabber;
 
+@SpringBootTest
 class AdvisorTest {
 
-  @Mock
+  @MockBean
   private EmailNotifier notifier;
 
   @Mock
@@ -50,7 +53,7 @@ class AdvisorTest {
   public void shouldTriggerAlert() throws IOException, CouldNotGrabPriceException {
     doReturn(true).when(alert).checkTrigger(priceInTime);
 
-    new Advisor(notifier, "recipient", grabber, "", alert, "@yearly").check();
+    new Advisor("recipient", grabber, "", alert, "@yearly").check();
 
     verify(notifier, times(1)).notify(any(), any());
   }
@@ -59,7 +62,7 @@ class AdvisorTest {
   public void shouldNotTriggerAlert() throws IOException, CouldNotGrabPriceException {
     doReturn(false).when(alert).checkTrigger(priceInTime);
 
-    new Advisor(notifier, "recipient", grabber, "", alert, "@yearly").check();
+    new Advisor("recipient", grabber, "", alert, "@yearly").check();
 
     verify(notifier, times(0)).notify(any(), any());
   }

@@ -1,7 +1,5 @@
 package rjm.romek.finance.notifier;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.util.Date;
 import java.util.Properties;
 import javax.mail.Authenticator;
@@ -12,36 +10,31 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
-@JsonDeserialize
-@NoArgsConstructor
-@AllArgsConstructor
-@Getter
 @Service
 public class EmailNotifier {
 
-  @JsonIgnore
-  @Value("${smtp.host}")
-  private String smtpHost;
+  private final String smtpHost;
+  private final String smtpPort;
+  private final String smtpUser;
+  private final String smtpPassword;
 
-  @JsonIgnore
-  @Value("${smtp.port}")
-  private String smtpPort;
+  @Autowired
+  public EmailNotifier(
+      @Value("${smtp.host}") String smtpHost, @Value("${smtp.port}") String smtpPort,
+      @Value("${smtp.user}") String smtpUser, @Value("${smtp.password}") String smtpPassword)
+  {
+    this.smtpHost = smtpHost;
+    this.smtpPort = smtpPort;
+    this.smtpUser = smtpUser;
+    this.smtpPassword = smtpPassword;
+  }
 
-  @JsonIgnore
-  @Value("${smtp.user}")
-  private String smtpUser;
-
-  @JsonIgnore
-  @Value("${smtp.password}")
-  private String smtpPassword;
 
   public void notify(String recipient, Notification notification) {
     sendEmail(getSession(), recipient, notification.getSubject(),

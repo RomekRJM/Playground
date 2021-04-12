@@ -1,7 +1,6 @@
 application.configFile: test-jobs.yaml
-smtp:
-  emailTo: wawel@o2.pl
-  host: localhost
-  port: 3025
-  user: test
-  password: test
+smtp.emailTo: wawel@o2.pl
+smtp.host: localhost
+smtp.port: 3025
+smtp.user: test
+smtp.password: test
