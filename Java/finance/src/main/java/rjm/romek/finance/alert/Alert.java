@@ -1,12 +1,14 @@
 package rjm.romek.finance.alert;
 
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Comparator;
 import java.util.List;
-import java.util.SortedMap;
+import java.util.stream.Collectors;
 import javax.money.MonetaryAmount;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import rjm.romek.finance.monetary.MonetaryConverter;
+import rjm.romek.finance.monetary.MonetaryFactory;
+import rjm.romek.finance.persistency.DataPoint;
 import rjm.romek.finance.rule.Rule;
 
 @Getter
@@ -15,6 +17,7 @@ public class Alert {
 
   private final Rule rule;
   private final Integer occurrencesToActivate;
+  private final MonetaryFactory monetaryFactory = new MonetaryFactory();
 
   public Alert() {
     this.rule = new Rule() {
@@ -26,12 +29,15 @@ public class Alert {
     this.occurrencesToActivate = -1;
   }
 
-  public boolean checkTrigger(SortedMap<Date, MonetaryAmount> map) {
+  public boolean checkTrigger(final List<DataPoint> dataPoints) {
     int numberOfOccurrences = 0;
-    List<MonetaryAmount> amounts = new ArrayList<>(map.values());
+    List<DataPoint> sortedDataPoints = dataPoints.stream().sorted(Comparator.reverseOrder())
+        .collect(Collectors.toList());
 
-    for (int i = amounts.size() - 1; i >= 0; --i) {
-      if(rule.applies(amounts.get(i))) {
+    for (DataPoint dataPoint : sortedDataPoints) {
+      MonetaryConverter monetaryConverter = monetaryFactory.create(dataPoint.getCurrencyCode());
+      if (rule
+          .applies(monetaryConverter.convert(dataPoint.getCurrencyCode(), dataPoint.getValue()))) {
         ++numberOfOccurrences;
       } else {
         break;

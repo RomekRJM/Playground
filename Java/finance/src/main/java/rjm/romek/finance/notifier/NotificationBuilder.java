@@ -1,9 +1,12 @@
 package rjm.romek.finance.notifier;
 
-import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import javax.money.MonetaryAmount;
 import rjm.romek.finance.alert.Alert;
+import rjm.romek.finance.monetary.MonetaryConverter;
+import rjm.romek.finance.monetary.MonetaryFactory;
+import rjm.romek.finance.persistency.DataPoint;
 import rjm.romek.finance.rule.PriceAboveRule;
 import rjm.romek.finance.rule.PriceBelowRule;
 import rjm.romek.finance.rule.Rule;
@@ -15,13 +18,14 @@ public class NotificationBuilder {
   private static final String SUBJECT = "Finance Alert";
   private static final String DP1 = ": ";
   private static final String DP2 = ", ";
+  private final MonetaryFactory monetaryFactory = new MonetaryFactory();
 
   private static final Map<Class<? extends Rule>, String> meaning = Map.of(
       PriceAboveRule.class, "above",
       PriceBelowRule.class, "below"
   );
 
-  public Notification build(String advisorName, Alert what, Map<Date, MonetaryAmount> when) {
+  public Notification build(String advisorName, Alert what, List<DataPoint> dataPoints) {
     return new Notification(
         String.format(
             MESSAGE,
@@ -29,17 +33,20 @@ public class NotificationBuilder {
             meaning.get(what.getRule().getClass()),
             what.getRule().getTargetValue().getAmount(),
             what.getOccurrencesToActivate()
-        ) + dataPointsAsString(when),
+        ) + dataPointsAsString(dataPoints),
         SUBJECT
     );
   }
 
-  private String dataPointsAsString(Map<Date, MonetaryAmount> when) {
+  private String dataPointsAsString(List<DataPoint> dataPoints) {
     StringBuilder sb = new StringBuilder();
-    for (Date d : when.keySet()) {
-      sb.append(d);
+    for (DataPoint dp : dataPoints) {
+      MonetaryConverter monetaryConverter = monetaryFactory.create(dp.getCurrencyCode());
+      MonetaryAmount monetaryAmount = monetaryConverter
+          .convert(dp.getCurrencyCode(), dp.getValue());
+      sb.append(dp.getDate());
       sb.append(DP1);
-      sb.append(when.get(d));
+      sb.append(monetaryAmount);
       sb.append(DP2);
     }
 

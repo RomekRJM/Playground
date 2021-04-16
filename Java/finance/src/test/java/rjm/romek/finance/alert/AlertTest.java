@@ -3,7 +3,7 @@ package rjm.romek.finance.alert;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import java.util.TreeMap;
+import java.util.Collections;
 import org.junit.jupiter.api.Test;
 import rjm.romek.finance.MonetaryDateUtil;
 import rjm.romek.finance.rule.PriceAboveRule;
@@ -26,6 +26,6 @@ class AlertTest {
 
   @Test
   public void shouldNotTrigger() {
-    assertFalse(new Alert().checkTrigger(new TreeMap<>()));
+    assertFalse(new Alert().checkTrigger(Collections.emptyList()));
   }
 }

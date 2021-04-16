@@ -27,6 +27,7 @@ class DataPointRepositoryTest {
 
     List<DataPoint> dataPoints = repository
         .findTop32DataPointsByAdvisorNameOrderByDateDesc(ADVISOR);
+    repository.deleteAll();
 
     assertEquals(32, dataPoints.size());
   }
@@ -37,7 +38,8 @@ class DataPointRepositoryTest {
       Date date = new Date();
       for (int j = 0; j < 100; ++j) {
         dataPoints.add(
-            DataPoint.builder().date(date).value(j).advisorName(ADVISOR).currencyCode(CURRENCY)
+            DataPoint.builder().date(date).value((double) j).advisorName(ADVISOR)
+                .currencyCode(CURRENCY)
                 .build()
         );
       }

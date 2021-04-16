@@ -2,16 +2,18 @@ package rjm.romek.finance.notifier;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import java.util.Date;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import javax.money.MonetaryAmount;
+import java.util.List;
+import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import rjm.romek.finance.MonetaryDateUtil;
 import rjm.romek.finance.alert.Alert;
+import rjm.romek.finance.persistency.DataPoint;
 import rjm.romek.finance.rule.PriceAboveRule;
 
 class MessageBuilderTest {
+
+  private static final String ADVISOR = "adv";
+  private static final String CURRENCY = "USD";
 
   private static final String EXPECTED = "Advisor has been above the price point 1234 for 2 "
       + "times in a row.<br/>Data points: Sun Mar 12 14:10:00 CET 2045: USD 1500.00, "
@@ -21,11 +23,10 @@ class MessageBuilderTest {
 
   @Test
   public void testBuild() {
-    SortedMap<Date, MonetaryAmount> when = new TreeMap<>();
-    when.put(MonetaryDateUtil.createDate(14, 10, 0),
-        MonetaryDateUtil.getDollars(1500).getMonetaryAmount());
-    when.put(MonetaryDateUtil.createDate(14, 30, 0),
-        MonetaryDateUtil.getDollars(1510).getMonetaryAmount());
+    List<DataPoint> dataPoints = Lists.list(
+        new DataPoint(1l, MonetaryDateUtil.createDate(14, 10, 0), ADVISOR, CURRENCY, 1500d),
+        new DataPoint(2l, MonetaryDateUtil.createDate(14, 30, 0), ADVISOR, CURRENCY, 1510d)
+    );
 
     Notification notification = notificationBuilder.build("Advisor",
         new Alert(
@@ -34,7 +35,7 @@ class MessageBuilderTest {
             ),
             2
         ),
-        when
+        dataPoints
     );
 
     assertEquals("Finance Alert", notification.getSubject());

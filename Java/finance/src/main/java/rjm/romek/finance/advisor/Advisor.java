@@ -2,7 +2,10 @@ package rjm.romek.finance.advisor;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
+import java.util.Map.Entry;
 import java.util.SortedMap;
 import javax.money.MonetaryAmount;
 import lombok.AllArgsConstructor;
@@ -12,6 +15,8 @@ import rjm.romek.finance.SpringContext;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.notifier.EmailNotifier;
 import rjm.romek.finance.notifier.NotificationBuilder;
+import rjm.romek.finance.persistency.DataPoint;
+import rjm.romek.finance.persistency.DataPointRepository;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 import rjm.romek.finance.scraper.Grabber;
 
@@ -30,7 +35,9 @@ public class Advisor {
   public void check() throws IOException, CouldNotGrabPriceException {
     validate();
 
-    SortedMap<Date, MonetaryAmount> pricePoints = grabber.grabPrice();
+    saveDataPoints(grabber.grabPrice());
+    List<DataPoint> pricePoints = getDataPointRepository()
+        .findTop32DataPointsByAdvisorNameOrderByDateDesc(name);
 
     if (alert.checkTrigger(pricePoints)) {
       getNotifier().notify(
@@ -42,6 +49,23 @@ public class Advisor {
 
   private EmailNotifier getNotifier() {
     return SpringContext.getBean(EmailNotifier.class);
+  }
+
+  private DataPointRepository getDataPointRepository() {
+    return SpringContext.getBean(DataPointRepository.class);
+  }
+
+  private void saveDataPoints(SortedMap<Date, MonetaryAmount> pricePoints) {
+    List<DataPoint> dataPoints = new ArrayList<>();
+    for (Entry<Date, MonetaryAmount> entry : pricePoints.entrySet()) {
+      MonetaryAmount monetaryAmount = entry.getValue();
+      Date date = entry.getKey();
+      dataPoints
+          .add(DataPoint.builder().date(date).value(monetaryAmount.getNumber().doubleValue())
+              .advisorName(name).currencyCode(monetaryAmount.getCurrency().getCurrencyCode())
+              .build());
+    }
+    getDataPointRepository().saveAll(dataPoints);
   }
 
   private void validate() {
