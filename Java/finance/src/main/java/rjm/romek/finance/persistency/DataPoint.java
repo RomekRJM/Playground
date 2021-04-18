@@ -8,12 +8,13 @@ import javax.persistence.Index;
 import javax.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Data
 @Entity
 @Table(
     indexes = {
@@ -26,15 +27,12 @@ public class DataPoint implements Comparable<DataPoint> {
   @GeneratedValue
   private Long Id;
 
-  @Getter
   private Date date;
 
   private String advisorName;
 
-  @Getter
   private String currencyCode;
 
-  @Getter
   private Double value;
 
   @Override

@@ -11,6 +11,7 @@ import javax.money.MonetaryAmount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.transaction.annotation.Transactional;
 import rjm.romek.finance.SpringContext;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.notifier.EmailNotifier;
@@ -55,7 +56,8 @@ public class Advisor {
     return SpringContext.getBean(DataPointRepository.class);
   }
 
-  private void saveDataPoints(SortedMap<Date, MonetaryAmount> pricePoints) {
+  @Transactional
+  void saveDataPoints(SortedMap<Date, MonetaryAmount> pricePoints) {
     List<DataPoint> dataPoints = new ArrayList<>();
     for (Entry<Date, MonetaryAmount> entry : pricePoints.entrySet()) {
       MonetaryAmount monetaryAmount = entry.getValue();

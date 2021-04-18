@@ -17,7 +17,6 @@ public class Alert {
 
   private final Rule rule;
   private final Integer occurrencesToActivate;
-  private final MonetaryFactory monetaryFactory = new MonetaryFactory();
 
   public Alert() {
     this.rule = new Rule() {
@@ -33,6 +32,7 @@ public class Alert {
     int numberOfOccurrences = 0;
     List<DataPoint> sortedDataPoints = dataPoints.stream().sorted(Comparator.reverseOrder())
         .collect(Collectors.toList());
+    MonetaryFactory monetaryFactory = new MonetaryFactory();
 
     for (DataPoint dataPoint : sortedDataPoints) {
       MonetaryConverter monetaryConverter = monetaryFactory.create(dataPoint.getCurrencyCode());

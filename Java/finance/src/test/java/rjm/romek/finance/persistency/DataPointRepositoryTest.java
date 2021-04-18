@@ -6,12 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
+@ActiveProfiles(profiles = "test")
 class DataPointRepositoryTest {
 
   @Autowired
@@ -27,9 +30,14 @@ class DataPointRepositoryTest {
 
     List<DataPoint> dataPoints = repository
         .findTop32DataPointsByAdvisorNameOrderByDateDesc(ADVISOR);
-    repository.deleteAll();
 
     assertEquals(32, dataPoints.size());
+  }
+
+  @AfterEach
+  public void cleanUp() {
+    repository.deleteAll();
+    repository.flush();
   }
 
   private void generateLargeDataSet() {
