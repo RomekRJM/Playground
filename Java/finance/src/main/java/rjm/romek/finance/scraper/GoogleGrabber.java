@@ -51,7 +51,7 @@ public class GoogleGrabber extends Grabber {
     return map;
   }
 
-  private Double getValue(Element element) throws CouldNotGrabPriceException {
+  Double getValue(Element element) throws CouldNotGrabPriceException {
     if (element.childNodes().isEmpty()) {
       throw new CouldNotGrabPriceException("Unable to parse the value from the response.");
     }
@@ -63,7 +63,7 @@ public class GoogleGrabber extends Grabber {
     return Double.valueOf(value);
   }
 
-  private String getUnit(Element element) throws CouldNotGrabPriceException {
+  String getUnit(Element element) throws CouldNotGrabPriceException {
     if (element.childNodes().isEmpty()) {
       throw new CouldNotGrabPriceException("Unable to parse the value from the response.");
     }

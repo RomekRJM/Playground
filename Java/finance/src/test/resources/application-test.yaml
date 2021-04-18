@@ -10,4 +10,6 @@ spring.datasource.username: sa
 spring.datasource.password: password
 spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
 spring.jpa.hibernate.ddl-auto: create-drop
+spring.jpa.properties.hibernate.jdbc.batch_size: 16
+spring.jpa.properties.hibernate.order_inserts: true
 #spring.jpa.show-sql: true

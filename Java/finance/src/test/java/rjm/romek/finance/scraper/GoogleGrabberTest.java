@@ -1,5 +1,6 @@
 package rjm.romek.finance.scraper;
 
+import org.jsoup.nodes.Element;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,20 +14,37 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class GoogleGrabberTest {
 
-  private Grabber googleGrabber;
+  private GoogleGrabber googleGrabber;
+  private final Element emptyElement = new Element("empty");
 
   @BeforeEach
-  public void setUp() {
+  void setUp() {
     googleGrabber = new GoogleGrabber("google+share+price");
   }
 
   @Test
-  public void testPrice() throws IOException, CouldNotGrabPriceException {
+  public void shouldGrabPrice() throws IOException, CouldNotGrabPriceException {
     Map<Date, MonetaryAmount> dateMonetaryAmountMap = googleGrabber.grabPrice();
     Optional<MonetaryAmount> first = dateMonetaryAmountMap.values().stream().findFirst();
 
     assertEquals(1, dateMonetaryAmountMap.size());
     assertTrue(first.isPresent());
     assertEquals("USD", first.get().getCurrency().getCurrencyCode());
+  }
+
+  @Test
+  public void shouldThrowExceptionOnWrongUrl() {
+    googleGrabber = new GoogleGrabber("invalid");
+    assertThrows(CouldNotGrabPriceException.class, googleGrabber::grabPrice);
+  }
+
+  @Test
+  void shouldThrowExceptionWhenNoValue() {
+    assertThrows(CouldNotGrabPriceException.class, () -> googleGrabber.getValue(emptyElement));
+  }
+
+  @Test
+  void getUnit() {
+    assertThrows(CouldNotGrabPriceException.class, () -> googleGrabber.getUnit(emptyElement));
   }
 }
