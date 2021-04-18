@@ -9,7 +9,7 @@
       targetValue:
         currencyCode: "PLN"
         amount: 150
-    occurrencesToActivate: 1
+    occurrencesToActivate: 3
 - name: "Ocado share price"
   recipient: "romek.rjm@gmail.com"
   grabber: !<GoogleGrabber>
@@ -20,4 +20,4 @@
       targetValue:
         currencyCode: "GBP"
         amount: 2000
-    occurrencesToActivate: 1
+    occurrencesToActivate: 3

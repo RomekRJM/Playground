@@ -7,7 +7,7 @@ import org.assertj.core.util.Lists;
 import org.junit.jupiter.api.Test;
 import rjm.romek.finance.MonetaryDateUtil;
 import rjm.romek.finance.alert.Alert;
-import rjm.romek.finance.persistency.DataPoint;
+import rjm.romek.finance.datapoint.model.DataPoint;
 import rjm.romek.finance.rule.PriceAboveRule;
 
 class MessageBuilderTest {
@@ -24,8 +24,8 @@ class MessageBuilderTest {
   @Test
   public void testBuild() {
     List<DataPoint> dataPoints = Lists.list(
-        new DataPoint(1l, MonetaryDateUtil.createDate(14, 10, 0), ADVISOR, CURRENCY, 1500d),
-        new DataPoint(2l, MonetaryDateUtil.createDate(14, 30, 0), ADVISOR, CURRENCY, 1510d)
+        new DataPoint(1L, MonetaryDateUtil.createDate(14, 10, 0), ADVISOR, CURRENCY, 1500d),
+        new DataPoint(2L, MonetaryDateUtil.createDate(14, 30, 0), ADVISOR, CURRENCY, 1510d)
     );
 
     Notification notification = notificationBuilder.build("Advisor",

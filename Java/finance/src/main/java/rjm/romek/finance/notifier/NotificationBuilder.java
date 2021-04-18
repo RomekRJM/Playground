@@ -6,7 +6,7 @@ import javax.money.MonetaryAmount;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.monetary.MonetaryConverter;
 import rjm.romek.finance.monetary.MonetaryFactory;
-import rjm.romek.finance.persistency.DataPoint;
+import rjm.romek.finance.datapoint.model.DataPoint;
 import rjm.romek.finance.rule.PriceAboveRule;
 import rjm.romek.finance.rule.PriceBelowRule;
 import rjm.romek.finance.rule.Rule;

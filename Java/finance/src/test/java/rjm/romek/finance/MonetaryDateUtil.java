@@ -9,7 +9,7 @@ import java.util.TreeMap;
 import javax.money.Monetary;
 import javax.money.MonetaryAmount;
 import rjm.romek.finance.monetary.SimpleMonetaryAmount;
-import rjm.romek.finance.persistency.DataPoint;
+import rjm.romek.finance.datapoint.model.DataPoint;
 
 public class MonetaryDateUtil {
 

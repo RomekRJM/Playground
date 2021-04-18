@@ -1,4 +1,4 @@
-package rjm.romek.finance.persistency;
+package rjm.romek.finance.datapoint.model;
 
 import java.util.Date;
 import javax.persistence.Entity;

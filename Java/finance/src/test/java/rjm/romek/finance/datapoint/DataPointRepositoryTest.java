@@ -1,4 +1,4 @@
-package rjm.romek.finance.persistency;
+package rjm.romek.finance.datapoint;
 
 import static java.util.concurrent.TimeUnit.SECONDS;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -12,6 +12,8 @@ import org.junit.jupiter.api.Timeout;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import rjm.romek.finance.datapoint.model.DataPoint;
+import rjm.romek.finance.datapoint.model.DataPointRepository;
 
 @SpringBootTest
 @ActiveProfiles(profiles = "test")

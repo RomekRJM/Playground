@@ -16,8 +16,10 @@ import rjm.romek.finance.SpringContext;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.notifier.EmailNotifier;
 import rjm.romek.finance.notifier.NotificationBuilder;
-import rjm.romek.finance.persistency.DataPoint;
-import rjm.romek.finance.persistency.DataPointRepository;
+import rjm.romek.finance.datapoint.model.DataPoint;
+import rjm.romek.finance.datapoint.model.DataPointRepository;
+import rjm.romek.finance.notifier.model.Notification;
+import rjm.romek.finance.notifier.model.NotificationRepository;
 import rjm.romek.finance.scraper.CouldNotGrabPriceException;
 import rjm.romek.finance.scraper.Grabber;
 
@@ -40,11 +42,12 @@ public class Advisor {
     List<DataPoint> pricePoints = getDataPointRepository()
         .findTop32DataPointsByAdvisorNameOrderByDateDesc(name);
 
-    if (alert.checkTrigger(pricePoints)) {
+    if (alert.checkTrigger(pricePoints) && isTimeToNotify(pricePoints)) {
       getNotifier().notify(
           recipient,
           new NotificationBuilder().build(name, alert, pricePoints)
       );
+      saveNotification();
     }
   }
 
@@ -54,6 +57,10 @@ public class Advisor {
 
   private DataPointRepository getDataPointRepository() {
     return SpringContext.getBean(DataPointRepository.class);
+  }
+
+  private NotificationRepository getNotificationRepository() {
+    return SpringContext.getBean(NotificationRepository.class);
   }
 
   @Transactional
@@ -68,6 +75,22 @@ public class Advisor {
               .build());
     }
     getDataPointRepository().saveAll(dataPoints);
+  }
+
+  @Transactional
+  void saveNotification() {
+    getNotificationRepository().save(
+        Notification.builder().advisorName(name).recipient(recipient).date(new Date()).build()
+    );
+  }
+
+  private boolean isTimeToNotify(List<DataPoint> pricePoints) {
+    Notification lastNotification = getNotificationRepository()
+        .findTopByAdvisorNameEqualsAndAndRecipientEqualsOrderByDateDesc(name, recipient);
+
+    return lastNotification == null ||
+        pricePoints.stream().filter((dp) -> dp.getDate().after(lastNotification.getDate()))
+            .count() >= alert.getOccurrencesToActivate();
   }
 
   private void validate() {

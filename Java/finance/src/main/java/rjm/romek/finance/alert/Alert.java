@@ -8,7 +8,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import rjm.romek.finance.monetary.MonetaryConverter;
 import rjm.romek.finance.monetary.MonetaryFactory;
-import rjm.romek.finance.persistency.DataPoint;
+import rjm.romek.finance.datapoint.model.DataPoint;
 import rjm.romek.finance.rule.Rule;
 
 @Getter
