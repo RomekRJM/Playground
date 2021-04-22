@@ -1,34 +1,69 @@
 ---
-- hosts: local
-  hosts: localhost
-  connection: local
-  tasks:
+- hosts: all
+  pre_tasks:
 
     - name: Build finance project
       command:
         cmd: ./gradlew build
         chdir: ../Java/finance
+      delegate_to: localhost
 
-- hosts: all
-  become: yes
-  become_user: root
+    - name: Grab finance.jar name
+      shell: 'ls ../Java/finance/build/libs/finance*.jar'
+      register: finance_jars
+      delegate_to: localhost
+
+    - set_fact:
+        finance_wrapper_source: 'templates/run-finance.sh'
+        finance_wrapper_destination: '/opt/run-finance.sh'
+        finance_jar_source: '{{ finance_jars.stdout_lines[0] }}'
+        finance_jar_destination: '/opt/finance.jar'
+        finance_service_source: 'templates/finance.service.j2'
+        finance_service_destination: '/etc/systemd/system/finance.service'
+
   tasks:
 
     - debug: msg="Ansible running in {{ansible_lsb.id}}!"
 
-    # - name: Install git
-    #   apt:
-    #     name: git
-    #     state: present
-    #     update_cache: yes
-    #
-    # - name: Install java
-    #   apt:
-    #     name: openjdk-8-jre
-    #     state: present
-    #     update_cache: yes
+    - name: Install git
+      apt:
+        name: git
+        state: present
+        update_cache: yes
 
-    - name: Sync finance app
+    - name: Install java
+      apt:
+        name: openjdk-8-jre
+        state: present
+        update_cache: yes
+
+    - name: Upload finance app
       copy:
-        src: ../Java/finance/build/libs/finance-0.0.1-SNAPSHOT.jar
-        dest: /opt/finance-0.0.1-SNAPSHOT.jar
+        src: '{{ finance_jar_source }}'
+        dest: '{{ finance_jar_destination }}'
+        mode: '0744'
+      become: true
+      become_user: root
+
+    - name: Upload finance script
+      copy:
+        src: '{{ finance_wrapper_source }}'
+        dest: '{{ finance_wrapper_destination }}'
+        mode: '0777'
+      become: true
+      become_user: root
+
+    - name: Upload finance service definition
+      copy:
+        content: "{{ lookup('template', finance_service_source) }}"
+        dest: '{{ finance_service_destination }}'
+        mode: '0744'
+      become: true
+      become_user: root
+
+    - name: Start finance as a service
+      service:
+        name: finance.service
+        state: started
+      become: true
+      become_user: root
