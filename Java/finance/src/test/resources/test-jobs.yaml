@@ -1,0 +1,12 @@
+---
+- name: "abcd"
+  recipient: "wawel@o2.pl"
+  grabber: !<GoogleGrabber>
+    asset: "google+share+price"
+  cron: "@daily"
+  alert:
+    rule: !<PriceAboveRule>
+      targetValue:
+        currencyCode: "USD"
+        amount: 1300
+    occurrencesToActivate: 3
