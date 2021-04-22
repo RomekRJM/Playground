@@ -1,3 +1,17 @@
+# How to run it
+
+Generate raspberrypi key:
+`ssh-keygen`
+
+Copy it on pi:
+`ssh-copy-id -i raspberrypi.pub pi@192.168.1.95`
+
+Make sure `hosts` has correct pi address.
+Run
+`ansible-playbook playbook.yml -i hosts`
+
+
+# Gallery
 1. Pull all image repos using repo pattern name, so new ones are also discovered.
 2. Scan all repos and find which files are tracked, save it as a list file.
 3. Go to the Google Drive and check for new image files.

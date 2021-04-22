@@ -3,8 +3,23 @@
   become: yes
   become_user: root
   tasks:
+
     - debug: msg="Ansible running in {{ansible_lsb.id}}!"
-    - name: Install awscli
-      pip:
-        name: awscli
-        executable: pip3
+
+    - name: Install git
+      apt:
+        name: git
+        state: present
+        update_cache: yes
+
+    - name: Install java
+      apt:
+        name: openjdk-11-jre
+        state: present
+        update_cache: yes
+
+    - name: Build finance project
+      local_action:
+        module: ansible.builtin.command
+        cmd: ./gradlew build
+        chdir: ../Java/finance
