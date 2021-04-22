@@ -1,4 +1,14 @@
 ---
+- hosts: local
+  hosts: localhost
+  connection: local
+  tasks:
+
+    - name: Build finance project
+      command:
+        cmd: ./gradlew build
+        chdir: ../Java/finance
+
 - hosts: all
   become: yes
   become_user: root
@@ -6,20 +16,19 @@
 
     - debug: msg="Ansible running in {{ansible_lsb.id}}!"
 
-    - name: Install git
-      apt:
-        name: git
-        state: present
-        update_cache: yes
+    # - name: Install git
+    #   apt:
+    #     name: git
+    #     state: present
+    #     update_cache: yes
+    #
+    # - name: Install java
+    #   apt:
+    #     name: openjdk-8-jre
+    #     state: present
+    #     update_cache: yes
 
-    - name: Install java
-      apt:
-        name: openjdk-11-jre
-        state: present
-        update_cache: yes
-
-    - name: Build finance project
-      local_action:
-        module: ansible.builtin.command
-        cmd: ./gradlew build
-        chdir: ../Java/finance
+    - name: Sync finance app
+      copy:
+        src: ../Java/finance/build/libs/finance-0.0.1-SNAPSHOT.jar
+        dest: /opt/finance-0.0.1-SNAPSHOT.jar
