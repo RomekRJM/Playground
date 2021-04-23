@@ -19,7 +19,7 @@ public class Deserializer {
   private static final PathMatchingResourcePatternResolver RESOURCE_PATTERN_RESOLVER
       = new PathMatchingResourcePatternResolver();
 
-  public Deserializer(@Value("${application.configFile}") String configFile) {
+  public Deserializer(@Value("${jobs-file}") String configFile) {
     this.configFile = configFile;
   }
 

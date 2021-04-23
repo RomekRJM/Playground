@@ -26,7 +26,7 @@ public class AdvisorScheduler implements ApplicationListener<ApplicationReadyEve
     try {
       tasks = deserializer.load();
     } catch (IOException e) {
-      log.error("Could not read advisor definition file: {}", e.getMessage());
+      log.error("Could not read jobs definition file: {}", e.getMessage());
       return;
     }
 
