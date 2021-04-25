@@ -8,16 +8,13 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Deserializer {
 
   private final String configFile;
-
-  private static final PathMatchingResourcePatternResolver RESOURCE_PATTERN_RESOLVER
-      = new PathMatchingResourcePatternResolver();
 
   public Deserializer(@Value("${jobs-file}") String configFile) {
     this.configFile = configFile;
@@ -36,6 +33,6 @@ public class Deserializer {
   }
 
   private File getJobsDefinitionFile(String filePath) throws IOException {
-    return RESOURCE_PATTERN_RESOLVER.getResource(filePath).getFile();
+    return new ClassPathResource(filePath, this.getClass().getClassLoader()).getFile();
   }
 }
