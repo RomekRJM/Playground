@@ -1,5 +1,6 @@
 package rjm.romek.finance.notifier;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.money.MonetaryAmount;
@@ -20,10 +21,13 @@ public class NotificationBuilder {
   private static final String DP2 = ", ";
   private final MonetaryFactory monetaryFactory = new MonetaryFactory();
 
-  private static final Map<Class<? extends Rule>, String> meaning = Map.of(
-      PriceAboveRule.class, "above",
-      PriceBelowRule.class, "below"
-  );
+  private static final Map<Class<? extends Rule>, String> meaning;
+
+  static {
+    meaning = new HashMap<>();
+    meaning.put(PriceAboveRule.class, "above");
+    meaning.put(PriceBelowRule.class, "below");
+  }
 
   public Notification build(String advisorName, Alert what, List<DataPoint> dataPoints) {
     return new Notification(
