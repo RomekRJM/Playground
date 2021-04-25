@@ -1,0 +1,90 @@
+- name: Build finance project
+  command:
+    cmd: ./gradlew build
+    chdir: ../Java/finance
+  delegate_to: localhost
+
+- name: Grab finance.jar name
+  shell: 'ls ../Java/finance/build/libs/finance*.jar'
+  register: finance_jars
+  delegate_to: localhost
+
+- set_fact:
+    finance_wrapper_source: 'templates/run-finance.sh.j2'
+    finance_wrapper_destination: '/opt/run-finance.sh'
+    finance_properties_source: 'templates/application.properties.j2'
+    finance_properties_destination: '/opt/application.properties'
+    finance_jobs_source: 'files/jobs.yaml'
+    finance_jobs_destination: '/opt/jobs.yaml'
+    finance_jar_source: '{{ finance_jars.stdout_lines[0] }}'
+    finance_jar_destination: '/opt/finance.jar'
+    finance_service_source: 'templates/finance.service.j2'
+    finance_service_destination: '/etc/systemd/system/finance.service'
+    smtp_host: "{{ lookup('env','SMTP_HOST') }}"
+    smtp_port: "{{ lookup('env','SMTP_PORT') }}"
+    smtp_user: "{{ lookup('env','SMTP_USER') }}"
+    smtp_password: "{{ lookup('env','SMTP_PASSWORD') }}"
+
+- name: Install git
+  apt:
+    name: git
+    state: present
+    update_cache: yes
+  become: true
+  become_user: root
+
+- name: Install java
+  apt:
+    name: openjdk-8-jre
+    state: present
+    update_cache: yes
+  become: true
+  become_user: root
+
+- name: Make /opt accessible to service user
+  file:
+    path: /opt
+    owner: pi
+    group: pi
+    mode: 0755
+  become: true
+  become_user: root
+
+- name: Upload finance app
+  copy:
+    src: '{{ finance_jar_source }}'
+    dest: '{{ finance_jar_destination }}'
+    mode: '0744'
+
+- name: Upload finance script
+  copy:
+    content: "{{ lookup('template', finance_wrapper_source) }}"
+    dest: '{{ finance_wrapper_destination }}'
+    mode: '0777'
+
+- name: Upload finance jobs definitions
+  copy:
+    src: '{{ finance_jobs_source }}'
+    dest: '{{ finance_jobs_destination }}'
+    mode: '0644'
+
+- name: Upload finance service definition
+  copy:
+    content: "{{ lookup('template', finance_service_source) }}"
+    dest: '{{ finance_service_destination }}'
+    mode: '0744'
+  become: true
+  become_user: root
+
+- name: Upload finance application.properties
+  copy:
+    content: "{{ lookup('template', finance_properties_source) }}"
+    dest: '{{ finance_properties_destination }}'
+    mode: '0644'
+
+- name: Start finance as a service
+  service:
+    name: finance.service
+    state: started
+  become: true
+  become_user: root

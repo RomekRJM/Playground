@@ -6,4 +6,4 @@ JAVA_OPTIONS=" -Xms64m -Xmx128m -server "
 APP_OPTIONS=""
 
 cd $WORKDIR
-"${JAVA_HOME}/bin/java" $JAVA_OPTIONS -jar /opt/finance.jar $APP_OPTIONS
+"${JAVA_HOME}/bin/java" $JAVA_OPTIONS -jar {{ finance_jar_destination }} $APP_OPTIONS

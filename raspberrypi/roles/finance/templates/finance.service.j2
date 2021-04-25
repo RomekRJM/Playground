@@ -1,15 +1,15 @@
 [Unit]
 Description=Stock price monitoring and alerting app
 After=syslog.target network.target
+
 [Service]
 SuccessExitStatus=143
-User=root
-Group=root
-
+User=pi
+Group=pi
 Type=forking
-
 ExecStart=/bin/bash {{ finance_wrapper_destination }}
 ExecStop=/bin/kill -15 $MAINPID
+TimeoutStartSec=210
 
 [Install]
 WantedBy=multi-user.target
