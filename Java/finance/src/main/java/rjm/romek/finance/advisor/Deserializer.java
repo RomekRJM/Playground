@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,8 +16,11 @@ public class Deserializer {
 
   private final String configFile;
 
-  public Deserializer(@Value("${jobs-file}") String configFile) {
+  ResourceLoader resourceLoader;
+
+  public Deserializer(@Value("${jobs.file}") String configFile, ResourceLoader resourceLoader) {
     this.configFile = configFile;
+    this.resourceLoader = resourceLoader;
   }
 
   public Collection<Advisor> load() throws IOException {
@@ -33,6 +36,6 @@ public class Deserializer {
   }
 
   private File getJobsDefinitionFile(String filePath) throws IOException {
-    return new ClassPathResource(filePath, this.getClass().getClassLoader()).getFile();
+    return resourceLoader.getResource(filePath).getFile();
   }
 }

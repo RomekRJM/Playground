@@ -2,7 +2,6 @@ package rjm.romek.finance;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -11,7 +10,6 @@ import java.io.IOException;
 import java.util.Date;
 import java.util.SortedMap;
 import javax.money.MonetaryAmount;
-import org.junit.Ignore;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -59,31 +57,6 @@ class AdvisorTest {
     doReturn(true).when(alert).checkTrigger(any());
 
     new Advisor("recipient", grabber, ADVISOR, alert, "@yearly").check();
-
-    verify(notifier, times(1)).notify(any(), any());
-  }
-
-  // todo finish this test, artificially set last notification date and check if it retriggers
-  @Test
-  @Ignore
-  public void shouldHonourRetriggering()
-      throws IOException, CouldNotGrabPriceException, InterruptedException {
-    Advisor advisor = new Advisor("recipient", grabber, ADVISOR, alert, "@yearly");
-    doReturn(true).when(alert).checkTrigger(any());
-
-    advisor.check();
-
-    verify(notifier, times(1)).notify(any(), any());
-    reset(notifier);
-
-    Thread.sleep(1);
-    advisor.check();
-
-    verify(notifier, times(0)).notify(any(), any());
-    reset(notifier);
-
-    Thread.sleep(1);
-    advisor.check();
 
     verify(notifier, times(1)).notify(any(), any());
   }

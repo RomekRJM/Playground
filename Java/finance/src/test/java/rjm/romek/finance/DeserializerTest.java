@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Collections;
 import org.junit.jupiter.api.Test;
+import org.springframework.core.io.DefaultResourceLoader;
 import rjm.romek.finance.advisor.Advisor;
 import rjm.romek.finance.advisor.Deserializer;
 import rjm.romek.finance.alert.Alert;
@@ -15,7 +16,8 @@ import rjm.romek.finance.scraper.GoogleGrabber;
 
 class DeserializerTest {
 
-  private final Deserializer deserializer = new Deserializer("test-jobs.yaml");
+  private final Deserializer deserializer = new Deserializer("test-jobs.yaml",
+      new DefaultResourceLoader());
 
   @Test
   public void shouldDeserialize() throws IOException {
