@@ -1,4 +1,16 @@
 # How to run it
+In the project root folder create `env` file with details about
+the mail server you'll be using for notifications, should look like this:
+
+```
+SMTP_HOST="poczta.o2.pl"
+SMTP_PORT="465"
+SMTP_USER="tester@o2.pl"
+SMTP_PASSWORD="secret"
+```
+
+Now assume it:
+`source env`
 
 Generate raspberrypi key:
 `ssh-keygen`

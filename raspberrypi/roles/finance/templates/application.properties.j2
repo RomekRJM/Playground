@@ -1,0 +1,13 @@
+application.configFile: jobs.yaml
+smtp.host: {{ smtp_host }}
+smtp.port: {{ smtp_port }}
+smtp.user: {{ smtp_user }}
+smtp.password: {{ smtp_password }}
+jobs.file: file:{{ finance_jobs_destination }}
+spring.datasource.url: jdbc:h2:file:./db;DB_CLOSE_DELAY=-1;DATABASE_TO_UPPER=false
+spring.datasource.driverClassName: org.h2.Driver
+spring.datasource.username: sa
+spring.datasource.password: password
+spring.jpa.database-platform: org.hibernate.dialect.H2Dialect
+spring.jpa.hibernate.ddl-auto: update
+spring.jpa.properties.hibernate.order_inserts: true
