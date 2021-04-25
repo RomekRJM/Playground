@@ -1,4 +1,3 @@
-application.configFile: test-jobs.yaml
 smtp.emailTo: wawel@o2.pl
 smtp.host: localhost
 smtp.port: 3025
