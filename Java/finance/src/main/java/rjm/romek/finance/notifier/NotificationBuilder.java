@@ -29,7 +29,8 @@ public class NotificationBuilder {
     meaning.put(PriceBelowRule.class, "below");
   }
 
-  public Notification build(String advisorName, Alert what, List<DataPoint> dataPoints) {
+  public Notification build(String advisorName, Alert what, List<DataPoint> dataPoints,
+      String graphicalRepresentation) {
     return new Notification(
         String.format(
             MESSAGE,
@@ -37,7 +38,7 @@ public class NotificationBuilder {
             meaning.get(what.getRule().getClass()),
             what.getRule().getTargetValue().getAmount(),
             what.getOccurrencesToActivate()
-        ) + dataPointsAsString(dataPoints),
+        ) + dataPointsAsString(dataPoints) + graphicalRepresentation.replaceAll("finance", "fff"),
         SUBJECT
     );
   }

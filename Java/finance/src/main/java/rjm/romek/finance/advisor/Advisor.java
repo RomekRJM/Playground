@@ -45,7 +45,8 @@ public class Advisor {
     if (alert.checkTrigger(pricePoints) && isTimeToNotify(pricePoints)) {
       getNotifier().notify(
           recipient,
-          new NotificationBuilder().build(name, alert, pricePoints)
+          new NotificationBuilder()
+              .build(name, alert, pricePoints, grabber.grabGraphicalRepresentation())
       );
       saveNotification();
     }

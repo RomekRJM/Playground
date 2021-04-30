@@ -35,7 +35,7 @@ class MessageBuilderTest {
             ),
             2
         ),
-        dataPoints
+        dataPoints, ""
     );
 
     assertEquals("Finance Alert", notification.getSubject());
