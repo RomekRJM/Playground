@@ -18,6 +18,7 @@ public class GoogleGrabber extends Grabber {
 
   private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8";
   private static final String QUERY_SEARCH_EXPRESSION = "g-card-section div g-card-section div span span span";
+  private static final String STATUS_SEARCH_EXPRESSION = "div[data-async-type='finance_wholepage_chart']";
   private static final MonetaryFactory MONETARY_FACTORY = new MonetaryFactory();
 
   public GoogleGrabber(String asset) {
@@ -27,10 +28,18 @@ public class GoogleGrabber extends Grabber {
   @Override
   public SortedMap<Date, MonetaryAmount> grabPrice() throws IOException, CouldNotGrabPriceException {
     String assetSearchUrl = String.format(SEARCH_URL, asset);
-
     Document doc = Jsoup.connect(assetSearchUrl).get();
 
     return extractMonetaryData(doc);
+  }
+
+  @Override
+  public String grabGraphicalRepresentation() throws IOException {
+    String assetSearchUrl = String.format(SEARCH_URL, asset);
+    Document doc = Jsoup.connect(assetSearchUrl).get();
+    Elements status = doc.select(STATUS_SEARCH_EXPRESSION);
+
+    return status.first().html();
   }
 
   private SortedMap<Date, MonetaryAmount> extractMonetaryData(Document doc)

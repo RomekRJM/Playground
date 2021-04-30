@@ -44,7 +44,13 @@ class GoogleGrabberTest {
   }
 
   @Test
-  void getUnit() {
+  void shouldGetUnit() {
     assertThrows(CouldNotGrabPriceException.class, () -> googleGrabber.getUnit(emptyElement));
+  }
+
+  @Test
+  void shouldGrabGraphicalRepresentation() throws IOException {
+    String status = googleGrabber.grabGraphicalRepresentation();
+    assertTrue(status.contains("finance-wholepage"));
   }
 }
