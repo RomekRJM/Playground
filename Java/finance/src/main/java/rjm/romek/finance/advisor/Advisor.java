@@ -46,7 +46,7 @@ public class Advisor {
       getNotifier().notify(
           recipient,
           new NotificationBuilder()
-              .build(name, alert, pricePoints, grabber.grabGraphicalRepresentation())
+              .build(name, alert, pricePoints, grabber.getUrl())
       );
       saveNotification();
     }

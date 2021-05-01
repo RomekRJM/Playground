@@ -73,7 +73,7 @@ public class EmailNotifier {
       msg.setFrom(new InternetAddress(from));
       msg.setReplyTo(InternetAddress.parse(from, false));
       msg.setSubject(subject, "UTF-8");
-      msg.setText(body, "UTF-8");
+      msg.setContent(body, "text/html");
       msg.setSentDate(new Date());
 
       msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email, false));

@@ -30,5 +30,5 @@ public abstract class Grabber {
   public abstract SortedMap<Date, MonetaryAmount> grabPrice()
       throws IOException, CouldNotGrabPriceException;
 
-  public abstract String grabGraphicalRepresentation() throws IOException;
+  public abstract String getUrl() throws IOException;
 }

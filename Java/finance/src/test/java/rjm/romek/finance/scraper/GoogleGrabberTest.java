@@ -49,8 +49,8 @@ class GoogleGrabberTest {
   }
 
   @Test
-  void shouldGrabGraphicalRepresentation() throws IOException {
-    String status = googleGrabber.grabGraphicalRepresentation();
-    assertTrue(status.contains("finance-wholepage"));
+  void shouldGetUrl() {
+    assertEquals("https://www.google.com/search?q=google+share+price&ie=utf-8&oe=utf-8",
+        googleGrabber.getUrl());
   }
 }

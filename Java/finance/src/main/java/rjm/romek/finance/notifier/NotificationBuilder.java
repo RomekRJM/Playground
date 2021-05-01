@@ -15,10 +15,9 @@ import rjm.romek.finance.rule.Rule;
 public class NotificationBuilder {
 
   private static final String MESSAGE =
-      "%s has been %s the price point %s for %s times in a row.<br/>Data points: ";
+      "%s has been %s the price point %s for %s times in a row."
+          + " <a href=\"%s\">Click to see the chart</a>.<br/><br/>Data points: %s";
   private static final String SUBJECT = "Finance Alert";
-  private static final String DP1 = ": ";
-  private static final String DP2 = ", ";
   private final MonetaryFactory monetaryFactory = new MonetaryFactory();
 
   private static final Map<Class<? extends Rule>, String> meaning;
@@ -30,33 +29,39 @@ public class NotificationBuilder {
   }
 
   public Notification build(String advisorName, Alert what, List<DataPoint> dataPoints,
-      String graphicalRepresentation) {
+      String url) {
     return new Notification(
         String.format(
             MESSAGE,
             advisorName,
             meaning.get(what.getRule().getClass()),
             what.getRule().getTargetValue().getAmount(),
-            what.getOccurrencesToActivate()
-        ) + dataPointsAsString(dataPoints) + graphicalRepresentation.replaceAll("finance", "fff"),
+            what.getOccurrencesToActivate(),
+            url,
+            dataPointsAsString(dataPoints)
+        ),
         SUBJECT
     );
   }
 
   private String dataPointsAsString(List<DataPoint> dataPoints) {
-    StringBuilder sb = new StringBuilder();
+    StringBuilder sb = new StringBuilder(
+        "<table border=\"1\"><tr><th>Date</th><th>Price</th><tr>");
     for (DataPoint dp : dataPoints) {
       MonetaryConverter monetaryConverter = monetaryFactory.create(dp.getCurrencyCode());
       MonetaryAmount monetaryAmount = monetaryConverter
           .convert(dp.getCurrencyCode(), dp.getValue());
+
+      sb.append("<tr><td>");
       sb.append(dp.getDate());
-      sb.append(DP1);
+      sb.append("</td><td>");
       sb.append(monetaryAmount);
-      sb.append(DP2);
+      sb.append("</td></tr>");
     }
 
-    return sb.length() > DP2.length() ?
-        sb.delete(sb.length() - DP2.length(), sb.length()).toString() : sb.toString();
+    sb.append("</table>");
+
+    return sb.toString();
   }
 
 }

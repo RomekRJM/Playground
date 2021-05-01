@@ -15,9 +15,9 @@ class MessageBuilderTest {
   private static final String ADVISOR = "adv";
   private static final String CURRENCY = "USD";
 
-  private static final String EXPECTED = "Advisor has been above the price point 1234 for 2 "
-      + "times in a row.<br/>Data points: Sun Mar 12 14:10:00 CET 2045: USD 1500.00, "
-      + "Sun Mar 12 14:30:00 CET 2045: USD 1510.00";
+  private static final String EXPECTED = "Advisor has been above the price point 1234 for 2 times"
+      + " in a row. <a href=\"https://google.com\">Click to see the chart</a>.<br/><br/>Data points"
+      + ": Sun Mar 12 14:10:00 CET 2045: USD 1500.00, Sun Mar 12 14:30:00 CET 2045: USD 1510.00";
 
   private NotificationBuilder notificationBuilder = new NotificationBuilder();
 
@@ -35,7 +35,7 @@ class MessageBuilderTest {
             ),
             2
         ),
-        dataPoints, ""
+        dataPoints, "https://google.com"
     );
 
     assertEquals("Finance Alert", notification.getSubject());
