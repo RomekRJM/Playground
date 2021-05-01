@@ -15,9 +15,17 @@ import rjm.romek.finance.rule.Rule;
 public class NotificationBuilder {
 
   private static final String MESSAGE =
-      "%s has been %s the price point %s for %s times in a row."
-          + " <a href=\"%s\">Click to see the chart</a>.<br/><br/>Data points: %s";
-  private static final String SUBJECT = "Finance Alert";
+      "%s has been %s the price point %s for %s times in a row.<br/>"
+          + "<a href=\"%s\">Click to see the chart</a>.<br/><br/>Data points: %s";
+  private static final String SUBJECT = "Finance Alert for %s";
+  public static final String TR = "<tr style=\"background-color: %s\"><td>";
+  public static final String TABLE = "<table border=\"1\" style=\"background-color: lightgrey\">"
+      + "<tr ><th>Date</th><th>Price</th><tr>";
+  public static final String WHITE = "white";
+  public static final String LIGHTBLUE = "lightblue";
+  public static final String TD = "</td><td>";
+  public static final String TR_CLOSE = "</td></tr>";
+  public static final String TABLE_CLOSE = "</table>";
   private final MonetaryFactory monetaryFactory = new MonetaryFactory();
 
   private static final Map<Class<? extends Rule>, String> meaning;
@@ -40,26 +48,34 @@ public class NotificationBuilder {
             url,
             dataPointsAsString(dataPoints)
         ),
-        SUBJECT
+        String.format(
+            SUBJECT,
+            advisorName
+        )
     );
   }
 
   private String dataPointsAsString(List<DataPoint> dataPoints) {
-    StringBuilder sb = new StringBuilder(
-        "<table border=\"1\"><tr><th>Date</th><th>Price</th><tr>");
+    StringBuilder sb = new StringBuilder(TABLE);
+
+    int index = 0;
     for (DataPoint dp : dataPoints) {
       MonetaryConverter monetaryConverter = monetaryFactory.create(dp.getCurrencyCode());
       MonetaryAmount monetaryAmount = monetaryConverter
           .convert(dp.getCurrencyCode(), dp.getValue());
 
-      sb.append("<tr><td>");
+      String color = index % 2 == 0 ? WHITE : LIGHTBLUE;
+
+      sb.append(String.format(TR, color));
       sb.append(dp.getDate());
-      sb.append("</td><td>");
+      sb.append(TD);
       sb.append(monetaryAmount);
-      sb.append("</td></tr>");
+      sb.append(TR_CLOSE);
+
+      ++index;
     }
 
-    sb.append("</table>");
+    sb.append(TABLE_CLOSE);
 
     return sb.toString();
   }
