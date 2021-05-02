@@ -27,37 +27,59 @@ public class MonetaryDateUtil {
         .create());
   }
 
-  public static Date createDate(int hours, int minutes, int seconds) {
+  public static Date createDate(int hours, int minutes) {
+
     return new Calendar.Builder()
         .setDate(2045, 2, 12)
-        .setTimeOfDay(hours, minutes, seconds)
+        .setTimeOfDay(hours, minutes, 0)
         .build().getTime();
   }
 
   public static SortedMap<Date, MonetaryAmount> createDateMonetaryUnits(String currencyCode,
-      Number... values) {
+      int startingHour, int startingMinute, Number... values) {
     SortedMap<Date, MonetaryAmount> map = new TreeMap<>();
+    List<Date> dates = createDates(startingHour, startingMinute, values.length);
 
     for (int i = 0; i < values.length; ++i) {
-      map.put(createDate(0, 0, i),
-          getSimpleMonetaryAmount(currencyCode, values[i]).getMonetaryAmount());
+      map.put(dates.get(i), getSimpleMonetaryAmount(currencyCode, values[i]).getMonetaryAmount());
     }
 
     return map;
   }
 
+  private static List<Date> createDates(int startingHour, int startingMinute, int length) {
+    int hour = startingHour;
+    int minute = startingMinute;
+    List<Date> dates = new ArrayList<>();
+
+    for (int i = 0; i < length; ++i) {
+      dates.add(createDate(hour, minute));
+
+      ++minute;
+      if (minute >= 60) {
+        minute = 0;
+        ++hour;
+      }
+    }
+
+    return dates;
+  }
+
   public static List<DataPoint> createDataPoints(String currencyCode,
-      Number... values) {
+      int startingHour, int startingMinute, Number... values) {
     List<DataPoint> dataPoints = new ArrayList<>();
+    List<Date> dates = createDates(startingHour, startingMinute, values.length);
 
     for (int i = 0; i < values.length; ++i) {
       dataPoints.add(new DataPoint(
           (long) i,
-          createDate(0, 0, i),
+          dates.get(i),
           ADVISOR,
           currencyCode,
           values[i].doubleValue()
       ));
+
+
     }
 
     return dataPoints;

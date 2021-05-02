@@ -28,8 +28,8 @@ class MessageBuilderTest {
   @Test
   public void testBuild() {
     List<DataPoint> dataPoints = Lists.list(
-        new DataPoint(1L, MonetaryDateUtil.createDate(14, 10, 0), ADVISOR, CURRENCY, 1500d),
-        new DataPoint(2L, MonetaryDateUtil.createDate(14, 30, 0), ADVISOR, CURRENCY, 1510d)
+        new DataPoint(1L, MonetaryDateUtil.createDate(14, 10), ADVISOR, CURRENCY, 1500d),
+        new DataPoint(2L, MonetaryDateUtil.createDate(14, 30), ADVISOR, CURRENCY, 1510d)
     );
 
     Notification notification = notificationBuilder.build("Advisor",

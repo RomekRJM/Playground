@@ -14,14 +14,14 @@ class AlertTest {
   public void shouldTrigger() {
     Alert alert = new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(10)), 2);
 
-    assertTrue(alert.checkTrigger(MonetaryDateUtil.createDataPoints("USD", 10, 11, 12)));
+    assertTrue(alert.checkTrigger(MonetaryDateUtil.createDataPoints("USD", 0, 0,10, 11, 12)));
   }
 
   @Test
   public void shouldNotTriggerOnPastEvents() {
     Alert alert = new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(10)), 2);
 
-    assertFalse(alert.checkTrigger(MonetaryDateUtil.createDataPoints("USD", 11, 12, 10)));
+    assertFalse(alert.checkTrigger(MonetaryDateUtil.createDataPoints("USD", 0, 0, 11, 12, 10)));
   }
 
   @Test

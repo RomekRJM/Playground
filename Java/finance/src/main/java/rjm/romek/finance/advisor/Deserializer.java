@@ -24,10 +24,9 @@ public class Deserializer {
   }
 
   public Collection<Advisor> load() throws IOException {
-    ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
-
-    return mapper.readValue(getJobsDefinitionFile(configFile), new TypeReference<List<Advisor>>() {
-    });
+    return new ObjectMapper(new YAMLFactory())
+        .readValue(getJobsDefinitionFile(configFile), new TypeReference<List<Advisor>>() {
+        });
   }
 
   public void save(Collection<Advisor> advisors, File file) throws IOException {
