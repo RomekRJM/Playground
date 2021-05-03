@@ -2,8 +2,15 @@
 
 JAVA_HOME=/usr/lib/jvm/java-8-openjdk-armhf
 WORKDIR=/opt
-JAVA_OPTIONS=" -Xms64m -Xmx128m -server "
+JAVA_OPTIONS=" -Xms256m -Xmx512m -server "
 APP_OPTIONS=""
 
 cd $WORKDIR
-"${JAVA_HOME}/bin/java" $JAVA_OPTIONS -jar {{ finance_jar_destination }} $APP_OPTIONS
+"${JAVA_HOME}/bin/java" $JAVA_OPTIONS -jar {{ finance_jar_destination }} $APP_OPTIONS &
+
+if ! kill -0 $! 2>/dev/null; then
+    # there was an error during startup
+    exit 1
+fi
+
+exit 0
