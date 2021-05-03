@@ -36,8 +36,8 @@ public class EmailNotifier {
   }
 
 
-  public void notify(String recipient, Notification notification) {
-    sendEmail(getSession(), recipient, notification.getSubject(),
+  public void notify(String [] recipients, Notification notification) {
+    sendEmail(getSession(), recipients, notification.getSubject(),
         notification.getBody(), smtpUser);
   }
 
@@ -59,10 +59,11 @@ public class EmailNotifier {
     return Session.getInstance(props, auth);
   }
 
-  private static void sendEmail(Session session, String email, String subject, String body,
+  private static void sendEmail(Session session, String [] recipients, String subject, String body,
       String from) {
 
-    log.info("Notifying {}", email);
+    String emails = String.join(",", recipients);
+    log.info("Notifying {}", emails);
 
     try {
       MimeMessage msg = new MimeMessage(session);
@@ -76,7 +77,7 @@ public class EmailNotifier {
       msg.setContent(body, "text/html");
       msg.setSentDate(new Date());
 
-      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(email, false));
+      msg.setRecipients(Message.RecipientType.TO, InternetAddress.parse(emails, false));
       Transport.send(msg, msg.getAllRecipients());
 
     } catch (MessagingException e) {

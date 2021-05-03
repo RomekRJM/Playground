@@ -29,7 +29,7 @@ import rjm.romek.finance.scraper.Grabber;
 @JsonDeserialize
 public class Advisor {
 
-  private String recipient;
+  private String[] recipients;
   private Grabber grabber;
   private String name;
   private Alert alert;
@@ -42,13 +42,19 @@ public class Advisor {
     List<DataPoint> pricePoints = getDataPointRepository()
         .findTop32DataPointsByAdvisorNameOrderByDateDesc(name);
 
-    if (alert.checkTrigger(pricePoints) && isTimeToNotify(pricePoints)) {
-      getNotifier().notify(
-          recipient,
-          new NotificationBuilder()
-              .build(name, alert, pricePoints, grabber.getUrl())
-      );
-      saveNotification();
+    if (!alert.checkTrigger(pricePoints)) {
+      return;
+    }
+
+    for (String recipient : recipients) {
+      if (isTimeToNotify(pricePoints, recipient)) {
+        getNotifier().notify(
+            recipients,
+            new NotificationBuilder()
+                .build(name, alert, pricePoints, grabber.getUrl())
+        );
+        saveNotification(recipient);
+      }
     }
   }
 
@@ -79,13 +85,13 @@ public class Advisor {
   }
 
   @Transactional
-  void saveNotification() {
+  void saveNotification(String recipient) {
     getNotificationRepository().save(
         Notification.builder().advisorName(name).recipient(recipient).date(new Date()).build()
     );
   }
 
-  private boolean isTimeToNotify(List<DataPoint> pricePoints) {
+  private boolean isTimeToNotify(List<DataPoint> pricePoints, String recipient) {
     Notification lastNotification = getNotificationRepository()
         .findTopByAdvisorNameEqualsAndAndRecipientEqualsOrderByDateDesc(name, recipient);
 

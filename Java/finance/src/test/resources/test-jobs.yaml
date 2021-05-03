@@ -1,6 +1,7 @@
 ---
 - name: "abcd"
-  recipient: "wawel@o2.pl"
+  recipients:
+    - "wawel@o2.pl"
   grabber: !<GoogleGrabber>
     asset: "google+share+price"
   cron: "@daily"

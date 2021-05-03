@@ -60,8 +60,9 @@ public class GoogleGrabber extends Grabber {
     }
 
     String value = element.childNodes().get(0).toString()
-        .replaceAll(",", "")
-        .replaceAll("&nbsp;", "");
+        .replaceAll(",", ".")
+        .replaceAll("&nbsp;", "")
+        .replaceAll(" ", "");
 
     return Double.valueOf(value);
   }

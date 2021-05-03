@@ -54,6 +54,7 @@ class AdvisorTest {
       .createDateMonetaryUnits("USD", 2, 0, 2, 2, 3);
 
   private static final String ADVISOR = "adv";
+  private static final String [] RECIPIENTS = new String[] { "recipient@mail.com" };
 
   @BeforeEach
   public void setUp() {
@@ -66,7 +67,7 @@ class AdvisorTest {
   public void shouldTriggerAlert() throws IOException, CouldNotGrabPriceException {
     when(grabber.grabPrice()).thenReturn(priceInTimeMatchingRule);
 
-    new Advisor("recipient", grabber, ADVISOR, alert, "@yearly").check();
+    new Advisor(RECIPIENTS, grabber, ADVISOR, alert, "@yearly").check();
 
     verify(notifier, times(1)).notify(any(), any());
   }
@@ -75,7 +76,7 @@ class AdvisorTest {
   public void shouldNotTriggerAlert() throws IOException, CouldNotGrabPriceException {
     when(grabber.grabPrice()).thenReturn(priceInTimeNotMatchingRule);
 
-    new Advisor("recipient", grabber, ADVISOR, alert, "@yearly").check();
+    new Advisor(RECIPIENTS, grabber, ADVISOR, alert, "@yearly").check();
 
     verify(notifier, times(0)).notify(any(), any());
   }
@@ -83,7 +84,7 @@ class AdvisorTest {
   @Test
   public void shouldRetrigger()
       throws IOException, CouldNotGrabPriceException, InterruptedException {
-    Advisor advisor = new Advisor("recipient", grabber, ADVISOR, alert, "@yearly");
+    Advisor advisor = new Advisor(RECIPIENTS, grabber, ADVISOR, alert, "@yearly");
 
     when(grabber.grabPrice()).thenReturn(priceInTimeMatchingRule);
     advisor.check();

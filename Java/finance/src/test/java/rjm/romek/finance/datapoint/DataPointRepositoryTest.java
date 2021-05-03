@@ -26,7 +26,7 @@ class DataPointRepositoryTest {
   private static final String CURRENCY = "usd";
 
   @Test
-  @Timeout(value = 10, unit = SECONDS)
+  @Timeout(value = 30, unit = SECONDS)
   public void loadTest() {
     generateLargeDataSet();
 

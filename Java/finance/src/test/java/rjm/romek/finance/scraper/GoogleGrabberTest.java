@@ -1,6 +1,7 @@
 package rjm.romek.finance.scraper;
 
 import org.jsoup.nodes.Element;
+import org.jsoup.nodes.TextNode;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,7 @@ class GoogleGrabberTest {
 
   @BeforeEach
   void setUp() {
-    googleGrabber = new GoogleGrabber("google+share+price");
+    googleGrabber = new GoogleGrabber("ocado+share+price");
   }
 
   @Test
@@ -29,7 +30,7 @@ class GoogleGrabberTest {
 
     assertEquals(1, dateMonetaryAmountMap.size());
     assertTrue(first.isPresent());
-    assertEquals("USD", first.get().getCurrency().getCurrencyCode());
+    assertEquals("GBP", first.get().getCurrency().getCurrencyCode());
   }
 
   @Test
@@ -44,13 +45,27 @@ class GoogleGrabberTest {
   }
 
   @Test
+  void shouldConvertValue() throws CouldNotGrabPriceException {
+    Element element = new Element("t");
+    element.prependChild(new TextNode("174.12"));
+    assertEquals(174.12d, googleGrabber.getValue(element));
+  }
+
+  @Test
+  void shouldConvertValue2() throws CouldNotGrabPriceException {
+    Element element = new Element("t");
+    element.prependChild(new TextNode("2 097.00"));
+    assertEquals(2097d, googleGrabber.getValue(element));
+  }
+
+  @Test
   void shouldGetUnit() {
     assertThrows(CouldNotGrabPriceException.class, () -> googleGrabber.getUnit(emptyElement));
   }
 
   @Test
   void shouldGetUrl() {
-    assertEquals("https://www.google.com/search?q=google+share+price&ie=utf-8&oe=utf-8",
+    assertEquals("https://www.google.com/search?q=ocado+share+price&ie=utf-8&oe=utf-8",
         googleGrabber.getUrl());
   }
 }

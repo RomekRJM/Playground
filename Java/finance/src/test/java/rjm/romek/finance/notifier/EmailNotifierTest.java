@@ -44,6 +44,7 @@ class EmailNotifierTest {
 
   private static final String SUBJECT = "subject";
   private static final String BODY = "body";
+  private final String [] recipients = new String[] { receiverUser };
 
   @BeforeEach
   public void setUp() {
@@ -60,14 +61,14 @@ class EmailNotifierTest {
 
   @Test
   public void shouldSendEmail() throws MessagingException {
-    emailNotifier.notify(receiverUser, new Notification(BODY, SUBJECT));
+    emailNotifier.notify(recipients, new Notification(BODY, SUBJECT));
     assertMessageReceived(BODY, SUBJECT);
   }
 
   @Test
-  public void shouldNotSendEmailOnConnectionError() throws MessagingException {
+  public void shouldNotSendEmailOnConnectionError() {
     greenMail.stop();
-    emailNotifier.notify(receiverUser, new Notification(BODY, SUBJECT));
+    emailNotifier.notify(recipients, new Notification(BODY, SUBJECT));
     assertNoMessages();
   }
 
