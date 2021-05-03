@@ -9,7 +9,7 @@ Group=pi
 Type=forking
 ExecStart=/bin/bash {{ finance_wrapper_destination }}
 ExecStop=/bin/kill -15 $MAINPID
-TimeoutStartSec=210
+TimeoutStartSec=360
 
 [Install]
 WantedBy=multi-user.target

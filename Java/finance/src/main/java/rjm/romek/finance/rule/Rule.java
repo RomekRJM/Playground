@@ -14,7 +14,7 @@ import rjm.romek.finance.monetary.SimpleMonetaryAmount;
 @JsonTypeInfo(use = Id.NAME, property = "type")
 @JsonSubTypes({
     @Type(value = PriceAboveRule.class, name = "PriceAboveRule"),
-    @Type(value = PriceAboveRule.class, name = "PriceBelowRule")
+    @Type(value = PriceBelowRule.class, name = "PriceBelowRule")
 })
 public abstract class Rule {
 

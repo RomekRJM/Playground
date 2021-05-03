@@ -1,9 +1,11 @@
 ---
 - name: "CDProjekt Red share price"
-  recipient: "romek.rjm@gmail.com"
+  recipients:
+    - "romek.rjm@gmail.com"
+    - "firek.sabina@gmail.com"
   grabber: !<GoogleGrabber>
     asset: "cdprojekt+share+price"
-  cron: "*/60 * * * * *"
+  cron: "@daily"
   alert:
     rule: !<PriceBelowRule>
       targetValue:
@@ -11,13 +13,15 @@
         amount: 170
     occurrencesToActivate: 3
 - name: "Ocado share price"
-  recipient: "romek.rjm@gmail.com"
+  recipients:
+    - "romek.rjm@gmail.com"
+    - "firek.sabina@gmail.com"
   grabber: !<GoogleGrabber>
     asset: "ocado+share+price"
-  cron: "*/5 * * * * *"
+  cron: "@daily"
   alert:
     rule: !<PriceAboveRule>
       targetValue:
         currencyCode: "GBP"
-        amount: 2000
+        amount: 23
     occurrencesToActivate: 3
