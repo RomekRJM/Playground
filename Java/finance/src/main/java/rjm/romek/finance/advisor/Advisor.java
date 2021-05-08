@@ -42,16 +42,18 @@ public class Advisor {
     List<DataPoint> pricePoints = getDataPointRepository()
         .findTop32DataPointsByAdvisorNameOrderByDateDesc(name);
 
-    if (!alert.checkTrigger(pricePoints)) {
+    List<DataPoint> recentDataPointsTriggeringAlert = alert.getRecentDataPointsTriggeringAlert(pricePoints);
+
+    if (recentDataPointsTriggeringAlert.isEmpty()) {
       return;
     }
 
     for (String recipient : recipients) {
-      if (isTimeToNotify(pricePoints, recipient)) {
+      if (isTimeToNotify(recentDataPointsTriggeringAlert, recipient)) {
         getNotifier().notify(
             recipients,
             new NotificationBuilder()
-                .build(name, alert, pricePoints, grabber.getUrl())
+                .build(name, alert, recentDataPointsTriggeringAlert, grabber.getUrl())
         );
         saveNotification(recipient);
       }
@@ -91,12 +93,12 @@ public class Advisor {
     );
   }
 
-  private boolean isTimeToNotify(List<DataPoint> pricePoints, String recipient) {
+  private boolean isTimeToNotify(List<DataPoint> recentDataPointsTriggeringAlert, String recipient) {
     Notification lastNotification = getNotificationRepository()
         .findTopByAdvisorNameEqualsAndAndRecipientEqualsOrderByDateDesc(name, recipient);
 
     return lastNotification == null ||
-        pricePoints.stream().filter((dp) -> dp.getDate().after(lastNotification.getDate()))
+        recentDataPointsTriggeringAlert.stream().filter((dp) -> dp.getDate().after(lastNotification.getDate()))
             .count() >= alert.getOccurrencesToActivate();
   }
 

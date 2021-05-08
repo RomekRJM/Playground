@@ -1,14 +1,16 @@
 package rjm.romek.finance.alert;
 
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import javax.money.MonetaryAmount;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import rjm.romek.finance.datapoint.model.DataPoint;
 import rjm.romek.finance.monetary.MonetaryConverter;
 import rjm.romek.finance.monetary.MonetaryFactory;
-import rjm.romek.finance.datapoint.model.DataPoint;
 import rjm.romek.finance.rule.Rule;
 
 @Getter
@@ -28,22 +30,21 @@ public class Alert {
     this.occurrencesToActivate = -1;
   }
 
-  public boolean checkTrigger(final List<DataPoint> dataPoints) {
-    int numberOfOccurrences = 0;
-    List<DataPoint> sortedDataPoints = dataPoints.stream().sorted(Comparator.reverseOrder())
-        .collect(Collectors.toList());
-    MonetaryFactory monetaryFactory = new MonetaryFactory();
-
-    for (DataPoint dataPoint : sortedDataPoints) {
-      MonetaryConverter monetaryConverter = monetaryFactory.create(dataPoint.getCurrencyCode());
-      if (rule
-          .applies(monetaryConverter.convert(dataPoint.getCurrencyCode(), dataPoint.getValue()))) {
-        ++numberOfOccurrences;
-      } else {
-        break;
-      }
+  public List<DataPoint> getRecentDataPointsTriggeringAlert(final List<DataPoint> dataPoints) {
+    if (occurrencesToActivate <= 0 || dataPoints.size() == 0) {
+      return Collections.emptyList();
     }
 
-    return occurrencesToActivate >= 0 && numberOfOccurrences >= occurrencesToActivate;
+    MonetaryConverter monetaryConverter = new MonetaryFactory().create(dataPoints.get(0).getCurrencyCode());
+
+    List<DataPoint> dataPointsReversed = dataPoints.stream()
+        .sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+
+    Optional<DataPoint> firstNonMatching = dataPointsReversed.stream()
+        .filter(dp -> !rule.applies(monetaryConverter.convert(dp.getCurrencyCode(), dp.getValue()))).findFirst();
+
+    return firstNonMatching.map(dataPoint -> dataPointsReversed.subList(0, dataPointsReversed.indexOf(dataPoint)))
+        .orElse(Collections.emptyList());
+
   }
 }
