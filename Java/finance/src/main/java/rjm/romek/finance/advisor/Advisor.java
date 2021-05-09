@@ -51,7 +51,7 @@ public class Advisor {
     for (String recipient : recipients) {
       if (isTimeToNotify(recentDataPointsTriggeringAlert, recipient)) {
         getNotifier().notify(
-            recipients,
+            recipient,
             new NotificationBuilder()
                 .build(name, alert, recentDataPointsTriggeringAlert, grabber.getUrl())
         );
