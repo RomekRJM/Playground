@@ -59,12 +59,15 @@ public class GoogleGrabber extends Grabber {
       throw new CouldNotGrabPriceException("Unable to parse the value from the response.");
     }
 
-    String value = element.childNodes().get(0).toString()
-        .replaceAll(",", ".")
-        .replaceAll("&nbsp;", "")
-        .replaceAll(" ", "");
+    String value = element.childNodes().get(0).toString();
 
-    return Double.valueOf(value);
+    if (value.contains(",") && value.contains(".")) {
+      value = value.replaceAll(",", "");
+    } else if (value.contains(",")) {
+      value = value.replaceAll(",", "");
+    }
+
+    return Double.valueOf(value.replaceAll(" ", ""));
   }
 
   String getUnit(Element element) throws CouldNotGrabPriceException {

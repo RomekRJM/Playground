@@ -59,6 +59,20 @@ class GoogleGrabberTest {
   }
 
   @Test
+  void shouldConvertValue3() throws CouldNotGrabPriceException {
+    Element element = new Element("t");
+    element.prependChild(new TextNode("2,097.00"));
+    assertEquals(2097d, googleGrabber.getValue(element));
+  }
+
+  @Test
+  void shouldConvertValue4() throws CouldNotGrabPriceException {
+    Element element = new Element("t");
+    element.prependChild(new TextNode("2,097"));
+    assertEquals(2097d, googleGrabber.getValue(element));
+  }
+
+  @Test
   void shouldGetUnit() {
     assertThrows(CouldNotGrabPriceException.class, () -> googleGrabber.getUnit(emptyElement));
   }
