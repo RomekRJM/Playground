@@ -10,6 +10,7 @@ Type=forking
 ExecStart=/bin/bash {{ finance_wrapper_destination }}
 ExecStop=/bin/kill -15 $MAINPID
 TimeoutStartSec=360
+Restart=on-failure
 
 [Install]
 WantedBy=multi-user.target
