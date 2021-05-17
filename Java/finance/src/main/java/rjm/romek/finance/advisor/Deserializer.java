@@ -16,7 +16,7 @@ public class Deserializer {
 
   private final String configFile;
 
-  ResourceLoader resourceLoader;
+  final ResourceLoader resourceLoader;
 
   public Deserializer(@Value("${jobs.file}") String configFile, ResourceLoader resourceLoader) {
     this.configFile = configFile;

@@ -44,17 +44,17 @@ class AdvisorTest {
   @Autowired
   private NotificationRepository notificationRepository;
 
-  private Rule rule = new PriceAboveRule(MonetaryDateUtil.getDollars(1));
+  private final Rule rule = new PriceAboveRule(MonetaryDateUtil.getDollars(1));
 
-  private Alert alert = new Alert(rule, 2, 49);
+  private final Alert alert = new Alert(rule, 2, 49);
 
-  private SortedMap<Date, MonetaryAmount> priceInTimeMatchingRule = MonetaryDateUtil
+  private final SortedMap<Date, MonetaryAmount> priceInTimeMatchingRule = MonetaryDateUtil
       .createDateMonetaryUnits("USD", 0, 0,1, 2, 3);
 
-  private SortedMap<Date, MonetaryAmount> priceInTimeNotMatchingRule = MonetaryDateUtil
+  private final SortedMap<Date, MonetaryAmount> priceInTimeNotMatchingRule = MonetaryDateUtil
       .createDateMonetaryUnits("USD", 1, 0, 1, 1, 2);
 
-  private SortedMap<Date, MonetaryAmount> priceInTimeMatchingRuleAgain = MonetaryDateUtil
+  private final SortedMap<Date, MonetaryAmount> priceInTimeMatchingRuleAgain = MonetaryDateUtil
       .createDateMonetaryUnits("USD", 2, 0, 2, 2, 3);
 
   private static final String ADVISOR = "adv";
@@ -114,7 +114,7 @@ class AdvisorTest {
 
   @Test
   public void shouldNotRetriggerIfTooEarly()
-      throws IOException, CouldNotGrabPriceException, InterruptedException {
+      throws IOException, CouldNotGrabPriceException {
     Advisor advisor = new Advisor(RECIPIENTS, grabber, ADVISOR, alert, "@yearly");
 
     when(grabber.grabPrice()).thenReturn(priceInTimeMatchingRule);

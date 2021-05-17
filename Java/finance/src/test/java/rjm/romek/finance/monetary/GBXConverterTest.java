@@ -8,7 +8,7 @@ import javax.money.MonetaryException;
 import org.junit.jupiter.api.Test;
 
 class GBXConverterTest {
-  private GBXConverter converter = new GBXConverter();
+  private final GBXConverter converter = new GBXConverter();
 
   @Test
   public void shouldConvert() {

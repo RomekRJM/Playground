@@ -23,7 +23,7 @@ class MessageBuilderTest {
       + "<tr style=\"background-color: lightblue\"><td>Sun Mar 12 14:30:00 CET 2045</td>"
       + "<td>USD 1510.00</td></tr></table>";
 
-  private NotificationBuilder notificationBuilder = new NotificationBuilder();
+  private final NotificationBuilder notificationBuilder = new NotificationBuilder();
 
   @Test
   public void testBuild() {

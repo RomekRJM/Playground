@@ -61,7 +61,7 @@ class EmailNotifierTest {
   @Test
   public void shouldSendEmail() throws MessagingException {
     emailNotifier.notify(receiverUser, new Notification(BODY, SUBJECT));
-    assertMessageReceived(BODY, SUBJECT);
+    assertMessageReceived(SUBJECT);
   }
 
   @Test
@@ -71,7 +71,7 @@ class EmailNotifierTest {
     assertNoMessages();
   }
 
-  private void assertMessageReceived(String body, String subject) throws MessagingException {
+  private void assertMessageReceived(String subject) throws MessagingException {
     assertTrue(greenMail.waitForIncomingEmail(5000, 1));
     Message message = greenMail.getReceivedMessages()[0];
     assertEquals(subject, message.getSubject());

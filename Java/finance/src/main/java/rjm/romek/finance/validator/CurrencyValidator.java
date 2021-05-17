@@ -3,7 +3,7 @@ package rjm.romek.finance.validator;
 import javax.money.MonetaryAmount;
 
 public class CurrencyValidator {
-  public static final void validate(MonetaryAmount expected, MonetaryAmount actual) {
+  public static void validate(MonetaryAmount expected, MonetaryAmount actual) {
     if (actual.getCurrency().equals(expected.getCurrency())) {
       return;
     }
