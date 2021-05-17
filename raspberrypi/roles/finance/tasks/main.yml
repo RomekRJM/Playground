@@ -25,6 +25,28 @@
     smtp_user: "{{ lookup('env','SMTP_USER') }}"
     smtp_password: "{{ lookup('env','SMTP_PASSWORD') }}"
 
+- name: Install NTP
+  apt:
+    name: ntp
+    state: present
+    update_cache: yes
+  become: true
+  become_user: root
+
+- name: Make sure ntp is started, and is enabled on restart.
+  service:
+    name: ntp
+    state: started
+    enabled: yes
+  become: true
+  become_user: root
+
+- name: "Unsure timezone is Europe/Warsaw"
+  timezone:
+    name: "Europe/Warsaw"
+  become: true
+  become_user: root
+
 - name: Install git
   apt:
     name: git
