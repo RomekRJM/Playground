@@ -19,6 +19,7 @@ public class Alert {
 
   private final Rule rule;
   private final Integer occurrencesToActivate;
+  private final Integer retriggerAfterMilliseconds;
 
   public Alert() {
     this.rule = new Rule() {
@@ -28,6 +29,7 @@ public class Alert {
       }
     };
     this.occurrencesToActivate = -1;
+    this.retriggerAfterMilliseconds = -1;
   }
 
   public List<DataPoint> getRecentDataPointsTriggeringAlert(final List<DataPoint> dataPoints) {
