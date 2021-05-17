@@ -37,7 +37,7 @@ class MessageBuilderTest {
             new PriceAboveRule(
                 MonetaryDateUtil.getDollars(1234)
             ),
-            2
+            2, 2
         ),
         dataPoints, "https://google.com"
     );

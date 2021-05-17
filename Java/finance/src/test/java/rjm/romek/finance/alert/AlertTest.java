@@ -14,7 +14,7 @@ class AlertTest {
 
   @Test
   public void shouldTriggerOnLast2Elements() {
-    Alert alert = new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(10)), 2);
+    Alert alert = new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(10)), 2, 2);
     List<DataPoint> dataPoints = MonetaryDateUtil.createDataPoints("USD", 0, 0, 13, 13, 10, 11, 12);
     List<DataPoint> expected = new ArrayList<>();
     expected.add(dataPoints.get(4));
@@ -24,7 +24,7 @@ class AlertTest {
 
   @Test
   public void shouldNotTriggerWhenNotEnoughPoints() {
-    Alert alert = new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(10)), 2);
+    Alert alert = new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(10)), 2, 2);
     List<DataPoint> dataPoints = MonetaryDateUtil.createDataPoints("USD", 0, 0, 11, 12, 10);
     assertEquals(Collections.emptyList(), alert.getRecentDataPointsTriggeringAlert(dataPoints));
   }

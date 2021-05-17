@@ -67,7 +67,7 @@ public class GoogleGrabber extends Grabber {
       value = value.replaceAll(",", "");
     }
 
-    return Double.valueOf(value.replaceAll(" ", ""));
+    return Double.valueOf(value.replaceAll(" ", "").replaceAll("&nbsp;", ""));
   }
 
   String getUnit(Element element) throws CouldNotGrabPriceException {

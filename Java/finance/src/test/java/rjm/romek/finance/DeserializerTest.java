@@ -32,7 +32,7 @@ class DeserializerTest {
         new String[] {"recipient@o2.pl"},
         new GoogleGrabber("google+share+price"),
         "abcd",
-        new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(1300)), 3),
+        new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(1300)), 3, 3),
         "0 0 0 * * *"
     );
     Collection<Advisor> advisors = Collections.singletonList(advisor);

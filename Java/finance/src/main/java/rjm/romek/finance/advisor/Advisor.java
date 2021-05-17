@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.Optional;
 import java.util.SortedMap;
 import javax.money.MonetaryAmount;
 import lombok.AllArgsConstructor;
@@ -94,11 +95,14 @@ public class Advisor {
   }
 
   private boolean isTimeToNotify(List<DataPoint> recentDataPointsTriggeringAlert, String recipient) {
-    Notification lastNotification = getNotificationRepository()
+    Optional<Notification> lastNotification = getNotificationRepository()
         .findTopByAdvisorNameEqualsAndAndRecipientEqualsOrderByDateDesc(name, recipient);
 
-    return lastNotification == null ||
-        recentDataPointsTriggeringAlert.stream().filter((dp) -> dp.getDate().after(lastNotification.getDate()))
+    Date lastNotificationDate = lastNotification.isPresent() ? lastNotification.get().getDate() : new Date(0);
+    Date nextNotificationDate = new Date(lastNotificationDate.getTime() + alert.getRetriggerAfterMilliseconds());
+
+    return nextNotificationDate.compareTo(new Date()) <= 0 &&
+        recentDataPointsTriggeringAlert.stream().filter((dp) -> dp.getDate().after(lastNotificationDate))
             .count() >= alert.getOccurrencesToActivate();
   }
 

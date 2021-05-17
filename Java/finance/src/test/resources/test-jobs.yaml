@@ -11,3 +11,4 @@
         currencyCode: "USD"
         amount: 1300
     occurrencesToActivate: 3
+    retriggerAfterMilliseconds: 3600000

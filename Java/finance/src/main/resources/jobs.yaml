@@ -12,6 +12,7 @@
         currencyCode: "PLN"
         amount: 170
     occurrencesToActivate: 3
+    retriggerAfterMilliseconds: 3600000
 - name: "Ocado share price"
   recipients:
     - "romek.rjm@gmail.com"
@@ -25,3 +26,4 @@
         currencyCode: "GBP"
         amount: 20
     occurrencesToActivate: 3
+    retriggerAfterMilliseconds: 3600000
