@@ -1,14 +1,15 @@
 package rjm.romek.finance.rule;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import javax.money.MonetaryAmount;
-import lombok.NoArgsConstructor;
 import rjm.romek.finance.monetary.SimpleMonetaryAmount;
 import rjm.romek.finance.validator.CurrencyValidator;
 
-@NoArgsConstructor
 public class PriceAboveRule extends Rule {
 
-  public PriceAboveRule(SimpleMonetaryAmount targetValue) {
+  @JsonCreator
+  public PriceAboveRule(@JsonProperty("targetValue") SimpleMonetaryAmount targetValue) {
     super(targetValue);
   }
 

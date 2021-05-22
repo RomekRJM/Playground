@@ -30,7 +30,7 @@ class DeserializerTest {
   public void shouldSerialize() throws IOException {
     Advisor advisor = new Advisor(
         new String[] {"recipient@o2.pl"},
-        new GoogleGrabber("google+share+price"),
+        new GoogleGrabber("NASDAQ:GOOGL"),
         "abcd",
         new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(1300)), 3, 3),
         "0 0 0 * * *"

@@ -1,11 +1,12 @@
 package rjm.romek.finance.scraper;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.io.IOException;
 import java.util.Date;
 import java.util.SortedMap;
 import java.util.TreeMap;
 import javax.money.MonetaryAmount;
-import lombok.NoArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -13,14 +14,14 @@ import org.jsoup.select.Elements;
 import rjm.romek.finance.monetary.MonetaryConverter;
 import rjm.romek.finance.monetary.MonetaryFactory;
 
-@NoArgsConstructor
 public class GoogleGrabber extends Grabber {
 
   private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8";
   private static final String QUERY_SEARCH_EXPRESSION = "g-card-section div g-card-section div span span span";
   private static final MonetaryFactory MONETARY_FACTORY = new MonetaryFactory();
 
-  public GoogleGrabber(String asset) {
+  @JsonCreator
+  public GoogleGrabber(@JsonProperty("asset") String asset) {
     super(asset);
   }
 

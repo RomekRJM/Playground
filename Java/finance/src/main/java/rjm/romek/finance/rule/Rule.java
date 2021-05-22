@@ -20,9 +20,5 @@ public abstract class Rule {
 
   protected final SimpleMonetaryAmount targetValue;
 
-  public Rule() {
-    this.targetValue = null;
-  }
-
   public abstract boolean applies(MonetaryAmount value);
 }

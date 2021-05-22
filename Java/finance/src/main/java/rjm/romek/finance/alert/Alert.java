@@ -1,35 +1,32 @@
 package rjm.romek.finance.alert;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.money.MonetaryAmount;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import rjm.romek.finance.datapoint.model.DataPoint;
 import rjm.romek.finance.monetary.MonetaryConverter;
 import rjm.romek.finance.monetary.MonetaryFactory;
 import rjm.romek.finance.rule.Rule;
 
 @Getter
-@RequiredArgsConstructor
 public class Alert {
 
   private final Rule rule;
   private final Integer occurrencesToActivate;
   private final Integer retriggerAfterMilliseconds;
 
-  public Alert() {
-    this.rule = new Rule() {
-      @Override
-      public boolean applies(MonetaryAmount value) {
-        return false;
-      }
-    };
-    this.occurrencesToActivate = -1;
-    this.retriggerAfterMilliseconds = -1;
+  @JsonCreator
+  public Alert(@JsonProperty("rule") Rule rule,
+      @JsonProperty("occurrencesToActivate") Integer occurrencesToActivate,
+      @JsonProperty("retriggerAfterMilliseconds") Integer retriggerAfterMilliseconds) {
+    this.rule = rule;
+    this.occurrencesToActivate = occurrencesToActivate;
+    this.retriggerAfterMilliseconds = retriggerAfterMilliseconds;
   }
 
   public List<DataPoint> getRecentDataPointsTriggeringAlert(final List<DataPoint> dataPoints) {

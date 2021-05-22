@@ -19,10 +19,6 @@ public abstract class Grabber {
   @JsonProperty
   protected final String asset;
 
-  protected Grabber() {
-    this.asset = "";
-  }
-
   protected Grabber(String asset) {
     this.asset = asset;
   }
