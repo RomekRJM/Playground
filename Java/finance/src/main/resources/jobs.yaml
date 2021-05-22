@@ -4,7 +4,7 @@
     - "romek.rjm@gmail.com"
     - "firek.sabina@gmail.com"
   grabber: !<GoogleGrabber>
-    asset: "cdprojekt+share+price"
+    asset: "wse:cdprojekt"
   cron: "*/60 * * * * *"
   alert:
     rule: !<PriceBelowRule>
@@ -18,7 +18,7 @@
     - "romek.rjm@gmail.com"
     - "firek.sabina@gmail.com"
   grabber: !<GoogleGrabber>
-    asset: "ocado+share+price"
+    asset: "lse:ocado"
   cron: "*/5 * * * * *"
   alert:
     rule: !<PriceAboveRule>

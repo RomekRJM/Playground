@@ -3,7 +3,7 @@
   recipients:
     - "wawel@o2.pl"
   grabber: !<GoogleGrabber>
-    asset: "google+share+price"
+    asset: "nasdaq:googl"
   cron: "@daily"
   alert:
     rule: !<PriceAboveRule>
