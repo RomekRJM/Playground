@@ -107,7 +107,7 @@
 - name: Start finance as a service
   service:
     name: finance.service
-    state: started
+    state: restarted
     enabled: yes
   become: true
   become_user: root
