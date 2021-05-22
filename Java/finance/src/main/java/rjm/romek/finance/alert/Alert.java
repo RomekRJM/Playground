@@ -45,8 +45,10 @@ public class Alert {
     Optional<DataPoint> firstNonMatching = dataPointsReversed.stream()
         .filter(dp -> !rule.applies(monetaryConverter.convert(dp.getCurrencyCode(), dp.getValue()))).findFirst();
 
-    return firstNonMatching.map(dataPoint -> dataPointsReversed.subList(0, dataPointsReversed.indexOf(dataPoint)))
-        .orElse(Collections.emptyList());
+    return firstNonMatching.isPresent() ?
+        firstNonMatching.map(
+            dataPoint -> dataPointsReversed.subList(0, dataPointsReversed.indexOf(dataPoint))).orElse(Collections.emptyList()
+        ) : dataPointsReversed;
 
   }
 }

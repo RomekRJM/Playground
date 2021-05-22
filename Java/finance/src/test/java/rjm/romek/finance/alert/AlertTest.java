@@ -23,6 +23,17 @@ class AlertTest {
   }
 
   @Test
+  public void shouldTriggerOnAllElements() {
+    Alert alert = new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(10)), 2, 2);
+    List<DataPoint> dataPoints = MonetaryDateUtil.createDataPoints("USD", 0, 0, 13, 13, 13);
+    List<DataPoint> expected = new ArrayList<>();
+    expected.add(dataPoints.get(2));
+    expected.add(dataPoints.get(1));
+    expected.add(dataPoints.get(0));
+    assertEquals(expected, alert.getRecentDataPointsTriggeringAlert(dataPoints));
+  }
+
+  @Test
   public void shouldNotTriggerWhenNotEnoughPoints() {
     Alert alert = new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(10)), 2, 2);
     List<DataPoint> dataPoints = MonetaryDateUtil.createDataPoints("USD", 0, 0, 11, 12, 10);
