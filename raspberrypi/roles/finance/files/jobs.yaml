@@ -6,13 +6,19 @@
   grabber: !<GoogleGrabber>
     asset: "cdprojekt+share+price"
   cron: "0 0 9-17 * * MON-FRI"
-  alert:
-    rule: !<PriceBelowRule>
-      targetValue:
-        currencyCode: "PLN"
-        amount: 170
-    occurrencesToActivate: 3
-    retriggerAfterMilliseconds: 259200000
+  alerts:
+    - rule: !<PriceBelowRule>
+        targetValue:
+          currencyCode: "PLN"
+          amount: 130
+      occurrencesToActivate: 3
+      retriggerAfterMilliseconds: 259200000
+    - rule: !<PriceAboveRule>
+        targetValue:
+          currencyCode: "PLN"
+          amount: 200
+      occurrencesToActivate: 3
+      retriggerAfterMilliseconds: 259200000
 - name: "Ocado share price"
   recipients:
     - "romek.rjm@gmail.com"
@@ -20,10 +26,10 @@
   grabber: !<GoogleGrabber>
     asset: "ocado+share+price"
   cron: "0 59 8-23 * * MON-FRI"
-  alert:
-    rule: !<PriceAboveRule>
-      targetValue:
-        currencyCode: "GBP"
-        amount: 23
-    occurrencesToActivate: 3
-    retriggerAfterMilliseconds: 259200000
+  alerts:
+    - rule: !<PriceAboveRule>
+        targetValue:
+          currencyCode: "GBP"
+          amount: 19
+      occurrencesToActivate: 3
+      retriggerAfterMilliseconds: 259200000
