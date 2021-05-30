@@ -1,14 +1,20 @@
 ---
-- name: "abcd"
-  recipients:
-    - "wawel@o2.pl"
+- recipients:
+    - "recipient@o2.pl"
   grabber: !<GoogleGrabber>
-    asset: "nasdaq:googl"
-  cron: "@daily"
-  alert:
-    rule: !<PriceAboveRule>
-      targetValue:
-        currencyCode: "USD"
-        amount: 1300
-    occurrencesToActivate: 3
-    retriggerAfterMilliseconds: 3600000
+    asset: "NASDAQ:GOOGL"
+  name: "abcd"
+  alerts:
+    - rule: !<PriceAboveRule>
+        targetValue:
+          currencyCode: "USD"
+          amount: 1300
+      occurrencesToActivate: 3
+      retriggerAfterMilliseconds: 3
+    - rule: !<PriceBelowRule>
+        targetValue:
+          currencyCode: "USD"
+          amount: 1000
+      occurrencesToActivate: 3
+      retriggerAfterMilliseconds: 3
+  cron: "0 0 0 * * *"

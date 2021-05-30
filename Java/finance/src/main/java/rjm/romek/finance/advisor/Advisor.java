@@ -33,16 +33,22 @@ public class Advisor {
   private String[] recipients;
   private Grabber grabber;
   private String name;
-  private Alert alert;
+  private Alert[] alerts;
   private String cron;
 
-  public void check() throws IOException, CouldNotGrabPriceException {
+  public void check() throws CouldNotGrabPriceException, IOException {
     validate();
 
     saveDataPoints(grabber.grabPrice());
     List<DataPoint> pricePoints = getDataPointRepository()
         .findTop32DataPointsByAdvisorNameOrderByDateDesc(name);
 
+    for (Alert alert : alerts) {
+      checkAlert(alert, pricePoints);
+    }
+  }
+
+  private void checkAlert(Alert alert, List<DataPoint> pricePoints) {
     List<DataPoint> recentDataPointsTriggeringAlert = alert.getRecentDataPointsTriggeringAlert(pricePoints);
 
     if (recentDataPointsTriggeringAlert.isEmpty()) {
@@ -50,7 +56,7 @@ public class Advisor {
     }
 
     for (String recipient : recipients) {
-      if (isTimeToNotify(recentDataPointsTriggeringAlert, recipient)) {
+      if (isTimeToNotify(alert, recentDataPointsTriggeringAlert, recipient)) {
         getNotifier().notify(
             recipient,
             new NotificationBuilder()
@@ -94,7 +100,8 @@ public class Advisor {
     );
   }
 
-  private boolean isTimeToNotify(List<DataPoint> recentDataPointsTriggeringAlert, String recipient) {
+  // todo: this should really check notification per alert type time in case of multiple alerts
+  private boolean isTimeToNotify(Alert alert, List<DataPoint> recentDataPointsTriggeringAlert, String recipient) {
     Optional<Notification> lastNotification = getNotificationRepository()
         .findTopByAdvisorNameEqualsAndAndRecipientEqualsOrderByDateDesc(name, recipient);
 
@@ -109,7 +116,7 @@ public class Advisor {
   private void validate() {
     assert grabber != null;
     assert name != null;
-    assert alert != null;
+    assert alerts != null;
     assert cron != null;
   }
 }

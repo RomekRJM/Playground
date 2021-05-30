@@ -46,10 +46,10 @@ class AdvisorTest {
 
   private final Rule rule = new PriceAboveRule(MonetaryDateUtil.getDollars(1));
 
-  private final Alert alert = new Alert(rule, 2, 49);
+  private final Alert[] alert = new Alert[]{new Alert(rule, 2, 49)};
 
   private final SortedMap<Date, MonetaryAmount> priceInTimeMatchingRule = MonetaryDateUtil
-      .createDateMonetaryUnits("USD", 0, 0,1, 2, 3);
+      .createDateMonetaryUnits("USD", 0, 0, 1, 2, 3);
 
   private final SortedMap<Date, MonetaryAmount> priceInTimeNotMatchingRule = MonetaryDateUtil
       .createDateMonetaryUnits("USD", 1, 0, 1, 1, 2);
@@ -58,7 +58,7 @@ class AdvisorTest {
       .createDateMonetaryUnits("USD", 2, 0, 2, 2, 3);
 
   private static final String ADVISOR = "adv";
-  private static final String [] RECIPIENTS = new String[] { "recipient@mail.com" };
+  private static final String[] RECIPIENTS = new String[]{"recipient@mail.com"};
 
   @BeforeEach
   public void setUp() {

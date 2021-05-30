@@ -35,7 +35,6 @@ public class EmailNotifier {
     this.smtpPassword = smtpPassword;
   }
 
-
   public void notify(String recipient, Notification notification) {
     sendEmail(getSession(), recipient, notification.getSubject(),
         notification.getBody(), smtpUser);

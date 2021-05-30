@@ -12,6 +12,7 @@ import rjm.romek.finance.advisor.Advisor;
 import rjm.romek.finance.advisor.Deserializer;
 import rjm.romek.finance.alert.Alert;
 import rjm.romek.finance.rule.PriceAboveRule;
+import rjm.romek.finance.rule.PriceBelowRule;
 import rjm.romek.finance.scraper.GoogleGrabber;
 
 class DeserializerTest {
@@ -32,7 +33,10 @@ class DeserializerTest {
         new String[] {"recipient@o2.pl"},
         new GoogleGrabber("NASDAQ:GOOGL"),
         "abcd",
-        new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(1300)), 3, 3),
+        new Alert[]{
+            new Alert(new PriceAboveRule(MonetaryDateUtil.getDollars(1300)), 3, 3),
+            new Alert(new PriceBelowRule(MonetaryDateUtil.getDollars(1000)), 3, 3)
+        },
         "0 0 0 * * *"
     );
     Collection<Advisor> advisors = Collections.singletonList(advisor);
