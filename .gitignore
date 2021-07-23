@@ -64,3 +64,4 @@ export_presets.cfg
 .directory
 *~
 venv
+.venv
