@@ -10,40 +10,31 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
 public class EmailNotifier {
 
-  private final String smtpHost;
-  private final String smtpPort;
-  private final String smtpUser;
-  private final String smtpPassword;
+  private final SmtpProperties smtpProperties;
 
   @Autowired
-  public EmailNotifier(
-      @Value("${smtp.host}") String smtpHost, @Value("${smtp.port}") String smtpPort,
-      @Value("${smtp.user}") String smtpUser, @Value("${smtp.password}") String smtpPassword)
-  {
-    this.smtpHost = smtpHost;
-    this.smtpPort = smtpPort;
-    this.smtpUser = smtpUser;
-    this.smtpPassword = smtpPassword;
+  public EmailNotifier(@Valid SmtpProperties smtpProperties) {
+    this.smtpProperties = smtpProperties;
   }
 
   public void notify(String recipient, Notification notification) {
     sendEmail(getSession(), recipient, notification.getSubject(),
-        notification.getBody(), smtpUser);
+        notification.getBody(), smtpProperties.getUser());
   }
 
   private Session getSession() {
     Properties props = new Properties();
-    props.put("mail.smtp.host", smtpHost);
-    props.put("mail.smtp.port", smtpPort);
+    props.put("mail.smtp.host", smtpProperties.getHost());
+    props.put("mail.smtp.port", smtpProperties.getPort());
     props.put("mail.smtp.auth", "true");
     props.put("mail.smtp.starttls.enable", "true");
     props.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
@@ -52,7 +43,7 @@ public class EmailNotifier {
 
     Authenticator auth = new Authenticator() {
       protected PasswordAuthentication getPasswordAuthentication() {
-        return new PasswordAuthentication(smtpUser, smtpPassword);
+        return new PasswordAuthentication(smtpProperties.getUser(), smtpProperties.getPassword());
       }
     };
     return Session.getInstance(props, auth);
