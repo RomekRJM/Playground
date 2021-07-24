@@ -1,6 +1,6 @@
 - name: Build finance project
   command:
-    cmd: ./gradlew build
+    cmd: ./gradlew build -x test
     chdir: ../Java/finance
   delegate_to: localhost
 
