@@ -16,7 +16,7 @@ import rjm.romek.finance.monetary.MonetaryFactory;
 
 public class GoogleGrabber extends Grabber {
 
-  private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8";
+  private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8&hl=us";
   private static final String QUERY_SEARCH_EXPRESSION = "g-card-section div g-card-section div span span span";
   private static final MonetaryFactory MONETARY_FACTORY = new MonetaryFactory();
 
@@ -62,13 +62,7 @@ public class GoogleGrabber extends Grabber {
 
     String value = element.childNodes().get(0).toString();
 
-    if (value.contains(",") && value.contains(".")) {
-      value = value.replaceAll(",", "");
-    } else if (value.contains(",")) {
-      value = value.replaceAll(",", "");
-    }
-
-    return Double.valueOf(value.replaceAll(" ", "").replaceAll("&nbsp;", ""));
+    return Double.valueOf(value.replaceAll(",", "").replaceAll(" ", "").replaceAll("&nbsp;", ""));
   }
 
   String getUnit(Element element) throws CouldNotGrabPriceException {

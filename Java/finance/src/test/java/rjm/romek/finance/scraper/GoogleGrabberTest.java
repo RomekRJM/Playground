@@ -45,28 +45,28 @@ class GoogleGrabberTest {
   }
 
   @Test
-  void shouldConvertValue() throws CouldNotGrabPriceException {
+  void shouldConvertValueWithDot() throws CouldNotGrabPriceException {
     Element element = new Element("t");
     element.prependChild(new TextNode("174.12"));
     assertEquals(174.12d, googleGrabber.getValue(element));
   }
 
   @Test
-  void shouldConvertValue2() throws CouldNotGrabPriceException {
+  void shouldConvertValueWithDotAndSpace() throws CouldNotGrabPriceException {
     Element element = new Element("t");
     element.prependChild(new TextNode("2 097.00"));
     assertEquals(2097d, googleGrabber.getValue(element));
   }
 
   @Test
-  void shouldConvertValue3() throws CouldNotGrabPriceException {
+  void shouldConvertValueWithNbspAndDot() throws CouldNotGrabPriceException {
     Element element = new Element("t");
-    element.prependChild(new TextNode("2,097.00"));
+    element.prependChild(TextNode.createFromEncoded("2&nbsp;097.00"));
     assertEquals(2097d, googleGrabber.getValue(element));
   }
 
   @Test
-  void shouldConvertValue4() throws CouldNotGrabPriceException {
+  void shouldConvertValueWithComma() throws CouldNotGrabPriceException {
     Element element = new Element("t");
     element.prependChild(new TextNode("2,097"));
     assertEquals(2097d, googleGrabber.getValue(element));
@@ -79,7 +79,7 @@ class GoogleGrabberTest {
 
   @Test
   void shouldGetUrl() {
-    assertEquals("https://www.google.com/search?q=ocado+share+price&ie=utf-8&oe=utf-8",
+    assertEquals("https://www.google.com/search?q=ocado+share+price&ie=utf-8&oe=utf-8&hl=us",
         googleGrabber.getUrl());
   }
 }
