@@ -12,3 +12,5 @@ spring.jpa.hibernate.ddl-auto: create
 spring.jpa.properties.hibernate.jdbc.batch_size: 16
 spring.jpa.properties.hibernate.order_inserts: true
 #spring.jpa.show-sql: true
+
+logging.level.org.javamoney.moneta: DEBUG
