@@ -16,9 +16,13 @@ import rjm.romek.finance.monetary.MonetaryFactory;
 
 public class GoogleGrabber extends Grabber {
 
-  private static final String SEARCH_URL = "https://www.google.com/search?q=%s&ie=utf-8&oe=utf-8&hl=us";
+  private static final String SEARCH_URL = "https://www.google.com/search?q=%s";
   private static final String QUERY_SEARCH_EXPRESSION = "g-card-section div g-card-section div span span span";
   private static final MonetaryFactory MONETARY_FACTORY = new MonetaryFactory();
+  private static final String LANGUAGE_HEADER = "Accept-Language";
+  private static final String LANGUAGE = "en-US,en;q=0.9,pl;q=0.8";
+  private static final String USER_AGENT_HEADER = "User-Agent";
+  private static final String USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/92.0.4515.107 Safari/537.36";
 
   @JsonCreator
   public GoogleGrabber(@JsonProperty("asset") String asset) {
@@ -27,7 +31,10 @@ public class GoogleGrabber extends Grabber {
 
   @Override
   public SortedMap<Date, MonetaryAmount> grabPrice() throws IOException, CouldNotGrabPriceException {
-    Document doc = Jsoup.connect(getUrl()).get();
+    Document doc = Jsoup.connect(getUrl())
+        .header(USER_AGENT_HEADER, USER_AGENT)
+        .header(LANGUAGE_HEADER, LANGUAGE)
+        .get();
 
     return extractMonetaryData(doc);
   }
