@@ -1,2 +1,1 @@
-mpyq==0.2.5
-s2protocol==5.0.9.87702.0
+sc2reader==1.8.0
