@@ -36,12 +36,18 @@ def update_value(d, key, value):
         d[key] = value
 
 
+def sort_dict_by_key(d):
+    for key in sorted(d):
+        d.move_to_end(key)
+
+
 if __name__ == '__main__':
     replay = sc2reader.load_replay('2022-07-12PvP.SC2Replay', load_level=4)
 
     player_units = [event.unit for event in replay.events if getattr_non_empty(getattr_non_empty(event, 'unit_controller', PlayerMock()), 'name', '') == 'RJM']
     player_units = [unit for unit in player_units if not unit.hallucinated]
     supply_per_second = OrderedDict()
+    workers_per_second = OrderedDict()
 
     for unit in player_units:
         born = convert_to_seconds(unit.finished_at)
@@ -50,11 +56,17 @@ if __name__ == '__main__':
         if born:
             update_value(supply_per_second, born, unit.supply)
 
+            if unit.is_worker:
+                update_value(workers_per_second, born, unit.supply)
+
         if died:
             update_value(supply_per_second, died, -unit.supply)
 
-    for key in sorted(supply_per_second):
-        supply_per_second.move_to_end(key)
+            if unit.is_worker:
+                update_value(workers_per_second, died, -unit.supply)
+
+    sort_dict_by_key(supply_per_second)
+    sort_dict_by_key(workers_per_second)
 
     total_supply = 12
 
