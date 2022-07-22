@@ -1,8 +1,17 @@
 from Python.vibe_b2gm_macro_timer.data import SupplyTimeseries
+from jinja2 import Environment, FileSystemLoader, select_autoescape
 
 
-def render_html(supply_timeseries: SupplyTimeseries):
-    pass
+def render_to_html(supply_timeseries: SupplyTimeseries, output_file: str):
+    env = Environment(
+        loader=FileSystemLoader(searchpath="./templates"),
+        autoescape=select_autoescape()
+    )
+
+    template = env.get_template("template.html")
+
+    with open(output_file, 'w') as f:
+        f.write(template.render(replay_name=supply_timeseries.replay_name))
 
 
 def render_to_std_out(supply_timeseries: SupplyTimeseries):

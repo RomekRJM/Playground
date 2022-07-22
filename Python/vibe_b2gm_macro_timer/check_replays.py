@@ -4,7 +4,7 @@ from typing import Optional
 import sc2reader
 
 from Python.vibe_b2gm_macro_timer.data import SupplyTimeseries
-from Python.vibe_b2gm_macro_timer.renderer import render_to_std_out
+from Python.vibe_b2gm_macro_timer.renderer import render_to_std_out, render_to_html
 
 
 class PlayerMock:
@@ -47,4 +47,4 @@ if __name__ == '__main__':
         if died:
             timeseries.add_data_point(died, -unit.supply, unit.is_worker)
 
-    render_to_std_out(timeseries)
+    render_to_html(timeseries, 'chart.html')
