@@ -4,7 +4,7 @@ from typing import Optional
 import sc2reader
 
 from Python.vibe_b2gm_macro_timer.data import SupplyTimeseries
-from Python.vibe_b2gm_macro_timer.renderer import render_to_std_out, render_to_html
+from Python.vibe_b2gm_macro_timer.renderer import render_to_html
 
 
 class PlayerMock:
