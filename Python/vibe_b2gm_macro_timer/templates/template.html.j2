@@ -22,7 +22,10 @@ var chart = c3.generate({
     },
     axis: {
         x: {
-            type: 'category'
+            type: 'category',
+            //tick: {
+            //    format: function (x) { return parseInt(x.replace(":","") % 300 != 0); }
+            //}
         }
     }
 });

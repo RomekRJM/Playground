@@ -7,7 +7,7 @@
 
 <body>
 <h3>
-    name
+    Pride of Altaris LE, GoldenArmada vs RJM
 </h3>
 <div id="chart"></div>
 <script>
@@ -22,7 +22,10 @@ var chart = c3.generate({
     },
     axis: {
         x: {
-            type: 'category'
+            type: 'category',
+            //tick: {
+            //    format: function (x) { return parseInt(x.replace(":","") % 300 != 0); }
+            //}
         }
     }
 });

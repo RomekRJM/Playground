@@ -32,10 +32,15 @@ def getattr_non_empty(x, attr, default):
 if __name__ == '__main__':
     replay = sc2reader.load_replay('2022-07-12PvP.SC2Replay', load_level=4)
 
-    player_units = [event.unit for event in replay.events if getattr_non_empty(getattr_non_empty(event, 'unit_controller', PlayerMock()), 'name', '') == 'RJM']
+    player_units = [event.unit for event in replay.events if
+                    getattr_non_empty(getattr_non_empty(event, 'unit_controller', PlayerMock()), 'name',
+                                      '') == 'RJM']
     player_units = [unit for unit in player_units if not unit.hallucinated]
 
-    timeseries = SupplyTimeseries('name', datetime.utcnow())
+    timeseries = SupplyTimeseries('{}, {} vs {}'
+                                  .format(replay.map_name, replay.humans[0].name, replay.humans[1].name),
+                                  datetime.utcnow()
+                                  )
 
     for unit in player_units:
         born = convert_to_mm_ss(unit.finished_at)
