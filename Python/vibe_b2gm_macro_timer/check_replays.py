@@ -47,4 +47,4 @@ if __name__ == '__main__':
         if died:
             timeseries.add_data_point(died, -unit.supply, unit.is_worker)
 
-    render_to_html(timeseries, 'chart.html')
+    render_to_html(timeseries.compute_supply_info(), 'chart.html')
