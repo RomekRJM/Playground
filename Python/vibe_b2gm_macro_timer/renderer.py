@@ -24,4 +24,5 @@ def render_to_html(supply_info: SupplyInfo, output_file: str):
 def render_to_std_out(supply_info: SupplyInfo):
     for i in range(supply_info.size):
         print("{} - workers: {}, army: {}, total: {}"
-              .format(supply_info.time_mm_ss[i], supply_info.workers[i], supply_info.total[i] - supply_info.workers[i], supply_info.total[i] ))
+              .format(supply_info.time_mm_ss[i], supply_info.workers[i],
+                      supply_info.total[i] - supply_info.workers[i], supply_info.total[i]))

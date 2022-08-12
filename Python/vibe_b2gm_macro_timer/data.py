@@ -39,7 +39,6 @@ class SupplyTimeseries:
         if is_worker:
             delta.worker_delta += supply_delta
 
-
     def compute_supply_info(self) -> SupplyInfo:
         for timer in sorted(self.delta_supply_timeseries):
             self.delta_supply_timeseries.move_to_end(timer)
