@@ -30,14 +30,15 @@ class SupplyTimeseries:
         self.delta_supply_timeseries = OrderedDict()
 
     def add_data_point(self, timer: str, supply_delta: int, is_worker: bool):
-        if timer in self.delta_supply_timeseries:
-            delta = self.delta_supply_timeseries[timer]
-            delta.supply_delta += supply_delta
-
-            if is_worker:
-                delta.worker_delta += supply_delta
-        else:
+        if timer not in self.delta_supply_timeseries:
             self.delta_supply_timeseries[timer] = DeltaSupply()
+
+        delta = self.delta_supply_timeseries[timer]
+        delta.supply_delta += supply_delta
+
+        if is_worker:
+            delta.worker_delta += supply_delta
+
 
     def compute_supply_info(self) -> SupplyInfo:
         for timer in sorted(self.delta_supply_timeseries):

@@ -35,7 +35,7 @@ if __name__ == '__main__':
     player_units = [event.unit for event in replay.events if
                     getattr_non_empty(getattr_non_empty(event, 'unit_controller', PlayerMock()), 'name',
                                       '') == 'RJM']
-    player_units = [unit for unit in player_units if not unit.hallucinated]
+    player_units = [unit for unit in player_units if not unit.hallucinated and (unit.is_worker or unit.is_army)]
 
     timeseries = SupplyTimeseries('{}, {} vs {}'
                                   .format(replay.map_name, replay.humans[0].name, replay.humans[1].name),
