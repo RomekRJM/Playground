@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="us">
+<body>
+
+<canvas id="roulette" width="600" height="600"
+        style="border:1px solid #c3c3c3;">
+  Your browser does not support the canvas element.
+</canvas>
+
+<script>
+    function init() {
+        setInterval(draw, 100);
+    }
+
+    function draw() {
+        const categories = ["CurveFever", "HexBall", "Rysowanie"];
+        const colors = ["#FF0000A0", "#FFFF00A0", "#0000FFA0"];
+        const r = 220;
+        const x = 300;
+        const y = 300;
+
+        let canvas = document.getElementById("roulette");
+        let ctx = canvas.getContext("2d");
+        let i;
+        let speed = 0;
+        let arcPortion = 2 * Math.PI / colors.length;
+        let startOfPortion = speed;
+        let endOfPortion = 0;
+
+        ctx.clearRect(0, 0, ctx.width, ctx.height);
+
+        for (i = 0; i < categories.length; ++i) {
+            startOfPortion += arcPortion;
+            endOfPortion = startOfPortion + arcPortion;
+            ctx.fillStyle = colors[i];
+            ctx.beginPath();
+            ctx.arc(x, y, r, startOfPortion, endOfPortion);
+            ctx.lineTo(x, y);
+            ctx.closePath();
+            ctx.fill();
+        }
+
+        let date = new Date();
+
+        ctx.save();
+        ctx.translate(x,y);
+        ctx.rotate( ((2*Math.PI)/6)*date.getSeconds() + ( (2*Math.PI)/6000)*date.getMilliseconds() );
+        // ctx.restore();
+    }
+
+    init();
+
+</script>
+
+</body>
+</html>
+
