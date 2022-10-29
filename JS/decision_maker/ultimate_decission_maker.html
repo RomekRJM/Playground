@@ -8,8 +8,9 @@
 </canvas>
 
 <script>
+    let frame = 0.0;
     function init() {
-        setInterval(draw, 100);
+        setInterval(draw, 16);
     }
 
     function draw() {
@@ -28,24 +29,24 @@
         let endOfPortion = 0;
 
         ctx.clearRect(0, 0, ctx.width, ctx.height);
+        ctx.translate(x,y);
 
         for (i = 0; i < categories.length; ++i) {
             startOfPortion += arcPortion;
             endOfPortion = startOfPortion + arcPortion;
             ctx.fillStyle = colors[i];
             ctx.beginPath();
-            ctx.arc(x, y, r, startOfPortion, endOfPortion);
-            ctx.lineTo(x, y);
+            ctx.arc(0, 0, r, startOfPortion, endOfPortion);
+            ctx.lineTo(0, 0);
             ctx.closePath();
             ctx.fill();
         }
 
         let date = new Date();
+        ctx.rotate( ((2*Math.PI)*frame/6));
+        ctx.translate(-x, -y);
 
-        ctx.save();
-        ctx.translate(x,y);
-        ctx.rotate( ((2*Math.PI)/6)*date.getSeconds() + ( (2*Math.PI)/6000)*date.getMilliseconds() );
-        // ctx.restore();
+        frame += 0.001;
     }
 
     init();
