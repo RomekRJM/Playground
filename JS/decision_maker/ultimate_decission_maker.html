@@ -8,9 +8,16 @@
 </canvas>
 
 <script>
-    let frame = 0.0;
+    const finish = 10;
+    const duration = 10;
+    const start = 0;
+    let time;
+    const fps = 16;
+    let interval;
+
     function init() {
-        setInterval(draw, 16);
+        time = 0;
+        interval = setInterval(draw, 1000 / fps);
     }
 
     function draw() {
@@ -42,11 +49,30 @@
             ctx.fill();
         }
 
-        let date = new Date();
-        ctx.rotate( ((2*Math.PI)*frame/6));
-        ctx.translate(-x, -y);
+        let position = easeInOutQuad(time * 100 / duration, time, start, finish, duration);
+        time += 1 / fps;
+        if (position < finish) {
+          ctx.rotate( ((2*Math.PI)*position/6));
+          ctx.translate(-x, -y);
+        } else {
+          ctx.translate(-x, -y);
+          clearInterval(interval);
+        }
+    }
 
-        frame += 0.001;
+    // formula     http://easings.net/
+    // description https://stackoverflow.com/questions/8316882/what-is-an-easing-function
+    // x: percent
+    // t: current time,
+    // b: beginning value,
+    // c: change in value,
+    // d: duration
+    function easeInOutQuad(x, t, b, c, d) {
+        if ((t /= d / 2) < 1) {
+            return c / 2 * t * t + b;
+        } else {
+            return -c / 2 * ((--t) * (t - 2) - 1) + b;
+        }
     }
 
     init();
