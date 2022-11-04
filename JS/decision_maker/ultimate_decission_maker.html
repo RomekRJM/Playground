@@ -44,8 +44,8 @@
 <script>
 
     function draw() {
-        const categories = ["CurveFever", "HexBall", "Rysowanie", "Plucie"];
-        const colors = ["#000000A0", "#FFFF00A0", "#FF00FFA0", "#0FF000A0"];
+        const categories = ["CurveFever", "HexBall", "Rysowanie"];
+        const colors = ["#000000A0", "#FFFF00A0", "#FF00FFA0"];
         const r = 220;
         const x = 300;
         const y = 300;
@@ -68,6 +68,19 @@
             ctx.lineTo(x, y);
             ctx.closePath();
             ctx.fill();
+
+            ctx.save();
+            ctx.translate(x, y);
+            ctx.font         = '20px Verdana';
+            ctx.fillStyle    = '#000000';
+            ctx.textAlign    = 'left';
+            ctx.textBaseline = 'middle';
+            ctx.rotate((endOfPortion + startOfPortion)/ 2);
+
+            ctx.fillText("      " + categories[i], 0, 0);
+            ctx.restore();
+
+
         }
     }
 
