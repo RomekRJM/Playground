@@ -1,16 +1,46 @@
 <!DOCTYPE html>
 <html lang="us">
+<head>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+      :root {
+          --start-at-angle: 0deg;
+          --end-at-angle: 0deg;
+      }
+
+      @keyframes rotation {
+          from {transform: rotate(var(--start-at-angle));}
+          to {transform: rotate(var(--end-at-angle));}
+      }
+
+      #roulette {
+          animation: rotation 3s ease-out;
+          animation-fill-mode: forwards;
+          position: absolute;
+          z-index: 1;
+      }
+
+      #pointer {
+          background-color: black;
+          position: absolute;
+          top: 60px;
+          left: 300px;
+          width: 2px;
+          height: 40px;
+      }
+
+  </style>
+</head>
 <body>
 
-<canvas id="roulette" width="600" height="600"
-        style="border:1px solid #c3c3c3;">
+<div id="pointer"></div>
+
+<canvas id="roulette" width="600" height="600" onclick="rotate()">
   Your browser does not support the canvas element.
 </canvas>
 
 <script>
-    function init() {
-        setInterval(draw, 100);
-    }
 
     function draw() {
         const categories = ["CurveFever", "HexBall", "Rysowanie"];
@@ -39,16 +69,25 @@
             ctx.closePath();
             ctx.fill();
         }
-
-        let date = new Date();
-
-        ctx.save();
-        ctx.translate(x,y);
-        ctx.rotate( ((2*Math.PI)/6)*date.getSeconds() + ( (2*Math.PI)/6000)*date.getMilliseconds() );
-        // ctx.restore();
     }
 
-    init();
+    function rotate() {
+        document.getAnimations().forEach((anim) => {
+            anim.cancel();
+            anim.play();
+        });
+
+        let startAngle = getComputedStyle(document.documentElement)
+            .getPropertyValue('--start-at-angle')
+            .replace('deg', '');
+
+        let endAngle = parseInt(startAngle) + Math.floor(1400 + Math.random() * 720);
+        document.documentElement.style.setProperty('--start-at-angle', startAngle);
+        document.documentElement.style.setProperty('--end-at-angle', endAngle + 'deg');
+
+    }
+
+    draw();
 
 </script>
 
