@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="us">
 <head>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet">
 
   <style>
       :root {
@@ -25,12 +25,13 @@
           background-color: black;
           position: absolute;
           top: 60px;
-          left: 300px;
-          width: 2px;
+          left: 308px;
+          width: 1px;
           height: 40px;
       }
 
   </style>
+  <title>Ultimate decision maker</title>
 </head>
 <body>
 
@@ -43,8 +44,8 @@
 <script>
 
     function draw() {
-        const categories = ["CurveFever", "HexBall", "Rysowanie"];
-        const colors = ["#FF0000A0", "#FFFF00A0", "#0000FFA0"];
+        const categories = ["CurveFever", "HexBall", "Rysowanie", "Plucie"];
+        const colors = ["#000000A0", "#FFFF00A0", "#FF00FFA0", "#0FF000A0"];
         const r = 220;
         const x = 300;
         const y = 300;
@@ -52,9 +53,8 @@
         let canvas = document.getElementById("roulette");
         let ctx = canvas.getContext("2d");
         let i;
-        let speed = 0;
         let arcPortion = 2 * Math.PI / colors.length;
-        let startOfPortion = speed;
+        let startOfPortion = - Math.PI / 2;
         let endOfPortion = 0;
 
         ctx.clearRect(0, 0, ctx.width, ctx.height);
@@ -82,6 +82,7 @@
             .replace('deg', '');
 
         let endAngle = parseInt(startAngle) + Math.floor(1400 + Math.random() * 720);
+
         document.documentElement.style.setProperty('--start-at-angle', startAngle);
         document.documentElement.style.setProperty('--end-at-angle', endAngle + 'deg');
 
