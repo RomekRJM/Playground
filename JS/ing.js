@@ -37,9 +37,9 @@ async function sumPaidExcludingBeginOfCreditLine() {
 
 sleep(10)
     .then(() => document.querySelector('ing-icon[icon-id="ming:all:kredyt-gotowkowy"]').click())
-    .then(() => sleep(1000))
+    .then(() => sleep(2000))
     .then(() => document.querySelector('.product-item.product-bubble-custom div.js-bubble-region').click())
-    .then(() => sleep(500))
+    .then(() => sleep(4000))
     .then(() => {
         totalMortgage = toNumber(document.querySelector('.budget-display_list-item_amount.amount.amount--med.col-lg-6.col-sm-7.col-xs-7.pa-0').innerText);
     })
@@ -47,13 +47,13 @@ sleep(10)
         standingBalance = toNumber(document.querySelector('.budget-display_list-item_amount.amount.amount--big.col-lg-6.col-sm-7.col-xs-7.pa-0').innerText);
     })
     .then(() => document.querySelector('.js-repayment-history-button').click())
-    .then(() => sleep(500))
+    .then(() => sleep(3000))
     .then(async () => {
             for (let year = 3; year < 20; year++) {
                 await clickDropdown();
-                await sleep(200);
+                await sleep(1000);
                 await pickYear(year);
-                await sleep(500);
+                await sleep(1000);
 
                 while (await clickMoreIfExists()) {
                     await sleep(500);
