@@ -36,9 +36,9 @@ async function sumPaidExcludingBeginOfCreditLine() {
 }
 
 sleep(10)
-    .then(() => document.querySelector('ing-icon[icon-id="ming:all:kredyt-gotowkowy"]').click())
+    .then(() => document.querySelector("#groups-region > ul > li:nth-child(3) > div.js-bubble-region.js-bubble > div > div").click())
     .then(() => sleep(2000))
-    .then(() => document.querySelector('.product-item.product-bubble-custom div.js-bubble-region').click())
+    .then(() => document.querySelector("#products-region > ul > li:nth-child(1) > div").click())
     .then(() => sleep(4000))
     .then(() => {
         totalMortgage = toNumber(document.querySelector('.budget-display_list-item_amount.amount.amount--med.col-lg-6.col-sm-7.col-xs-7.pa-0').innerText);
