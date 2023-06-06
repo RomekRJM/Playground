@@ -70,5 +70,5 @@ sleep(10)
             }
         }
     )
-    .then(() => console.log('Zapłacono w sumie ' + (-1) * totalPaid + 'PLN. Do zapłaty ' + standingBalance + 'PLN z '
-        + totalMortgage + 'PLN. Koszt kredytu: ' + (-1 * (totalMortgage + totalPaid - standingBalance)) + 'PLN.' ));
+    .then(() => console.log('Zapłacono w sumie ' + ((-1) * totalPaid).toFixed(2) + 'PLN. Do zapłaty ' + standingBalance.toFixed(2) + 'PLN z '
+        + totalMortgage + 'PLN. Koszt kredytu: ' + (-1 * (totalMortgage + totalPaid - standingBalance)).toFixed(2) + 'PLN.' ));
