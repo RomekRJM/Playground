@@ -54,25 +54,31 @@ moves_list = [
     [PAD_DOWN | R0, PAD_SELECT | R1],
     [PAD_SELECT | R0, PAD_DOWN | R1],
     [PAD_SELECT | R0],
+    [0 | R0]
 ]
 
 
-def double_pearson_hash(moves):
+def fast_16_hashes(moves):
     lsb = 0
     msb = 0
+    hs = []
+
     for i, move in enumerate(moves):
         if i & 1:
             msb = msb ^ move
         else:
             lsb = lsb ^ move
 
-    return (msb << 8) | lsb
+        h = (msb << 8) | lsb
+        hs.append(h)
+
+    return hs
 
 
 if __name__ == '__main__':
     hashes = {}
     for combo in moves_list:
-        hash = double_pearson_hash(combo)
+        hash = fast_16_hashes(combo)[len(combo) - 1]
 
         if hash in hashes:
             hashes[hash]['count'] += 1
