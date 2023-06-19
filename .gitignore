@@ -51,6 +51,7 @@ app.info
 
 #misc
 /BeginnersMethodRubiks/test_rcs.cpp
+hash*.txt
 
 # Godot-specific ignores
 .import/

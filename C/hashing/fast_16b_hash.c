@@ -1,23 +1,23 @@
 #include "stdio.h"
 
 unsigned char tmp1, tmp2, tmp3, tmp4, tmp5, tmp6;
-unsigned int tmpWord1, tmpWord2, tmpWord3, tmpWord4;
+unsigned int hash1msb, hash1lsb, hash2msb, hash2lsb, hash3msb, hash3lsb, hash4msb, hash4lsb;
 
 char file[] = "hash.txt";
 
 void fast_16b_hash() {
 
-    tmp5 = 0 ^ tmp1; // lsb
-    tmp6 = 0 ^ tmp2; // msb
+    hash1lsb = 0 ^ tmp1; // lsb
+    hash1msb = 0; // msb
 
-    tmpWord1 = tmp5;
-    tmpWord2 = (tmp6 << 8) | tmp5;
+    hash2lsb = hash1lsb;
+    hash2msb = 0 ^ tmp2;
 
-    tmp5 ^= tmp3;
-    tmp6 ^= tmp4;
+    hash3lsb = hash2lsb ^ tmp3;
+    hash3msb = hash2msb;
 
-    tmpWord3 = tmp5;
-    tmpWord4 = (tmp6 << 8) | tmp5;
+    hash4lsb = hash3lsb;
+    hash4msb = hash3msb ^ tmp4;
 }
 
 
@@ -32,8 +32,8 @@ int main(int argc, char **argv) {
             for (tmp3 = 0; tmp3 < 2; ++tmp3) {
                 for (tmp4 = 0; tmp4 < 2; ++tmp4) {
                     fast_16b_hash();
-                    fprintf(fp, "%d, %d, %d, %d: fast_16b_hash(%d, %d, %d, %d)\n", tmp1, tmp2, tmp3, tmp4,
-                            tmpWord1, tmpWord2, tmpWord3, tmpWord4);
+                    fprintf(fp, "%d, %d, %d, %d: fast_16b_hash(%d, %d, %d, %d, %d, %d, %d, %d)\n",
+                            tmp1, tmp2, tmp3, tmp4, hash1lsb, hash1msb, hash2lsb, hash2msb, hash3lsb, hash3msb, hash4lsb, hash4msb);
                 }
             }
         }

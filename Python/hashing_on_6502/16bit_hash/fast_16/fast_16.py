@@ -1,3 +1,5 @@
+import os
+
 PAD_RIGHT = 128
 PAD_LEFT = 64
 PAD_DOWN = 32
@@ -69,13 +71,13 @@ def fast_16_hashes(moves):
         else:
             lsb = lsb ^ move
 
-        h = (msb << 8) | lsb
-        hs.append(h)
+        hs.append(lsb)
+        hs.append(msb)
 
     return hs
 
 
-if __name__ == '__main__':
+def compute_hashes_for_moves_list():
     hashes = {}
     for combo in moves_list:
         hash = fast_16_hashes(combo)[len(combo) - 1]
@@ -89,4 +91,26 @@ if __name__ == '__main__':
                 'for': [combo]
             }
 
-print(hashes)
+    print(hashes)
+
+
+def write_hashes():
+    path = 'hash_py.txt'
+
+    if os.path.exists(path):
+        os.remove(path)
+
+    with open(path, 'w') as f:
+        for tmp1 in range(255):
+            for tmp2 in range(255):
+                for tmp3 in range(2):
+                    for tmp4 in range(2):
+                        moves = [tmp1, tmp2, tmp3, tmp4]
+                        hashes = [str(h) for h in fast_16_hashes(moves)]
+                        hashes_s = ", ".join(hashes)
+                        f.write(f"{tmp1}, {tmp2}, {tmp3}, {tmp4}: fast_16b_hash({hashes_s})\n")
+
+
+if __name__ == '__main__':
+    # compute_hashes_for_moves_list()
+    write_hashes()
