@@ -1,17 +1,17 @@
 #include "stdio.h"
 
 unsigned char tmp1, tmp2, tmp3, tmp4;
-unsigned int hash1msb, hash1lsb, hash2msb, hash2lsb, hash3msb, hash3lsb, hash4msb, hash4lsb;
+unsigned char hash1msb, hash1lsb, hash2msb, hash2lsb, hash3msb, hash3lsb, hash4msb, hash4lsb;
 
 char file[] = "hash.txt";
 
 void fast_16b_hash() {
 
     hash1msb = 0;
-    hash1lsb = 0 ^ tmp1;
+    hash1lsb = tmp1;
 
     hash2lsb = hash1lsb;
-    hash2msb = 0 ^ tmp2;
+    hash2msb = tmp2;
 
     hash3msb = hash2msb;
     hash3lsb = hash2lsb ^ tmp3;
