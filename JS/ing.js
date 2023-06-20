@@ -56,7 +56,7 @@ sleep(10)
                 await sleep(1000);
 
                 while (await clickMoreIfExists()) {
-                    await sleep(500);
+                    await sleep(1500);
                 }
 
                 let paidInYear = await sumPaidExcludingBeginOfCreditLine();
