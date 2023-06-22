@@ -1,4 +1,5 @@
 import os
+from dataclasses import dataclass
 
 PAD_RIGHT = 128
 PAD_LEFT = 64
@@ -14,8 +15,19 @@ R1 = 4
 R2 = 8
 R3 = 12
 
+PUNCH = 130
+KICK = 131
+JUMP_KICK = 132
+DRILL = 133
+DASHING_PUNCH = 134
+DASHING_KICK = 135
+DUCKING_PUNCH = 136
+PUNCH_OR_THROW = 137
+
+MOVES_LIST_FILE = 'moves_list.txt'
+
 moves_list = [
-    [PAD_DOWN | PAD_LEFT | R0, PAD_B | R1],
+    [DRILL, PAD_DOWN | PAD_LEFT | R0, PAD_B | R1],
     [PAD_DOWN | R0, PAD_LEFT | R1, PAD_DOWN | R2, PAD_B | R3],
     [PAD_LEFT | R0, PAD_DOWN | R1, PAD_LEFT | R2, PAD_B | R3],
     [PAD_DOWN | PAD_LEFT | R0, PAD_LEFT | R1, PAD_B | R2],
@@ -60,6 +72,12 @@ moves_list = [
 ]
 
 
+@dataclass
+class Move:
+    move_name: str
+    hash_val: str
+
+
 def fast_16_hashes(moves):
     lsb = 0
     msb = 0
@@ -94,6 +112,29 @@ def compute_hashes_for_moves_list():
     print(hashes)
 
 
+def read_moves():
+    with open(MOVES_LIST_FILE, 'r') as f:
+        moves_list_lines = f.readlines()
+
+    move_hash = []
+    for line in moves_list_lines:
+        parts = [x.strip() for x in line.split(',')]
+        move_name = parts[0]
+        moves = parts[1:]
+
+        input_states = [0] * len(moves)
+
+        for i, sequence in enumerate(moves):
+            keys = [x.strip() for x in sequence.split('|')]
+
+            for key in keys:
+                input_states[i] = input_states[i] | globals()[key]
+
+        move_hash.append(Move(move_name, fast_16_hashes(input_states)))
+
+    return move_hash
+
+
 def write_hashes():
     path = 'hash_py.txt'
 
@@ -113,4 +154,5 @@ def write_hashes():
 
 if __name__ == '__main__':
     # compute_hashes_for_moves_list()
-    write_hashes()
+    # write_hashes()
+    read_moves()
