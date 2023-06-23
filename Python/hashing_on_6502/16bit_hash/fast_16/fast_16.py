@@ -75,7 +75,10 @@ moves_list = [
 @dataclass
 class Move:
     move_name: str
-    hash_val: str
+    hash_lsb: str
+    hash_msb: str
+    is_special: bool
+    move_length: int
 
 
 def fast_16_hashes(moves):
@@ -116,11 +119,13 @@ def read_moves():
     with open(MOVES_LIST_FILE, 'r') as f:
         moves_list_lines = f.readlines()
 
-    move_hash = []
+    move_hashes = []
     for line in moves_list_lines:
         parts = [x.strip() for x in line.split(',')]
         move_name = parts[0]
-        moves = parts[1:]
+        move_type = parts[1] == 'SPECIAL_MOVE'
+        moves = parts[2:]
+        move_lenght = len(moves)
 
         input_states = [0] * len(moves)
 
@@ -130,9 +135,38 @@ def read_moves():
             for key in keys:
                 input_states[i] = input_states[i] | globals()[key]
 
-        move_hash.append(Move(move_name, fast_16_hashes(input_states)))
+        computed_hashes = fast_16_hashes(input_states)
 
-    return move_hash
+        move_hashes.append(Move(move_name, computed_hashes[-2], computed_hashes[-1],
+                                move_type, move_lenght))
+
+    return move_hashes
+
+
+def translate_move_hashes_to_c_array(move_hashes):
+    count_moves = {}
+
+    for move_hash in move_hashes:
+        if move_hash.move_name in count_moves:
+            count_moves[move_hash.move_name] += 1
+        else:
+            count_moves[move_hash.move_name] = 1
+
+    c_code = ""
+
+    for move_name, count in count_moves.items():
+        control_byte = ""
+        c_code += f"\n{move_name}, "
+        for move_hash in move_hashes:
+            if move_hash.move_name == move_name:
+                if not control_byte:
+                    control_byte = "SPECIAL_MOVE" if move_hash.is_special else "BASIC_MOVE"
+                    control_byte += f" | {count}"
+                    c_code += f"{control_byte}, "
+
+                c_code += f"{move_hash.hash_lsb}, {move_hash.hash_msb}, "
+
+    return c_code[:-2]
 
 
 def write_hashes():
@@ -155,4 +189,6 @@ def write_hashes():
 if __name__ == '__main__':
     # compute_hashes_for_moves_list()
     # write_hashes()
-    read_moves()
+    move_hashes_from_file = read_moves()
+    move_hashes_as_c_code = translate_move_hashes_to_c_array(move_hashes_from_file)
+    print(move_hashes_as_c_code)
