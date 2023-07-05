@@ -18,9 +18,6 @@
 *.dbg
 *.deb
 
-# Fortran module files
-*.mod
-
 # Compiled Static libraries
 *.lai
 *.la
