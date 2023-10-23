@@ -94,7 +94,7 @@
             .getPropertyValue('--start-at-angle')
             .replace('deg', '');
 
-        let endAngle = parseInt(startAngle) + Math.floor(1400 + Math.random() * 720);
+        let endAngle = parseInt(startAngle) + Math.floor(1440 + Math.random() * 1440);
 
         document.documentElement.style.setProperty('--start-at-angle', startAngle);
         document.documentElement.style.setProperty('--end-at-angle', endAngle + 'deg');
