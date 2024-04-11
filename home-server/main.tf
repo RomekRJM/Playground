@@ -11,7 +11,31 @@ provider "docker" {
   host = "unix:///home/rjm/.docker/desktop/docker.sock"
 }
 
+resource "docker_image" "minecraft" {
+  name         = "itzg/minecraft-server"
+  keep_locally = false
+}
+
+resource "docker_container" "minecraft" {
+  image = docker_image.minecraft.image_id
+  name  = "minecraft-server"
+  env = toset(["EULA=TRUE"])
+  stdin_open = true
+  tty = true
+
+  volumes {
+    host_path = "/tmp"
+    container_path = "/data"
+  }
+
+  ports {
+    internal = 25565
+    external = 25565
+  }
+}
+
 resource "docker_image" "nginx" {
+  
   name         = "nginx"
   keep_locally = false
 }
