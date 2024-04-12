@@ -1,16 +1,3 @@
-terraform {
-  required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~> 3.0.1"
-    }
-  }
-}
-
-provider "docker" {
-  host = "unix:///home/rjm/.docker/desktop/docker.sock"
-}
-
 resource "docker_image" "minecraft" {
   name         = "itzg/minecraft-server"
   keep_locally = false
