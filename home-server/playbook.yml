@@ -54,10 +54,10 @@
         state: latest
         update_cache: true
 
-#    - name: Ensure docker deamon is running as a service
-#      service:
-#        name: docker
-#        state: started
+    - name: Ensure docker deamon is running as a service
+      service:
+        name: docker
+        state: started
 
     - name: Copy config files
       synchronize:

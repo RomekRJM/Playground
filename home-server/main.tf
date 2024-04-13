@@ -52,7 +52,7 @@ resource "docker_container" "nginx" {
 
   volumes {
     host_path = "${path.cwd}/eryk-sonic"
-    container_path = "/usr/share/nginx/eryk-sonic"
+    container_path = "/usr/share/nginx/html/eryk-sonic"
   }
 }
 
