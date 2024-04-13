@@ -10,8 +10,10 @@ resource "docker_container" "minecraft" {
   restart = "always"
   env = toset([
     "EULA=TRUE",
-    "WHITELIST=ErykCoco",
-    "OPS=ErykCoco",
+    "WHITELIST=ErykCoco,",
+    "OPS=ErykCoco,",
+    "MODRINTH_PROJECTS=jline4mcdsrv",
+    "TYPE=FABRIC"
   ])
   stdin_open = true
   tty = true
