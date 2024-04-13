@@ -6,7 +6,13 @@ resource "docker_image" "minecraft" {
 resource "docker_container" "minecraft" {
   image = docker_image.minecraft.image_id
   name  = "minecraft-server"
-  env = toset(["EULA=TRUE"])
+  network_mode = "host"
+  restart = "always"
+  env = toset([
+    "EULA=TRUE",
+    "WHITELIST=ErykCoco",
+    "OPS=ErykCoco",
+  ])
   stdin_open = true
   tty = true
 
@@ -29,6 +35,8 @@ resource "docker_image" "nginx" {
 resource "docker_container" "nginx" {
   image = docker_image.nginx.image_id
   name  = "nginx"
+  network_mode = "host"
+  restart = "always"
 
   upload {
     file = "/etc/nginx/conf.d/eryk.nginx.conf"

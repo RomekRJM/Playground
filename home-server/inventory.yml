@@ -1,0 +1,8 @@
+all:
+  hosts:
+    lenovo-ssf:
+      ansible_host: 192.168.50.145
+      ansible_port: 22
+      ansible_user: root
+      ansible_ssh_private_key_file: ~/.ssh/lenovo_ssf_id_rsa
+      ansible_rsync_path: /usr/bin/rsync

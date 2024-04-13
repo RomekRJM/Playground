@@ -1,0 +1,80 @@
+---
+- hosts: all
+  become: true
+
+  vars:
+      home_server_install_path: '/opt/home-server'
+
+  tasks:
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+
+    - name: Install required system packages
+      apt:
+        pkg:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - git
+          - gnupg2
+          - wget
+          - software-properties-common
+          - rsync
+        state: latest
+        update_cache: true
+
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/debian/gpg
+        state: present
+
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/debian bookworm stable
+        state: present
+
+    - name: Add Terraform GPG apt Key
+      shell: wget -O- https://apt.releases.hashicorp.com/gpg | gpg --dearmor | sudo tee /usr/share/keyrings/hashicorp-archive-keyring.gpg > /dev/null
+
+    - name: Add Terraform Repository
+      shell: echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com bookworm main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+
+    - name: Update apt and install docker-ce
+      apt:
+        name: docker-ce
+        state: latest
+        update_cache: true
+
+    - name: Terraform installation
+      apt:
+        name: terraform
+        state: latest
+        update_cache: true
+
+#    - name: Ensure docker deamon is running as a service
+#      service:
+#        name: docker
+#        state: started
+
+    - name: Copy config files
+      synchronize:
+        src: ./
+        dest: '{{ home_server_install_path }}'
+        delete: yes
+        rsync_path: /usr/bin/rsync
+        rsync_opts:
+          - "--exclude=*.tfstate*"
+          - "--exclude=*.terraform*"
+
+    - name: Terraform init
+      ansible.builtin.command: terraform init
+      args:
+        chdir: '{{ home_server_install_path }}'
+
+    - name: Terraform apply
+      ansible.builtin.command: terraform apply -var-file="lenovo-ssf/terraform.tfvars" -auto-approve
+      args:
+        chdir: '{{ home_server_install_path }}'
