@@ -1,5 +1,5 @@
 resource "docker_image" "minecraft" {
-  name         = "itzg/minecraft-server"
+  name         = "itzg/minecraft-server:java21-alpine"
   keep_locally = false
 }
 
@@ -12,8 +12,10 @@ resource "docker_container" "minecraft" {
     "EULA=TRUE",
     "WHITELIST=ErykCoco,",
     "OPS=ErykCoco,",
-    "MODRINTH_PROJECTS=jline4mcdsrv",
-    "TYPE=FABRIC"
+    "TYPE=FABRIC",
+    "INIT_MEMORY=2G",
+    "MAX_MEMORY=3G",
+    "REMOVE_OLD_MODS=true",
   ])
   stdin_open = true
   tty = true
