@@ -1,5 +1,23 @@
+locals {
+  minecraft_default_envs = {
+    EULA = "TRUE"
+    WHITELIST = "ErykCoco,"
+    OPS = "ErykCoco,"
+    REMOVE_OLD_MODS = "true"
+  }
+
+  minecraft_default_config = {
+    tag = "latest"
+    env = {
+      "TYPE" = "FABRIC"
+    }
+  }
+
+  current_minecraft_config = local.minecraft_default_config
+}
+
 resource "docker_image" "minecraft" {
-  name         = "itzg/minecraft-server:java21-alpine"
+  name         = "itzg/minecraft-server:${local.current_minecraft_config.tag}"
   keep_locally = false
 }
 
@@ -8,15 +26,12 @@ resource "docker_container" "minecraft" {
   name  = "minecraft-server"
   network_mode = "host"
   restart = "always"
-  env = toset([
-    "EULA=TRUE",
-    "WHITELIST=ErykCoco,",
-    "OPS=ErykCoco,",
-    "TYPE=FABRIC",
-    "INIT_MEMORY=2G",
-    "MAX_MEMORY=3G",
-    "REMOVE_OLD_MODS=true",
-  ])
+  env = toset(
+    [
+      for key, value in merge(local.minecraft_default_envs, local.current_minecraft_config.env):
+        "${key}=${value}"
+    ]
+  )
   stdin_open = true
   tty = true
 
