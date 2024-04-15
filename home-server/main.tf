@@ -31,7 +31,7 @@ locals {
       "SPIGET_RESOURCES" = "115123",
       "INIT_MEMORY"      = "1G",
       "MAX_MEMORY"       = "2G",
-      "VERSION"          = "1.20"
+      "VERSION"          = "1.20.4"
     }
   }
 
