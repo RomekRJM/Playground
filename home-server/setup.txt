@@ -6,3 +6,6 @@ ansible-playbook playbook.yml -i inventory.yml -u rjm
 
 terraform apply -var-file="mac/terraform.tfvars" -auto-approve
 terraform destroy -var-file="mac/terraform.tfvars" -auto-approve
+
+terraform apply -var-file="lenovo-ssf/terraform.tfvars" -auto-approve
+terraform apply -var-file="lenovo-ssf/terraform.tfvars" -auto-approve

@@ -70,7 +70,7 @@ resource "docker_container" "minecraft" {
 }
 
 resource "docker_image" "nginx" {
-  name         = "nginx"
+  name         = "nginxinc/nginx-unprivileged"
   keep_locally = false
 }
 

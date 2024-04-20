@@ -4,6 +4,7 @@
 
   vars:
       home_server_install_path: '/opt/home-server'
+      non_root_user: 'nobody'
 
   tasks:
     - name: Install aptitude
@@ -59,7 +60,7 @@
         name: docker
         state: started
 
-    - name: Copy config files
+    - name: Sync files
       synchronize:
         src: ./
         dest: '{{ home_server_install_path }}'
@@ -69,12 +70,28 @@
           - "--exclude=*.tfstate*"
           - "--exclude=*.terraform*"
 
+    - name: Change synced files ownership
+      file:
+        path: '{{ home_server_install_path }}'
+        recurse: true
+        owner: '{{ non_root_user }}'
+
+    - name: Change nginx ownership
+      file:
+        path: '{{ home_server_install_path }}'
+        recurse: true
+        owner: '{{ non_root_user }}'
+
     - name: Terraform init
       ansible.builtin.command: terraform init
+      become: true
+      become_user: '{{ non_root_user }}'
       args:
         chdir: '{{ home_server_install_path }}'
 
     - name: Terraform apply
       ansible.builtin.command: terraform apply -var-file="lenovo-ssf/terraform.tfvars" -auto-approve
+      become: true
+      become_user: '{{ non_root_user }}'
       args:
         chdir: '{{ home_server_install_path }}'
