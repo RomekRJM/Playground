@@ -9,6 +9,6 @@ function _draw()
 end
 
 
-function _update()
+function _update60()
    updateArrows()
 end
