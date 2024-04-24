@@ -50,8 +50,17 @@ end
 function drawArrows()
 
     for _, visible_arrow in pairs(visibleArrowQueue) do
+
+        if visible_arrow.x > 48 and visible_arrow.x < 80 then
+            pal(7, 11)
+        end
+
         spr(visible_arrow.sprite, visible_arrow.x, visible_arrow.y, visible_arrow.w, visible_arrow.h,
                 visible_arrow.flip_x, visible_arrow.flip_y)
+
+        if visible_arrow.x > 48 and visible_arrow.x < 80 then
+            pal()
+        end
     end
 
     print(stat(1), 0, 0)
