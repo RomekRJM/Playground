@@ -4,6 +4,7 @@ arrow = {
     sprite = 0,
     w = 2,
     h = 2,
+    next_element_pad_x = 32,
     flip_x = false,
     flip_y = false,
     visible = true,
@@ -14,89 +15,88 @@ function arrow:new(changes)
     return setmetatable(changes or {}, self)
 end
 
-function deepCopy(obj)
-    if type(obj) ~= 'table' then
-        return obj
-    end
-
-    local res = setmetatable({}, getmetatable(obj))
-
-    for k, v in pairs(obj) do
-        res[deepCopy(k)] = deepCopy(v)
-    end
-
-    return res
-end
-
 leftArrow = arrow:new(nil)
 rightArrow = arrow:new({ flip_x = true })
 topArrow = arrow:new({ sprite = 2, flip_x = true })
 bottomArrow = arrow:new({ sprite = 2, flip_y = true })
 
 function restartArrows()
-    firstVisible = 1
+    arrowQueueIndex = 1
     arrowUpdateBatchLen = 10
     arrowSpeed = 1
-    newInvisible = 0
     frame = 0
 
-    arrow_queue = {}
-    arrow_queue_len = 128
+    arrowQueue = {}
+    arrowQueueLen = 32
+    visibleArrowQueue = {}
+    visibleArrowQueueMaxLen = 10
 
     sequence = { leftArrow, rightArrow, topArrow, bottomArrow }
 
-    for i = 1, arrow_queue_len do
-        arrow_queue[i] = deepCopy(rnd(sequence))
+    for i = 1, arrowQueueLen do
+        arrowQueue[i] = deepCopy(rnd(sequence))
 
-        arrow_queue[i].x = arrow_queue[i].x + ((i - 1) % arrowUpdateBatchLen) * 32
+        if i <= arrowUpdateBatchLen then
+            arrowQueue[i].x = 128
+        end
     end
+
+    add(visibleArrowQueue, deepCopy(arrowQueue[1]))
+    visibleArrowQueueLen = 1
+
+    printh(tprint(arrowQueue))
 end
 
 function drawArrows()
 
-    for i = firstVisible, arrow_queue_len - 1 do
-        if arrow_queue[i].visible == false then
-            break
-        end
-
-        spr(arrow_queue[i].sprite, arrow_queue[i].x, arrow_queue[i].y, arrow_queue[i].w,
-                arrow_queue[i].h, arrow_queue[i].flip_x, arrow_queue[i].flip_y)
+    for _, visible_arrow in pairs(visibleArrowQueue) do
+        spr(visible_arrow.sprite, visible_arrow.x, visible_arrow.y, visible_arrow.w, visible_arrow.h,
+                visible_arrow.flip_x, visible_arrow.flip_y)
     end
 
     print(stat(1), 0, 0)
 end
 
-function logArrows(frame)
-    local log = "arrows.txt"
-    printh("pass: " .. tostring(pass))
-    printh("first: " .. tostring(firstVisible), log)
-    printh("last: " .. tostring(lastVisible), log)
+function logarrows()
+    printh("arrowQueueIndex: " .. tostring(arrowQueueIndex))
+    printh("visibleArrowQueueLen: " .. tostring(visibleArrowQueueLen))
 
-    for i = 1, arrow_queue_len do
-        printh(tostring(i) .. ": " .. tostring(arrow_queue[i].x), log)
+    for _, visibleArrow in pairs(visibleArrowQueue) do
+        printh(tostring(i) .. ": " .. tostring(visibleArrow.x))
     end
 end
 
 function updateArrows()
-    firstVisible = firstVisible + newInvisible
-    lastVisible = firstVisible + arrowUpdateBatchLen
 
-    newInvisible = 0
-
-    if lastVisible > arrow_queue_len then
-        lastVisible = arrow_queue_len
+    if btn(⬆️) then
+        stop()
     end
 
-    for i = firstVisible, lastVisible - 1 do
-        arrow_queue[i].x = arrow_queue[i].x - arrowSpeed
+    if visibleArrowQueueLen == 0 and arrowQueueIndex == arrowQueueLen then
+        return
+    end
 
-        if arrow_queue[i].x < arrow_queue[i].w * -8 then
-            arrow_queue[i].visible = false
-            newInvisible = newInvisible + 1
+    local scheduledForDeletion = {}
+
+    for _, visibleArrow in pairs(visibleArrowQueue) do
+        visibleArrow.x = visibleArrow.x - arrowSpeed
+        visibleArrow.next_element_pad_x = visibleArrow.next_element_pad_x - arrowSpeed
+
+        if visibleArrow.next_element_pad_x == 0 and arrowQueueIndex < arrowQueueLen then
+            add(visibleArrowQueue, deepCopy(arrowQueue[arrowQueueIndex]))
+            arrowQueueIndex = arrowQueueIndex + 1
+            visibleArrowQueueLen = visibleArrowQueueLen + 1
+        end
+
+        if visibleArrow.x < visibleArrow.w * -8 then
+            add(scheduledForDeletion, visibleArrow)
         end
     end
 
-    logArrows(frame)
+    for _, deletedArrow in pairs(scheduledForDeletion) do
+        del(visibleArrowQueue, deletedArrow)
+        visibleArrowQueueLen = visibleArrowQueueLen - 1
+    end
 
     frame = frame + 1
 end
