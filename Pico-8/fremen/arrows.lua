@@ -1,24 +1,11 @@
-arrow = {
-    x = 128,
-    y = 80,
-    sprite = 0,
-    w = 2,
-    h = 2,
+arrow = sprite:new{
     next_element_pad_x = 32,
-    flip_x = false,
-    flip_y = false,
-    visible = true,
 }
-arrow.__index = arrow
 
-function arrow:new(changes)
-    return setmetatable(changes or {}, self)
-end
-
-leftArrow = arrow:new(nil)
-rightArrow = arrow:new({ flip_x = true })
-topArrow = arrow:new({ sprite = 2, flip_x = true })
-bottomArrow = arrow:new({ sprite = 2, flip_y = true })
+leftArrow = arrow:new()
+rightArrow = arrow:new{ flip_x = true }
+topArrow = arrow:new{ sprite = 2, flip_x = true }
+bottomArrow = arrow:new{ sprite = 2, flip_y = true }
 
 function restartArrows()
     arrowQueueIndex = 1

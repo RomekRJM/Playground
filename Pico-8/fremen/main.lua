@@ -1,14 +1,15 @@
 function _init()
-  restartArrows()
+    restartUnicorns()
+    restartArrows()
 end
-
 
 function _draw()
     cls()
+    drawUnicorns()
     drawArrows()
 end
 
-
 function _update60()
-   updateArrows()
+    updateUnicorns()
+    updateArrows()
 end
