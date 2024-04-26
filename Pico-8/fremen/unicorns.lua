@@ -24,6 +24,7 @@ rainbowPart = sprite:new {
 }
 
 rainbowAngleMultiplier = 16 / 360
+rainbowCollisionX = 0
 leftRainbowX = 24
 rightRainbowX = 102
 
@@ -43,7 +44,6 @@ function drawUnicorns()
 end
 
 function drawRainbow()
-    local rainbowCollisionX = leftRainbowX + (rightRainbowX - leftRainbowX) / 2
     local x = 0
 
     for i, rainbowSprite in ipairs(rainbow) do
@@ -57,14 +57,75 @@ function drawRainbow()
             x = rainbowSprite.x
             spr(rainbowSprite.sprite, x, rainbowSprite.y + shiftY, rainbowSprite.w, rainbowSprite.h)
         end
+    end
+end
 
+particles = {}
+
+function updateParticles(sourceX, sourceY)
+    for i = 1, 1 + rnd(3) do
+
+        if count(particles) >= 33 then
+            break
+        end
+
+        add(particles, {
+            x = sourceX,
+            y = sourceY + rnd(3),
+            speed = 0.3 * rnd(4),
+            colour = 7,
+            radius = rnd(4),
+            duration = 5 + rnd(16)
+        })
+
+    end
+
+    for p in all(particles) do
+        p.y -= p.speed
+        p.duration -= 1
+
+        if p.duration <= 0 then
+            del(particles, p)
+        elseif p.duration < 3 then
+            p.radius = 1
+            p.colour = 5
+        elseif p.duration < 5 then
+            if p.radius == 3 then
+                p.radius = -0.3
+            end
+            p.colour = 9
+        elseif p.duration < 7 then
+            p.colour = 10
+        end
     end
 end
 
 function drawUnicornsWithRainbow()
     drawRainbow()
+    drawParticles()
     drawUnicorns()
 end
 
+function drawParticles()
+    for p in all(particles) do
+        circfill(p.x, p.y, p.radius, p.colour)
+        circfill(p.x, 60 - p.y, p.radius, p.colour)
+    end
+end
+
+rcShift = 0
+
 function updateUnicorns()
+    rainbowCollisionX = leftRainbowX + (rightRainbowX - leftRainbowX) / 2
+
+    if btn(⬅️) then
+      rcShift -= 2
+    end
+
+    if btn(➡️) then
+      rcShift += 2
+    end
+
+    rainbowCollisionX += rcShift
+    updateParticles(rainbowCollisionX, 28)
 end
