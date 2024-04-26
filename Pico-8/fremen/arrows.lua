@@ -11,7 +11,6 @@ function restartArrows()
     arrowQueueIndex = 1
     arrowUpdateBatchLen = 10
     arrowSpeed = 1
-    frame = 0
 
     arrowQueue = {}
     arrowQueueLen = 32
@@ -93,6 +92,4 @@ function updateArrows()
         del(visibleArrowQueue, deletedArrow)
         visibleArrowQueueLen = visibleArrowQueueLen - 1
     end
-
-    frame = frame + 1
 end
