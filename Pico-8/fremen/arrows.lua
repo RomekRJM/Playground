@@ -33,7 +33,16 @@ function restartArrows()
     printh(tprint(arrowQueue))
 end
 
+
+rightArrowHitBoundary = 80
+leftArrowHitBoundary = 48
+circleCentreX = (rightArrowHitBoundary - leftArrowHitBoundary) / 2 + leftArrowHitBoundary - 1
+circleCentreY = defaultSpriteY + 8 * (defaultSpriteH - 1)
+circleRadius = defaultSpriteH * 4 + 2
+
 function drawArrows()
+
+    circ(circleCentreX, circleCentreY, circleRadius)
 
     for _, visible_arrow in pairs(visibleArrowQueue) do
 
@@ -62,11 +71,6 @@ function logarrows()
 end
 
 function updateArrows()
-
-    if btn(⬆️) then
-        stop()
-    end
-
     if visibleArrowQueueLen == 0 and arrowQueueIndex == arrowQueueLen then
         return
     end

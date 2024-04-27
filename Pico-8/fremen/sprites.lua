@@ -1,9 +1,13 @@
+defaultSpriteY = 80
+defaultSpriteW = 2
+defaultSpriteH = 2
+
 sprite = {
     x = 128,
-    y = 80,
+    y = defaultSpriteY,
     sprite = 0,
-    w = 2,
-    h = 2,
+    w = defaultSpriteW,
+    h = defaultSpriteH,
     flip_x = false,
     flip_y = false,
     visible = true,
