@@ -31,8 +31,7 @@ rightRainbowX = 102
 
 function restartUnicorns()
     rainbow = {}
-    leftRainbowLength = 0
-    rightRainbowLength = 0
+    rainbowLength = 0
 
     for x = leftRainbowX, rightRainbowX, 1 do
         add(rainbow, deepCopy(rainbowPart:new({ x = x })))
@@ -129,40 +128,37 @@ function updateUnicorns()
     end
 
     rainbowCollisionX += rcShift
-    local leftRainbowVisibleSprites = 0
-    local rightRainbowVisibleSprites = 0
 
     for i, rainbowSprite in ipairs(rainbow) do
         local angle = (frame + i * 2) % 360
         local shiftY = sin(angle * rainbowAngleMultiplier)
 
         if rainbowSprite.x <= rainbowCollisionX then
+            local x = rainbowCollisionX - rainbowSprite.x + leftRainbowX
             arrowSinoid[i] = {
-                x = rainbowCollisionX - rainbowSprite.x + leftRainbowX,
+                x = x,
                 y = rainbowSprite.y - shiftY
             }
 
-            if leftRainbowVisibleSprites < leftRainbowLength then
+            if x - leftRainbowX < rainbowLength then
                 rainbowSprite.visible = true
             end
-
-            leftRainbowVisibleSprites += 1
         else
+            local x = rainbowSprite.x
             arrowSinoid[i] = {
-                x = rainbowSprite.x,
+                x = x,
                 y = rainbowSprite.y + shiftY
             }
 
-            if rightRainbowVisibleSprites < rightRainbowLength then
+            if rightRainbowX - x < rainbowLength then
                 rainbowSprite.visible = true
             end
-
-            rightRainbowVisibleSprites += 1
         end
     end
 
-    leftRainbowLength += 1
-    rightRainbowLength += 1
-
-    updateParticles(rainbowCollisionX, 28)
+    if rainbowLength >= (rightRainbowX - leftRainbowX) / 2 then
+        updateParticles(rainbowCollisionX, 28)
+    else
+        rainbowLength += 1
+    end
 end
