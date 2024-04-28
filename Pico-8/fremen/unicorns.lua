@@ -128,13 +128,16 @@ function updateUnicorns()
     end
 
     rainbowCollisionX += rcShift
+    local angle = 0
+    local shiftY = 0
+    local x = 0
 
     for i, rainbowSprite in ipairs(rainbow) do
-        local angle = (frame + i * 2) % 360
-        local shiftY = sin(angle * rainbowAngleMultiplier)
 
         if rainbowSprite.x <= rainbowCollisionX then
-            local x = rainbowCollisionX - rainbowSprite.x + leftRainbowX
+            angle = (frame + i * 2) % 360
+            shiftY = sin(angle * rainbowAngleMultiplier)
+            x = rainbowCollisionX - rainbowSprite.x + leftRainbowX
             arrowSinoid[i] = {
                 x = x,
                 y = rainbowSprite.y - shiftY
@@ -144,7 +147,9 @@ function updateUnicorns()
                 rainbowSprite.visible = true
             end
         else
-            local x = rainbowSprite.x
+            angle = (frame - i * 2) % 360
+            shiftY = sin(angle * rainbowAngleMultiplier)
+            x = rainbowCollisionX - rainbowSprite.x + rightRainbowX
             arrowSinoid[i] = {
                 x = x,
                 y = rainbowSprite.y + shiftY
