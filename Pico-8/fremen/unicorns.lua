@@ -41,8 +41,14 @@ end
 function drawUnicorns()
     spr(leftUnicorn.sprite, leftUnicorn.x, leftUnicorn.y, leftUnicorn.w, leftUnicorn.h,
             leftUnicorn.flip_x, leftUnicorn.flip_y)
+    pal(7, 6)
+    pal(13, 5)
+    pal(8, 2)
+    pal(14, 8)
+    pal(12, 1)
     spr(rightUnicorn.sprite, rightUnicorn.x, rightUnicorn.y, rightUnicorn.w, rightUnicorn.h,
             rightUnicorn.flip_x, rightUnicorn.flip_y)
+    pal()
 end
 
 function drawRainbow()
@@ -120,11 +126,11 @@ function updateUnicorns()
     rainbowCollisionX = leftRainbowX + (rightRainbowX - leftRainbowX) / 2
 
     if btn(⬅️) then
-        rcShift -= 2
+        rcShift -= 1
     end
 
     if btn(➡️) then
-        rcShift += 2
+        rcShift += 1
     end
 
     rainbowCollisionX += rcShift
