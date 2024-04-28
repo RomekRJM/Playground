@@ -21,6 +21,7 @@ rainbowPart = sprite:new {
     sprite = 32,
     w = 1,
     h = 1,
+    visible = false,
 }
 
 rainbowAngleMultiplier = 16 / 360
@@ -30,6 +31,8 @@ rightRainbowX = 102
 
 function restartUnicorns()
     rainbow = {}
+    leftRainbowLength = 0
+    rightRainbowLength = 0
 
     for x = leftRainbowX, rightRainbowX, 1 do
         add(rainbow, deepCopy(rainbowPart:new({ x = x })))
@@ -44,18 +47,9 @@ function drawUnicorns()
 end
 
 function drawRainbow()
-    local x = 0
-
     for i, rainbowSprite in ipairs(rainbow) do
-        local angle = (frame + i * 2) % 360
-        local shiftY = sin(angle * rainbowAngleMultiplier)
-
-        if rainbowSprite.x <= rainbowCollisionX then
-            x = rainbowCollisionX - rainbowSprite.x + leftRainbowX
-            spr(rainbowSprite.sprite, x, rainbowSprite.y - shiftY, rainbowSprite.w, rainbowSprite.h)
-        else
-            x = rainbowSprite.x
-            spr(rainbowSprite.sprite, x, rainbowSprite.y + shiftY, rainbowSprite.w, rainbowSprite.h)
+        if rainbowSprite.visible then
+            spr(rainbowSprite.sprite, arrowSinoid[i].x, arrowSinoid[i].y, rainbowSprite.w, rainbowSprite.h)
         end
     end
 end
@@ -114,18 +108,61 @@ function drawParticles()
 end
 
 rcShift = 0
+arrowSinoid = {}
+rainbowLength = 0
+
+function lograinbow()
+    for i, rainbowSprite in ipairs(rainbow) do
+        printh(tostring(i) .. ": " .. tostring(rainbowSprite.visible))
+    end
+end
 
 function updateUnicorns()
     rainbowCollisionX = leftRainbowX + (rightRainbowX - leftRainbowX) / 2
 
     if btn(⬅️) then
-      rcShift -= 2
+        rcShift -= 2
     end
 
     if btn(➡️) then
-      rcShift += 2
+        rcShift += 2
     end
 
     rainbowCollisionX += rcShift
+    local leftRainbowVisibleSprites = 0
+    local rightRainbowVisibleSprites = 0
+
+    for i, rainbowSprite in ipairs(rainbow) do
+        local angle = (frame + i * 2) % 360
+        local shiftY = sin(angle * rainbowAngleMultiplier)
+
+        if rainbowSprite.x <= rainbowCollisionX then
+            arrowSinoid[i] = {
+                x = rainbowCollisionX - rainbowSprite.x + leftRainbowX,
+                y = rainbowSprite.y - shiftY
+            }
+
+            if leftRainbowVisibleSprites < leftRainbowLength then
+                rainbowSprite.visible = true
+            end
+
+            leftRainbowVisibleSprites += 1
+        else
+            arrowSinoid[i] = {
+                x = rainbowSprite.x,
+                y = rainbowSprite.y + shiftY
+            }
+
+            if rightRainbowVisibleSprites < rightRainbowLength then
+                rainbowSprite.visible = true
+            end
+
+            rightRainbowVisibleSprites += 1
+        end
+    end
+
+    leftRainbowLength += 1
+    rightRainbowLength += 1
+
     updateParticles(rainbowCollisionX, 28)
 end

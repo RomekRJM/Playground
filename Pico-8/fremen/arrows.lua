@@ -29,8 +29,6 @@ function restartArrows()
 
     add(visibleArrowQueue, deepCopy(arrowQueue[1]))
     visibleArrowQueueLen = 1
-
-    printh(tprint(arrowQueue))
 end
 
 
