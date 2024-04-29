@@ -125,15 +125,16 @@ end
 function updateUnicorns()
     rainbowCollisionX = leftRainbowX + (rightRainbowX - leftRainbowX) / 2
 
-    if btn(⬅️) then
-        rcShift -= 1
-    end
+    --if btn(⬅️) then
+    --    rcShift -= 1
+    --end
+    --
+    --if btn(➡️) then
+    --    rcShift += 1
+    --end
+    --
+    --rainbowCollisionX += rcShift
 
-    if btn(➡️) then
-        rcShift += 1
-    end
-
-    rainbowCollisionX += rcShift
     local angle = 0
     local shiftY = 0
     local x = 0

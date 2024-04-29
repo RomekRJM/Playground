@@ -1,11 +1,19 @@
 arrow = sprite:new{
     next_element_pad_x = 32,
+    associatedAction = 0,
+    actioned = false,
 }
 
 leftArrow = arrow:new()
-rightArrow = arrow:new{ flip_x = true }
-topArrow = arrow:new{ sprite = 2, flip_x = true }
-bottomArrow = arrow:new{ sprite = 2, flip_y = true }
+rightArrow = arrow:new{ flip_x = true, associatedAction = 1}
+topArrow = arrow:new{ sprite = 2, flip_x = true, associatedAction = 2}
+bottomArrow = arrow:new{ sprite = 2, flip_y = true, associatedAction = 3}
+
+halfArrowWidth = arrow.w * 4
+arrowPerfectX = 64 - halfArrowWidth
+arrowMinAcceptableX = arrowPerfectX - halfArrowWidth
+arrowMaxAcceptableX = arrowPerfectX + halfArrowWidth
+currentArrow = nil
 
 function restartArrows()
     arrowQueueIndex = 1
@@ -44,14 +52,14 @@ function drawArrows()
 
     for _, visible_arrow in pairs(visibleArrowQueue) do
 
-        if visible_arrow.x > 48 and visible_arrow.x < 80 then
+        if visible_arrow == currentArrow then
             pal(7, 11)
         end
 
         spr(visible_arrow.sprite, visible_arrow.x, visible_arrow.y, visible_arrow.w, visible_arrow.h,
                 visible_arrow.flip_x, visible_arrow.flip_y)
 
-        if visible_arrow.x > 48 and visible_arrow.x < 80 then
+        if visible_arrow == currentArrow then
             pal()
         end
     end
@@ -69,6 +77,8 @@ function logarrows()
 end
 
 function updateArrows()
+    currentArrow = nil
+
     if visibleArrowQueueLen == 0 and arrowQueueIndex == arrowQueueLen then
         return
     end
@@ -83,6 +93,12 @@ function updateArrows()
             add(visibleArrowQueue, deepCopy(arrowQueue[arrowQueueIndex]))
             arrowQueueIndex = arrowQueueIndex + 1
             visibleArrowQueueLen = visibleArrowQueueLen + 1
+        end
+
+        if visibleArrow.x > arrowMinAcceptableX and visibleArrow.x < arrowMaxAcceptableX then
+            if currentArrow == nil then
+                currentArrow = visibleArrow
+            end
         end
 
         if visibleArrow.x < visibleArrow.w * -8 then
