@@ -96,3 +96,26 @@ resource "docker_container" "nginx" {
   }
 }
 
+resource "docker_image" "node" {
+  name         = "node:22-alpine"
+  keep_locally = false
+}
+
+resource "docker_container" "node" {
+  image        = docker_image.node.image_id
+  name         = "node"
+  network_mode = "host"
+  restart      = "unless-stopped"
+
+  env = toset(
+    [
+        "NODE_ENV=production",
+    ]
+  )
+
+  ports {
+    internal = 3000
+    external = 3000
+  }
+}
+
