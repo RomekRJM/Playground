@@ -97,7 +97,7 @@ resource "docker_container" "nginx" {
 }
 
 resource "docker_image" "node" {
-  name         = "node:22-alpine"
+  name         = "node:22.12-alpine3.21"
   keep_locally = false
 }
 
