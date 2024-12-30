@@ -96,14 +96,14 @@ resource "docker_container" "nginx" {
   }
 }
 
-resource "docker_image" "node" {
-  name         = "node:22.12-alpine3.21"
+resource "docker_image" "multiple_pony" {
+  name         = "multiple-pony"
   keep_locally = false
 }
 
-resource "docker_container" "node" {
-  image        = docker_image.node.image_id
-  name         = "node"
+resource "docker_container" "multiple_pony" {
+  image        = docker_image.multiple_pony.image_id
+  name         = "multiple_pony"
   network_mode = "host"
   restart      = "unless-stopped"
 

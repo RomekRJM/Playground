@@ -69,3 +69,6 @@ venv
 .terraform.lock.hcl
 *terraform.tfstate*
 
+# archives
+*.zip
+*.tar.gz
