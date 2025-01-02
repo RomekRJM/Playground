@@ -75,3 +75,7 @@ venv
 
 # local files
 allowed_origins.cfg
+
+# audio
+*.mp3
+*.ogg

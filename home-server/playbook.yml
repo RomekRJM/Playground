@@ -82,11 +82,17 @@
         src: 'allowed_origins.cfg'
         dest: '{{ home_server_install_path }}/MultiplePony/server/'
 
+    - name: Copy audio files, before building multiple pony image
+      ansible.builtin.copy:
+        src: 'audio'
+        dest: '{{ home_server_install_path }}/MultiplePony/server/public/'
+
     - name: Build multiple pony image
       community.docker.docker_image:
         name: multiple-pony:latest
         build:
           path: '{{ home_server_install_path }}/MultiplePony/server'
+          nocache: true
         source: build
 
     - name: Terraform init
