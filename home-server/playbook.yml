@@ -1,4 +1,21 @@
 ---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: init git submodules locally
+      command: git submodule init
+
+    - name: update git submodules locally
+      command: git submodule update
+
+    - name: checkout submodules
+      command: git submodule foreach git checkout master
+
+    - name: pull submodules
+      command: git submodule foreach git pull origin master
+
+
 - hosts: all
   become: true
 
@@ -94,6 +111,7 @@
           path: '{{ home_server_install_path }}/MultiplePony/server'
           nocache: true
         source: build
+        force_source: true
 
     - name: Terraform init
       ansible.builtin.command: terraform init
