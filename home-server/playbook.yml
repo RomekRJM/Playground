@@ -24,6 +24,7 @@
           - wget
           - software-properties-common
           - rsync
+          - python3-docker
         state: latest
         update_cache: true
 
@@ -76,11 +77,17 @@
         recurse: true
         owner: '{{ non_root_user }}'
 
-    - name: Change nginx ownership
-      file:
-        path: '{{ home_server_install_path }}'
-        recurse: true
-        owner: '{{ non_root_user }}'
+    - name: Copy allowed_origins.cfg, before building multiple pony image
+      ansible.builtin.copy:
+        src: 'allowed_origins.cfg'
+        dest: '{{ home_server_install_path }}/MultiplePony/server/'
+
+    - name: Build multiple pony image
+      community.docker.docker_image:
+        name: multiple-pony:latest
+        build:
+          path: '{{ home_server_install_path }}/MultiplePony/server'
+        source: build
 
     - name: Terraform init
       ansible.builtin.command: terraform init

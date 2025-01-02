@@ -72,3 +72,6 @@ venv
 # archives
 *.zip
 *.tar.gz
+
+# local files
+allowed_origins.cfg

@@ -97,7 +97,7 @@ resource "docker_container" "nginx" {
 }
 
 resource "docker_image" "multiple_pony" {
-  name         = "multiple-pony"
+  name         = "multiple-pony:latest"
   keep_locally = false
 }
 
