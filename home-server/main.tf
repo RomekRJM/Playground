@@ -44,6 +44,7 @@ resource "docker_image" "minecraft" {
 }
 
 resource "docker_container" "minecraft" {
+  count        = 0 # disabled to free the resources
   image        = docker_image.minecraft.image_id
   name         = "minecraft-server"
   network_mode = "host"
