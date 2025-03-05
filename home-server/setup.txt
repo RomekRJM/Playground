@@ -1,5 +1,7 @@
 https://developer.hashicorp.com/terraform/tutorials/aws-get-started/install-cli
 
+git submodule update --init --force --remote
+
 route get 192.168.50.145
 
 ansible-playbook playbook.yml -i inventory.yml -u rjm
