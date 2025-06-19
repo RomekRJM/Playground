@@ -21,7 +21,7 @@
 
   vars:
       home_server_install_path: '/opt/home-server'
-      non_root_user: 'nobody'
+      non_root_user: 'rjm'
 
   tasks:
     - name: Install aptitude

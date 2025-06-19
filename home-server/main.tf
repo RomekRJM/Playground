@@ -1,8 +1,8 @@
 locals {
   minecraft_default_envs = {
     EULA                    = "TRUE"
-    WHITELIST               = "ErykCoco,"
-    OPS                     = "ErykCoco,"
+    WHITELIST               = "ErykCoco,Nataniczek,PokeOscar,"
+    OPS                     = "ErykCoco,Nataniczek,PokeOscar,"
     REMOVE_OLD_MODS         = "true"
     REMOVE_OLD_MODS_EXCLUDE = ""
   }
@@ -31,11 +31,11 @@ locals {
       "SPIGET_RESOURCES" = "115123",
       "INIT_MEMORY"      = "1G",
       "MAX_MEMORY"       = "2G",
-      "VERSION"          = "1.20.4"
+      "VERSION"          = "1.21.5"
     }
   }
 
-  current_minecraft_config = local.castle_siege_config
+  current_minecraft_config = local.minecraft_default_config
 }
 
 resource "docker_image" "minecraft" {
@@ -44,7 +44,7 @@ resource "docker_image" "minecraft" {
 }
 
 resource "docker_container" "minecraft" {
-  count        = 0 # disabled to free the resources
+  count        = 1
   image        = docker_image.minecraft.image_id
   name         = "minecraft-server"
   network_mode = "host"
