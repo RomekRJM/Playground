@@ -1,7 +1,7 @@
 locals {
   minecraft_default_envs = {
     EULA                    = "TRUE"
-    WHITELIST               = "ErykCoco,Nataniczek,PokeOscar,"
+    WHITELIST               = "ErykCoco,Pingwinek,Nataniczek,PokeOscar,"
     OPS                     = "ErykCoco,Nataniczek,PokeOscar,"
     REMOVE_OLD_MODS         = "true"
     REMOVE_OLD_MODS_EXCLUDE = ""
@@ -14,24 +14,15 @@ locals {
     }
   }
 
-  grinch_christmas_config = {
+  pyspigot_config = {
     tag = "latest"
     env = {
-      "TYPE"             = "SPIGOT",
-      "SPIGET_RESOURCES" = "108842",
+      "TYPE"             = "PAPER",
+      "PAPER_CHANNEL"    = "experimental"
+      "SPIGET_RESOURCES" = "126204",
       "INIT_MEMORY"      = "2G",
       "MAX_MEMORY"       = "3G",
-    }
-  }
-
-  castle_siege_config = {
-    tag = "java17-alpine"
-    env = {
-      "TYPE"             = "SPIGOT",
-      "SPIGET_RESOURCES" = "115123",
-      "INIT_MEMORY"      = "1G",
-      "MAX_MEMORY"       = "2G",
-      "VERSION"          = "1.21.5"
+      "VERSION"          = "1.21.6"
     }
   }
 
@@ -110,7 +101,7 @@ resource "docker_container" "multiple_pony" {
 
   env = toset(
     [
-        "NODE_ENV=production",
+      "NODE_ENV=production",
     ]
   )
 
