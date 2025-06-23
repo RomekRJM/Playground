@@ -14,19 +14,19 @@ locals {
     }
   }
 
-  pyspigot_config = {
+  minescript_config = {
     tag = "latest"
     env = {
-      "TYPE"             = "PAPER",
-      "PAPER_CHANNEL"    = "experimental"
-      "SPIGET_RESOURCES" = "126204",
-      "INIT_MEMORY"      = "2G",
-      "MAX_MEMORY"       = "3G",
-      "VERSION"          = "1.21.6"
+      "TYPE"              = "PAPER",
+      "PAPER_CHANNEL"     = "experimental"
+      "MODRINTH_PROJECTS" = "minescript"
+      "INIT_MEMORY"       = "2G",
+      "MAX_MEMORY"        = "3G",
+      "VERSION"           = "1.21.6"
     }
   }
 
-  current_minecraft_config = local.minecraft_default_config
+  current_minecraft_config = local.minescript_config
 }
 
 resource "docker_image" "minecraft" {
