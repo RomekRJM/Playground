@@ -88,6 +88,11 @@
           - "--exclude=*.tfstate*"
           - "--exclude=*.terraform*"
 
+    - name: Creates directory
+      ansible.builtin.file:
+        path: '{{ home_server_install_path }}/data'
+        state: directory
+
     - name: Change synced files ownership
       file:
         path: '{{ home_server_install_path }}'

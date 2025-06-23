@@ -14,11 +14,24 @@ locals {
     }
   }
 
+  world_edit_config = {
+    tag = "latest"
+    env = {
+      "TYPE"                          = "PAPER",
+      "PAPER_CHANNEL"                 = "experimental",
+      "MODRINTH_PROJECTS"             = "worldedit",
+      "MODRINTH_ALLOWED_VERSION_TYPE" = "release",
+      "INIT_MEMORY"                   = "2G",
+      "MAX_MEMORY"                    = "3G",
+      "VERSION"                       = "1.21.6"
+    }
+  }
+
   minescript_config = {
     tag = "latest"
     env = {
-      "TYPE"              = "PAPER",
-      "PAPER_CHANNEL"     = "experimental"
+      "TYPE"              = "NEOFORGE",
+      "NEOFORGE_VERSION"  = "beta"
       "MODRINTH_PROJECTS" = "minescript"
       "INIT_MEMORY"       = "2G",
       "MAX_MEMORY"        = "3G",
