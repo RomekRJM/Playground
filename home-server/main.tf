@@ -17,10 +17,10 @@ locals {
   world_edit_config = {
     tag = "latest"
     env = {
-      "TYPE"                          = "PAPER",
-      "PAPER_CHANNEL"                 = "experimental",
+      "TYPE"                          = "NEOFORGE",
+      "NEOFORGE_VERSION"              = "beta"
       "MODRINTH_PROJECTS"             = "worldedit",
-      "MODRINTH_ALLOWED_VERSION_TYPE" = "release",
+      "MODRINTH_ALLOWED_VERSION_TYPE" = "beta",
       "INIT_MEMORY"                   = "2G",
       "MAX_MEMORY"                    = "3G",
       "VERSION"                       = "1.21.6"
@@ -39,7 +39,7 @@ locals {
     }
   }
 
-  current_minecraft_config = local.minescript_config
+  current_minecraft_config = local.world_edit_config
 }
 
 resource "docker_image" "minecraft" {
