@@ -1,8 +1,8 @@
 locals {
   minecraft_default_envs = {
     EULA                    = "TRUE"
-    WHITELIST               = "ErykCoco,Pingwinek,Nataniczek,PokeOscar,"
-    OPS                     = "ErykCoco,Nataniczek,PokeOscar,"
+    WHITELIST               = "ErykCoco,Pingwinek,Nataniczek,PokeOscar,grubykabaczek"
+    OPS                     = "ErykCoco,Nataniczek,PokeOscar"
     REMOVE_OLD_MODS         = "true"
     REMOVE_OLD_MODS_EXCLUDE = ""
   }
@@ -10,7 +10,9 @@ locals {
   minecraft_default_config = {
     tag = "latest"
     env = {
-      "TYPE" = "FABRIC"
+      "TYPE"        = "FABRIC"
+      "INIT_MEMORY" = "2G",
+      "MAX_MEMORY"  = "5G",
     }
   }
 
@@ -18,12 +20,12 @@ locals {
     tag = "latest"
     env = {
       "TYPE"                          = "NEOFORGE",
-      "NEOFORGE_VERSION"              = "beta"
+      "NEOFORGE_VERSION"              = "21.7.1"
       "MODRINTH_PROJECTS"             = "worldedit",
       "MODRINTH_ALLOWED_VERSION_TYPE" = "beta",
       "INIT_MEMORY"                   = "2G",
       "MAX_MEMORY"                    = "3G",
-      "VERSION"                       = "1.21.6"
+      "VERSION"                       = "1.21.7"
     }
   }
 
@@ -39,7 +41,20 @@ locals {
     }
   }
 
-  current_minecraft_config = local.world_edit_config
+  pixelmon_config = {
+    tag = "2025.6.2"
+    env = {
+      "TYPE"                          = "NEOFORGE",
+      "NEOFORGE_VERSION"              = "21.1.206"
+      "MODRINTH_PROJECTS"             = "pixelmon"
+      "MODRINTH_ALLOWED_VERSION_TYPE" = "beta"
+      "INIT_MEMORY"                   = "5G",
+      "MAX_MEMORY"                    = "6G",
+      "VERSION"                       = "1.21.1"
+    }
+  }
+
+  current_minecraft_config = local.minecraft_default_config
 }
 
 resource "docker_image" "minecraft" {
