@@ -2,7 +2,7 @@ locals {
   minecraft_default_envs = {
     EULA                    = "TRUE"
     WHITELIST               = "ErykCoco,Pingwinek,Nataniczek,PokeOscar,grubykabaczek"
-    OPS                     = "ErykCoco,Nataniczek,PokeOscar"
+    OPS                     = "Nataniczek"
     REMOVE_OLD_MODS         = "true"
     REMOVE_OLD_MODS_EXCLUDE = ""
   }
