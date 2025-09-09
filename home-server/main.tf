@@ -79,7 +79,7 @@ resource "docker_container" "minecraft" {
   )
 
   volumes {
-    host_path      = "/tmp"
+    host_path      = "/opt/minecraftdata"
     container_path = "/data"
   }
 
