@@ -1,8 +1,8 @@
 locals {
   minecraft_default_envs = {
     EULA                    = "TRUE"
-    WHITELIST               = "ErykCoco,"
-    OPS                     = "ErykCoco,"
+    WHITELIST               = "ErykCoco,Pingwinek,Nataniczek,PokeOscar,grubykabaczek"
+    OPS                     = "Nataniczek"
     REMOVE_OLD_MODS         = "true"
     REMOVE_OLD_MODS_EXCLUDE = ""
   }
@@ -10,32 +10,51 @@ locals {
   minecraft_default_config = {
     tag = "latest"
     env = {
-      "TYPE" = "FABRIC"
+      "TYPE"        = "FABRIC"
+      "INIT_MEMORY" = "2G",
+      "MAX_MEMORY"  = "5G",
     }
   }
 
-  grinch_christmas_config = {
+  world_edit_config = {
     tag = "latest"
     env = {
-      "TYPE"             = "SPIGOT",
-      "SPIGET_RESOURCES" = "108842",
-      "INIT_MEMORY"      = "2G",
-      "MAX_MEMORY"       = "3G",
+      "TYPE"                          = "NEOFORGE",
+      "NEOFORGE_VERSION"              = "21.7.1"
+      "MODRINTH_PROJECTS"             = "worldedit",
+      "MODRINTH_ALLOWED_VERSION_TYPE" = "beta",
+      "INIT_MEMORY"                   = "2G",
+      "MAX_MEMORY"                    = "3G",
+      "VERSION"                       = "1.21.7"
     }
   }
 
-  castle_siege_config = {
-    tag = "java17-alpine"
+  minescript_config = {
+    tag = "latest"
     env = {
-      "TYPE"             = "SPIGOT",
-      "SPIGET_RESOURCES" = "115123",
-      "INIT_MEMORY"      = "1G",
-      "MAX_MEMORY"       = "2G",
-      "VERSION"          = "1.20.4"
+      "TYPE"              = "NEOFORGE",
+      "NEOFORGE_VERSION"  = "beta"
+      "MODRINTH_PROJECTS" = "minescript"
+      "INIT_MEMORY"       = "2G",
+      "MAX_MEMORY"        = "3G",
+      "VERSION"           = "1.21.6"
     }
   }
 
-  current_minecraft_config = local.castle_siege_config
+  pixelmon_config = {
+    tag = "2025.6.2"
+    env = {
+      "TYPE"                          = "NEOFORGE",
+      "NEOFORGE_VERSION"              = "21.1.206"
+      "MODRINTH_PROJECTS"             = "pixelmon"
+      "MODRINTH_ALLOWED_VERSION_TYPE" = "beta"
+      "INIT_MEMORY"                   = "5G",
+      "MAX_MEMORY"                    = "6G",
+      "VERSION"                       = "1.21.1"
+    }
+  }
+
+  current_minecraft_config = local.minecraft_default_config
 }
 
 resource "docker_image" "minecraft" {
@@ -44,6 +63,7 @@ resource "docker_image" "minecraft" {
 }
 
 resource "docker_container" "minecraft" {
+  count        = 1
   image        = docker_image.minecraft.image_id
   name         = "minecraft-server"
   network_mode = "host"
@@ -59,7 +79,7 @@ resource "docker_container" "minecraft" {
   )
 
   volumes {
-    host_path      = "/tmp"
+    host_path      = "/opt/minecraftdata"
     container_path = "/data"
   }
 
@@ -93,6 +113,29 @@ resource "docker_container" "nginx" {
   volumes {
     host_path      = "${path.cwd}/eryk-sonic"
     container_path = "/usr/share/nginx/html/eryk-sonic"
+  }
+}
+
+resource "docker_image" "multiple_pony" {
+  name         = "multiple-pony:latest"
+  keep_locally = false
+}
+
+resource "docker_container" "multiple_pony" {
+  image        = docker_image.multiple_pony.image_id
+  name         = "multiple_pony"
+  network_mode = "host"
+  restart      = "unless-stopped"
+
+  env = toset(
+    [
+      "NODE_ENV=production",
+    ]
+  )
+
+  ports {
+    internal = 3000
+    external = 3000
   }
 }
 

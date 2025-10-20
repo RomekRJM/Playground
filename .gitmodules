@@ -1,3 +1,5 @@
-[submodule "Pico-8/MultiplePony"]
-	path = Pico-8/MultiplePony
+[submodule "home-server/MultiplePony"]
+	path = home-server/MultiplePony
 	url = https://github.com/RomekRJM/MultiplePony
+	branch = master
+	update = merge

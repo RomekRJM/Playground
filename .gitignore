@@ -69,6 +69,17 @@ venv
 .terraform.lock.hcl
 *terraform.tfstate*
 
+# archives
+*.zip
+*.tar.gz
+
+# local files
+allowed_origins.cfg
+
+# audio
+*.mp3
+*.ogg
+
 # personal
 Python/ing/*.pdf
 Python/ing/*.md

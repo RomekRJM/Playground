@@ -1,10 +1,27 @@
 ---
+- hosts: localhost
+  connection: local
+
+  tasks:
+    - name: init git submodules locally
+      command: git submodule init
+
+    - name: update git submodules locally
+      command: git submodule update
+
+    - name: checkout submodules
+      command: git submodule foreach git checkout master
+
+    - name: pull submodules
+      command: git submodule foreach git pull origin master
+
+
 - hosts: all
   become: true
 
   vars:
       home_server_install_path: '/opt/home-server'
-      non_root_user: 'nobody'
+      non_root_user: 'rjm'
 
   tasks:
     - name: Install aptitude
@@ -24,6 +41,7 @@
           - wget
           - software-properties-common
           - rsync
+          - python3-docker
         state: latest
         update_cache: true
 
@@ -70,17 +88,35 @@
           - "--exclude=*.tfstate*"
           - "--exclude=*.terraform*"
 
+    - name: Creates directory
+      ansible.builtin.file:
+        path: '{{ home_server_install_path }}/data'
+        state: directory
+
     - name: Change synced files ownership
       file:
         path: '{{ home_server_install_path }}'
         recurse: true
         owner: '{{ non_root_user }}'
 
-    - name: Change nginx ownership
-      file:
-        path: '{{ home_server_install_path }}'
-        recurse: true
-        owner: '{{ non_root_user }}'
+    - name: Copy allowed_origins.cfg, before building multiple pony image
+      ansible.builtin.copy:
+        src: 'allowed_origins.cfg'
+        dest: '{{ home_server_install_path }}/MultiplePony/server/'
+
+    - name: Copy audio files, before building multiple pony image
+      ansible.builtin.copy:
+        src: 'audio'
+        dest: '{{ home_server_install_path }}/MultiplePony/server/public/'
+
+    - name: Build multiple pony image
+      community.docker.docker_image:
+        name: multiple-pony:latest
+        build:
+          path: '{{ home_server_install_path }}/MultiplePony/server'
+          nocache: true
+        source: build
+        force_source: true
 
     - name: Terraform init
       ansible.builtin.command: terraform init
