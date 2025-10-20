@@ -69,3 +69,6 @@ venv
 .terraform.lock.hcl
 *terraform.tfstate*
 
+# personal
+Python/ing/*.pdf
+Python/ing/*.md
