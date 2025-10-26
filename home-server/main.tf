@@ -45,7 +45,7 @@ locals {
     tag = "2025.6.2"
     env = {
       "TYPE"                          = "NEOFORGE",
-      "NEOFORGE_VERSION"              = "21.1.206"
+      "NEOFORGE_VERSION"              = "21.1.213"
       "MODRINTH_PROJECTS"             = "pixelmon"
       "MODRINTH_ALLOWED_VERSION_TYPE" = "beta"
       "INIT_MEMORY"                   = "5G",
@@ -54,7 +54,7 @@ locals {
     }
   }
 
-  current_minecraft_config = local.minecraft_default_config
+  current_minecraft_config = local.pixelmon_config
 }
 
 resource "docker_image" "minecraft" {
