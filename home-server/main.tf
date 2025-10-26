@@ -44,9 +44,22 @@ locals {
   pixelmon_config = {
     tag = "2025.6.2"
     env = {
+      "TYPE"                          = "FORGE",
+      "FORGE_VERSION"                 = "48.1.0"
+      "MODRINTH_PROJECTS"             = "pixelmon"
+      "MODRINTH_ALLOWED_VERSION_TYPE" = "beta"
+      "INIT_MEMORY"                   = "5G",
+      "MAX_MEMORY"                    = "6G",
+      "VERSION"                       = "1.20.2"
+    }
+  }
+
+  farmers_delight_config = {
+    tag = "2025.6.2"
+    env = {
       "TYPE"                          = "NEOFORGE",
       "NEOFORGE_VERSION"              = "21.1.213"
-      "MODRINTH_PROJECTS"             = "pixelmon"
+      "MODRINTH_PROJECTS"             = "farmers-delight"
       "MODRINTH_ALLOWED_VERSION_TYPE" = "beta"
       "INIT_MEMORY"                   = "5G",
       "MAX_MEMORY"                    = "6G",
