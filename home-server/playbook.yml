@@ -119,7 +119,7 @@
         force_source: true
 
     - name: Terraform init
-      ansible.builtin.command: terraform init
+      ansible.builtin.command: terraform init -upgrade
       become: true
       become_user: '{{ non_root_user }}'
       args:

@@ -13,6 +13,7 @@ locals {
       "TYPE"        = "FABRIC"
       "INIT_MEMORY" = "2G",
       "MAX_MEMORY"  = "5G",
+      "MODRINTH_PROJECTS" = "fabric-api"
     }
   }
 
@@ -67,7 +68,7 @@ locals {
     }
   }
 
-  current_minecraft_config = local.pixelmon_config
+  current_minecraft_config = local.minecraft_default_config
 }
 
 resource "docker_image" "minecraft" {
