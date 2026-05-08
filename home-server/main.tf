@@ -8,7 +8,7 @@ locals {
   }
 
   minecraft_default_config = {
-    tag = "latest"
+    tag = "stable-java25-jdk"
     env = {
       "TYPE"        = "FABRIC"
       "INIT_MEMORY" = "2G",
